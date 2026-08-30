@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <meta charset="UTF-8">
+  <title>Product | OnlyHers</title>
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png" />
 
-  <title>Product — OnlyHers</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
 
+  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <script src="app.js" defer></script>
-
 
   <style>
 
@@ -26,305 +26,600 @@
       box-sizing: border-box;
     }
 
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f8f5f0;
-      color: #181818;
+    html {
+      scroll-behavior: smooth;
     }
 
+    body {
+      font-family: "DM Sans", sans-serif;
+      background: #8f0d1b;
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-    nav {
+    /* =========================
+       BACKGROUND DECORATION
+    ========================= */
+
+    .bg-shape {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: -1;
+      filter: blur(2px);
+      opacity: 0.25;
+    }
+
+    .shape-one {
+      width: 500px;
+      height: 500px;
+      border: 1px solid #f3caca;
+      top: -250px;
+      right: -180px;
+      animation: floatShape 12s ease-in-out infinite;
+    }
+
+    .shape-two {
+      width: 350px;
+      height: 350px;
+      border: 1px solid #f3caca;
+      bottom: -150px;
+      left: -120px;
+      animation: floatShape 10s ease-in-out infinite reverse;
+    }
+
+    @keyframes floatShape {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(30px) rotate(10deg);
+      }
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    header {
+      width: 100%;
+      padding: 22px 7%;
+      background: #b51f2c;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
 
       display: flex;
       justify-content: space-between;
       align-items: center;
 
-      padding: 20px 7%;
-
-      border-bottom: 1px solid #ddd;
-
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
     }
-
 
     .logo {
-
-      font-family: Georgia, serif;
-
+      text-decoration: none;
+      color: white;
+      font-family: "Playfair Display", serif;
       font-size: 30px;
+      font-weight: 600;
+      letter-spacing: -1px;
+    }
 
-      font-weight: bold;
+    .logo span {
+      font-family: "Great Vibes", cursive;
+      font-size: 34px;
+      margin-left: 4px;
+    }
 
-      color: #181818;
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
 
+    nav a {
+      color: rgba(255,255,255,0.85);
       text-decoration: none;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      transition: 0.3s;
+    }
 
+    nav a:hover {
+      color: white;
+    }
+
+    .collection-btn {
+      border: 1px solid rgba(255,255,255,0.7);
+      padding: 11px 20px;
+      transition: 0.3s;
+    }
+
+    .collection-btn:hover {
+      background: white;
+      color: #8f0d1b;
     }
 
 
-    .back {
-
-      color: #181818;
-
-      text-decoration: none;
-
-      font-size: 12px;
-
-    }
-
+    /* =========================
+       PRODUCT SECTION
+    ========================= */
 
     .product-page {
-
-      max-width: 1300px;
-
+      max-width: 1250px;
       margin: auto;
+      padding: 70px 30px 100px;
 
-      padding: 70px 7%;
+      min-height: 80vh;
+    }
 
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+
+      margin-bottom: 45px;
+      font-size: 14px;
+
+      transition: 0.3s;
+    }
+
+    .back-link:hover {
+      color: white;
+      transform: translateX(-5px);
+    }
+
+
+    .product-container {
       display: grid;
-
-      grid-template-columns: 1.1fr 0.9fr;
-
+      grid-template-columns: 1fr 1fr;
       gap: 80px;
+      align-items: center;
 
+      animation: fadeUp 0.8s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(35px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
 
-    .image-box {
+    /* =========================
+       IMAGE
+    ========================= */
 
-      width: 100%;
-
-      aspect-ratio: 3 / 4;
-
-      background: #e5dfd7;
-
+    .product-image-wrapper {
+      position: relative;
     }
 
-
-    .image-box img {
+    .product-image-wrapper::before {
+      content: "";
+      position: absolute;
 
       width: 100%;
       height: 100%;
 
+      border: 1px solid rgba(255,255,255,0.3);
+
+      top: 18px;
+      left: 18px;
+
+      z-index: -1;
+    }
+
+    .product-image {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+
       object-fit: cover;
 
+      background: #a51b28;
+
+      display: block;
+
+      transition: transform 0.6s ease;
+    }
+
+    .product-image:hover {
+      transform: scale(1.015);
     }
 
 
-    .category {
+    /* =========================
+       PRODUCT DETAILS
+    ========================= */
 
-      font-size: 11px;
+    .product-category {
+      font-size: 12px;
 
-      letter-spacing: 2px;
-
+      letter-spacing: 3px;
       text-transform: uppercase;
 
-      color: #777;
+      color: #f2c7c7;
 
-      margin-bottom: 20px;
-
+      margin-bottom: 18px;
     }
 
+    .product-name {
+      font-family: "Playfair Display", serif;
 
-    h1 {
+      font-size: clamp(40px, 5vw, 68px);
+      line-height: 1.05;
 
-      font-family: Georgia, serif;
-
-      font-size: clamp(40px, 5vw, 70px);
-
-      font-weight: normal;
-
-      margin-bottom: 20px;
-
+      margin-bottom: 25px;
     }
 
-
-    .price {
-
+    .product-price {
       font-size: 22px;
+      font-weight: 500;
 
-      font-weight: bold;
+      margin-bottom: 30px;
 
-      margin-bottom: 35px;
-
+      color: #fff;
     }
 
+    .product-line {
+      width: 100%;
+      height: 1px;
 
-    .description {
+      background: rgba(255,255,255,0.2);
 
+      margin-bottom: 30px;
+    }
+
+    .product-description {
+      color: rgba(255,255,255,0.82);
+
+      font-size: 16px;
       line-height: 1.8;
 
-      color: #555;
-
       margin-bottom: 35px;
 
+      max-width: 550px;
     }
 
 
-    .section-title {
+    /* =========================
+       SIZE SECTION
+    ========================= */
 
-      font-size: 11px;
+    .size-title {
+      font-size: 13px;
 
-      letter-spacing: 2px;
-
+      letter-spacing: 1.5px;
       text-transform: uppercase;
 
-      margin-bottom: 15px;
-
+      margin-bottom: 18px;
     }
 
-
     .sizes {
-
       display: flex;
-
       flex-wrap: wrap;
 
       gap: 10px;
 
-      margin-bottom: 40px;
-
+      margin-bottom: 38px;
     }
 
-
-    .size {
-
-      padding: 12px 18px;
+    .size-btn {
+      min-width: 52px;
+      padding: 13px 16px;
 
       background: transparent;
 
-      border: 1px solid #181818;
+      border: 1px solid rgba(255,255,255,0.5);
+
+      color: white;
 
       cursor: pointer;
 
+      font-family: "DM Sans", sans-serif;
+
+      transition: 0.3s;
+    }
+
+    .size-btn:hover,
+    .size-btn.active {
+      background: white;
+      color: #8f0d1b;
+      border-color: white;
     }
 
 
-    .size.active {
+    /* =========================
+       BUTTON
+    ========================= */
 
-      background: #181818;
-
-      color: white;
-
-    }
-
-
-    .cart-button {
-
+    .order-btn {
       width: 100%;
 
-      padding: 20px;
-
-      background: #181818;
-
-      color: white;
+      padding: 19px;
 
       border: none;
 
-      cursor: pointer;
+      background: #fff;
+      color: #8f0d1b;
 
-      font-size: 12px;
+      font-family: "DM Sans", sans-serif;
 
-      font-weight: bold;
+      font-size: 13px;
+      font-weight: 700;
 
       letter-spacing: 2px;
 
+      text-transform: uppercase;
+
+      cursor: pointer;
+
+      transition: all 0.35s ease;
+    }
+
+    .order-btn:hover {
+      background: #161616;
+      color: white;
+
+      transform: translateY(-3px);
+
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+
+    .product-note {
+      margin-top: 18px;
+
+      font-size: 12px;
+
+      color: rgba(255,255,255,0.6);
+
+      text-align: center;
     }
 
 
-    .cart-button:hover {
-
-      background: #a31d28;
-
-    }
-
+    /* =========================
+       LOADING
+    ========================= */
 
     .loading {
+      text-align: center;
+      padding: 120px 20px;
 
-      padding: 100px;
+      font-family: "Playfair Display", serif;
+      font-size: 28px;
+    }
+
+    .error-message {
+      text-align: center;
+      padding: 100px 20px;
+    }
+
+    .error-message h2 {
+      font-family: "Playfair Display", serif;
+      font-size: 42px;
+
+      margin-bottom: 20px;
+    }
+
+    .error-message p {
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 30px;
+    }
+
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+      background: #720814;
+
+      padding: 60px 7% 35px;
 
       text-align: center;
 
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .footer-brand {
+      font-family: "Playfair Display", serif;
+
+      font-size: 32px;
+
+      margin-bottom: 8px;
+    }
+
+    .hers-by {
+      font-family: "Great Vibes", cursive;
+
+      font-size: 30px;
+
+      color: #f3c7c7;
+
+      margin-bottom: 20px;
+    }
+
+    .footer-text {
+      color: rgba(255,255,255,0.6);
+
+      font-size: 13px;
     }
 
 
-    @media(max-width: 800px) {
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 800px) {
+
+      header {
+        padding: 18px 6%;
+      }
+
+      nav {
+        gap: 15px;
+      }
+
+      nav a:not(.collection-btn) {
+        display: none;
+      }
 
       .product-page {
+        padding: 45px 20px 70px;
+      }
 
+      .product-container {
         grid-template-columns: 1fr;
+        gap: 55px;
+      }
 
-        padding: 40px 6%;
+      .product-name {
+        font-size: 48px;
+      }
 
-        gap: 40px;
-
+      .product-image-wrapper::before {
+        top: 10px;
+        left: 10px;
       }
 
     }
 
   </style>
-
 </head>
 
 
 <body>
 
+  <!-- Background decoration -->
 
-  <nav>
+  <div class="bg-shape shape-one"></div>
+  <div class="bg-shape shape-two"></div>
+
+
+  <!-- HEADER -->
+
+  <header>
 
     <a href="index.html" class="logo">
-      OnlyHers
+      Only<span>Hers</span>
+    </a>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="collection.html" class="collection-btn">
+        Collection
+      </a>
+    </nav>
+
+  </header>
+
+
+  <!-- PRODUCT -->
+
+  <main class="product-page">
+
+    <a href="collection.html" class="back-link">
+      ← Back to collection
     </a>
 
 
-    <a href="collection.html" class="back">
-      ← COLLECTION
-    </a>
+    <div id="productContent">
 
-  </nav>
+      <div class="loading">
+        Loading your piece...
+      </div>
 
-
-
-  <main id="productContainer">
-
-    <div class="loading">
-      Loading product...
     </div>
 
   </main>
 
 
+  <!-- FOOTER -->
+
+  <footer>
+
+    <div class="footer-brand">
+      OnlyHers
+    </div>
+
+    <div class="hers-by">
+      Hers by Hari Venkatesh
+    </div>
+
+    <p class="footer-text">
+      © 2026 OnlyHers. Thoughtfully designed fashion made to feel like yours.
+    </p>
+
+  </footer>
+
+
+  <!-- SUPABASE SCRIPT -->
 
   <script>
 
-    const params =
-      new URLSearchParams(window.location.search);
+    const SUPABASE_URL = "https://zeodtbgxadxfvexvywpm.supabase.co";
 
-    const productId =
-      params.get("id");
+    const SUPABASE_KEY = "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
 
 
-    let currentProduct = null;
+    const supabaseClient = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+
+    // GET PRODUCT ID FROM URL
+
+    const params = new URLSearchParams(window.location.search);
+
+    const productId = params.get("id");
 
 
     async function loadProduct() {
 
-      const container =
-        document.getElementById("productContainer");
+      const productContent =
+        document.getElementById("productContent");
 
+
+      // If no product ID
 
       if (!productId) {
 
-        container.innerHTML = `
-          <div class="loading">
-            Product not found.
+        productContent.innerHTML = `
+
+          <div class="error-message">
+
+            <h2>Product not found</h2>
+
+            <p>
+              We couldn't find the piece you're looking for.
+            </p>
+
+            <a href="collection.html" class="collection-btn"
+               style="display:inline-block; color:white; text-decoration:none;">
+              VIEW COLLECTION
+            </a>
+
           </div>
+
         `;
 
         return;
-
       }
 
+
+      // FETCH PRODUCT FROM SUPABASE
 
       const { data: product, error } =
         await supabaseClient
@@ -336,140 +631,204 @@
 
       if (error || !product) {
 
-        container.innerHTML = `
-          <div class="loading">
-            Product could not be loaded.
+        console.error(error);
+
+
+        productContent.innerHTML = `
+
+          <div class="error-message">
+
+            <h2>Something went wrong</h2>
+
+            <p>
+              This product is currently unavailable.
+            </p>
+
+            <a href="collection.html"
+               class="collection-btn"
+               style="display:inline-block; color:white; text-decoration:none;">
+              BACK TO COLLECTION
+            </a>
+
           </div>
+
         `;
 
         return;
-
       }
 
 
-      currentProduct = product;
+      // SUPPORT DIFFERENT COLUMN NAMES
 
-
-      const name =
+      const productName =
         product.name ||
         product.title ||
-        "Untitled Product";
+        "OnlyHers Design";
 
 
-      const image =
+      const productPrice =
+        product.price || 0;
+
+
+      const productDescription =
+        product.description ||
+        "Thoughtfully designed to feel comfortable, personal, and uniquely hers.";
+
+
+      const productCategory =
+        product.category ||
+        "OnlyHers Collection";
+
+
+      const productImage =
         product.image_url ||
         product.image ||
+        product.imageUrl ||
         "";
 
 
-      const category =
-        product.category || "";
-
-
-      const description =
-        product.description ||
-        "No description available.";
-
-
-      let sizes =
+      const sizes =
         product.sizes ||
         product.available_sizes ||
-        [];
+        product.size ||
+        "";
 
 
-      if (typeof sizes === "string") {
+      // CONVERT SIZES TO ARRAY
 
-        sizes =
-          sizes
-            .split(",")
-            .map(size => size.trim())
-            .filter(Boolean);
+      let sizeArray = [];
+
+
+      if (Array.isArray(sizes)) {
+
+        sizeArray = sizes;
+
+      } else if (typeof sizes === "string") {
+
+        sizeArray = sizes
+          .split(",")
+          .map(size => size.trim())
+          .filter(size => size);
 
       }
 
 
-      if (!Array.isArray(sizes)) {
-        sizes = [];
+      // CREATE SIZE BUTTONS
+
+      let sizesHTML = "";
+
+
+      if (sizeArray.length > 0) {
+
+        sizeArray.forEach(size => {
+
+          sizesHTML += `
+
+            <button class="size-btn">
+              ${size}
+            </button>
+
+          `;
+
+        });
+
+      } else {
+
+        sizesHTML = `
+
+          <span style="color:rgba(255,255,255,0.6)">
+            Sizes coming soon
+          </span>
+
+        `;
+
       }
 
 
-      const sizesHTML =
-        sizes.length
+      // DISPLAY PRODUCT
 
-          ? sizes.map(size => `
+      productContent.innerHTML = `
 
-              <button
-                class="size"
-                onclick="selectSize(this)"
-              >
-                ${escapeHTML(size)}
-              </button>
-
-            `).join("")
-
-          : `<p>Size information coming soon.</p>`;
+        <div class="product-container">
 
 
-      document.title =
-        name + " — OnlyHers";
+          <!-- IMAGE -->
 
+          <div class="product-image-wrapper">
 
-      container.innerHTML = `
-
-        <div class="product-page">
-
-
-          <div class="image-box">
-
-            ${
-              image
-                ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(name)}">`
-                : ""
-            }
+            <img
+              src="${productImage}"
+              alt="${productName}"
+              class="product-image"
+              onerror="this.src='https://placehold.co/600x750/9b1422/ffffff?text=OnlyHers'"
+            >
 
           </div>
 
 
 
-          <div class="product-info">
+          <!-- DETAILS -->
+
+          <div class="product-details">
 
 
-            <div class="category">
-              ${escapeHTML(category)}
+            <div class="product-category">
+
+              ${productCategory}
+
             </div>
 
 
-            <h1>
-              ${escapeHTML(name)}
+            <h1 class="product-name">
+
+              ${productName}
+
             </h1>
 
 
-            <div class="price">
-              ${formatPrice(product.price)}
+            <div class="product-price">
+
+              ₹${Number(productPrice).toLocaleString("en-IN")}
+
             </div>
 
 
-            <p class="description">
-              ${escapeHTML(description)}
+            <div class="product-line"></div>
+
+
+            <p class="product-description">
+
+              ${productDescription}
+
             </p>
 
 
-            <div class="section-title">
-              Available Sizes
+            <div class="size-title">
+
+              Select your size
+
             </div>
 
 
             <div class="sizes">
+
               ${sizesHTML}
+
             </div>
 
 
-            <button
-              class="cart-button"
-              onclick="addToCart()"
-            >
-              ADD TO CART
+            <button class="order-btn" id="orderBtn">
+
+              Enquire about this piece
+
             </button>
+
+
+            <p class="product-note">
+
+              Every piece is thoughtfully made for her.
+
+            </p>
 
 
           </div>
@@ -479,72 +838,81 @@
 
       `;
 
-    }
+
+      // SIZE SELECTION
+
+      const sizeButtons =
+        document.querySelectorAll(".size-btn");
 
 
-    function selectSize(button) {
+      sizeButtons.forEach(button => {
 
-      document
-        .querySelectorAll(".size")
-        .forEach(item => {
-          item.classList.remove("active");
+        button.addEventListener("click", () => {
+
+          sizeButtons.forEach(btn =>
+            btn.classList.remove("active")
+          );
+
+          button.classList.add("active");
+
         });
 
+      });
 
-      button.classList.add("active");
+
+      // ORDER / ENQUIRY BUTTON
+
+      document
+        .getElementById("orderBtn")
+        .addEventListener("click", () => {
+
+          const selectedSize =
+            document.querySelector(".size-btn.active");
+
+
+          const sizeText =
+            selectedSize
+              ? selectedSize.textContent.trim()
+              : "Not selected";
+
+
+          const message = `Hi OnlyHers! 👋
+
+I'm interested in:
+
+${productName}
+
+Price: ₹${productPrice}
+
+Size: ${sizeText}
+
+Could you please share more details?`;
+
+
+          // CHANGE THIS NUMBER TO YOUR WHATSAPP NUMBER
+
+          const whatsappNumber =
+            "91XXXXXXXXXX";
+
+
+          window.open(
+
+            `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`,
+
+            "_blank"
+
+          );
+
+        });
 
     }
 
 
-    async function addToCart() {
-
-      const {
-        data: { session }
-      } =
-        await supabaseClient.auth.getSession();
-
-
-      if (!session) {
-
-        alert("Please login first.");
-
-        window.location.href =
-          "auth.html?redirect=" +
-          encodeURIComponent(window.location.href);
-
-        return;
-
-      }
-
-
-      const selectedSize =
-        document.querySelector(".size.active");
-
-
-      if (
-        document.querySelectorAll(".size").length > 0 &&
-        !selectedSize
-      ) {
-
-        alert("Please select a size.");
-
-        return;
-
-      }
-
-
-      alert(
-        "Added to cart! 🛍️"
-      );
-
-    }
-
+    // LOAD PRODUCT
 
     loadProduct();
 
   </script>
 
-
 </body>
-
 </html>
