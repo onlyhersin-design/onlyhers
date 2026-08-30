@@ -1,122 +1,1887 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>OnlyHers Dashboard</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap');
-:root{--red:#a8242e;--cream:#f5efe7}*{box-sizing:border-box}body{margin:0;background:var(--cream);font-family:"DM Sans",sans-serif;color:#181313}
-header{background:var(--red);padding:25px clamp(20px,5vw,70px);display:flex;justify-content:space-between;align-items:center}header b{letter-spacing:.2em}button{cursor:pointer}
-.wrap{max-width:1050px;margin:45px auto;padding:0 20px}.panel{background:#fff;border:1px solid rgba(0,0,0,.12);padding:30px;margin-bottom:25px}
-h1,h2{font-family:"Playfair Display",serif;font-weight:500}.login{max-width:460px;margin:70px auto}.hidden{display:none!important}
-label{display:block;font-size:12px;font-weight:600;margin:18px 0 7px}input,textarea{width:100%;padding:13px;border:1px solid #bbb;font:inherit;background:#fff}textarea{min-height:110px;resize:vertical}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:18px}.btn{border:0;background:var(--red);padding:14px 18px;font-weight:600;margin-top:22px}.btn:hover{background:#000;color:#fff}.logout{border:1px solid #000;background:transparent;padding:9px 14px}
-.products{display:grid;gap:12px}.product{display:grid;grid-template-columns:70px 1fr auto;gap:15px;align-items:center;border-top:1px solid #ddd;padding:12px 0}.product img{width:70px;height:85px;object-fit:cover;background:#eee}.delete{background:#fff;border:1px solid #a00;color:#a00;padding:9px 12px}.status{font-size:13px;margin-top:12px}.ok{color:green}.err{color:#b00020}
-@media(max-width:650px){.row{grid-template-columns:1fr}.product{grid-template-columns:60px 1fr}.product button{grid-column:2}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>OnlyHers Admin Dashboard</title>
+
+  <style>
+
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap');
+
+    :root {
+      --red: #a8242e;
+      --dark-red: #76121b;
+      --cream: #f6f0e9;
+      --black: #181313;
+      --border: rgba(0,0,0,.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--black);
+      font-family: "DM Sans", sans-serif;
+    }
+
+    header {
+      background: var(--red);
+      color: white;
+      padding: 22px clamp(20px, 5vw, 70px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header b {
+      letter-spacing: .15em;
+      font-size: 14px;
+    }
+
+    .wrap {
+      max-width: 1150px;
+      margin: 45px auto;
+      padding: 0 20px 70px;
+    }
+
+    .panel {
+      background: white;
+      border: 1px solid var(--border);
+      padding: 30px;
+      margin-bottom: 25px;
+    }
+
+    h1, h2 {
+      font-family: "Playfair Display", serif;
+      font-weight: 500;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin: 18px 0 7px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #bbb;
+      font: inherit;
+      background: white;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .btn {
+      border: none;
+      background: var(--red);
+      color: white;
+      padding: 13px 18px;
+      font-weight: 600;
+      margin-top: 22px;
+      transition: .25s;
+    }
+
+    .btn:hover {
+      background: var(--black);
+    }
+
+    .btn.secondary {
+      background: transparent;
+      border: 1px solid var(--red);
+      color: var(--red);
+    }
+
+    .btn.secondary:hover {
+      background: var(--red);
+      color: white;
+    }
+
+    .btn.danger {
+      background: #a00018;
+    }
+
+    .logout {
+      background: transparent;
+      border: 1px solid white;
+      color: white;
+      padding: 9px 14px;
+    }
+
+    .login {
+      max-width: 460px;
+      margin: 70px auto;
+    }
+
+    .status {
+      margin-top: 14px;
+      font-size: 13px;
+    }
+
+    .ok {
+      color: green;
+    }
+
+    .err {
+      color: #b00020;
+    }
+
+    /* PRODUCT PHOTOS */
+
+    .image-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .preview-item {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      background: #eee;
+      border: 2px solid transparent;
+    }
+
+    .preview-item.cover {
+      border-color: var(--red);
+    }
+
+    .preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .cover-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--red);
+      color: white;
+      text-align: center;
+      padding: 5px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .preview-actions {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      right: 5px;
+      display: flex;
+      justify-content: space-between;
+      gap: 5px;
+    }
+
+    .photo-action {
+      border: none;
+      background: white;
+      padding: 5px 7px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .photo-action.remove {
+      color: #a00018;
+    }
+
+    .help-text {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.5;
+      margin-top: 8px;
+    }
+
+    /* PRODUCTS */
+
+    .products {
+      display: grid;
+      gap: 12px;
+    }
+
+    .product {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      gap: 16px;
+      align-items: center;
+      border-top: 1px solid #ddd;
+      padding: 14px 0;
+    }
+
+    .product:first-child {
+      border-top: none;
+    }
+
+    .product img {
+      width: 80px;
+      height: 100px;
+      object-fit: cover;
+      background: #eee;
+    }
+
+    .product-name {
+      font-weight: 700;
+    }
+
+    .product-meta {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .photo-count {
+      margin-top: 5px;
+      font-size: 12px;
+      color: var(--red);
+    }
+
+    .product-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .small-btn {
+      padding: 9px 12px;
+      border: 1px solid #aaa;
+      background: white;
+    }
+
+    .small-btn.edit {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .small-btn.delete {
+      border-color: #a00018;
+      color: #a00018;
+    }
+
+    /* MODAL */
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-box {
+      width: min(850px, 100%);
+      max-height: 92vh;
+      overflow-y: auto;
+      background: white;
+      padding: 30px;
+      position: relative;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 18px;
+      border: none;
+      background: transparent;
+      font-size: 28px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    @media(max-width:700px) {
+
+      .row {
+        grid-template-columns: 1fr;
+      }
+
+      .product {
+        grid-template-columns: 65px 1fr;
+      }
+
+      .product img {
+        width: 65px;
+        height: 82px;
+      }
+
+      .product-actions {
+        grid-column: 2;
+      }
+
+      .panel,
+      .modal-box {
+        padding: 20px;
+      }
+
+    }
+
+  </style>
 </head>
+
+
 <body>
-<header><b>ONLYHERS · DASHBOARD</b><button class="logout hidden" id="logout">Log out</button></header>
+
+<header>
+
+  <b>ONLYHERS · DASHBOARD</b>
+
+  <button id="logout" class="logout hidden">
+    Log out
+  </button>
+
+</header>
+
 
 <div class="wrap">
+
+
+  <!-- LOGIN -->
+
   <section class="panel login" id="loginPanel">
+
     <h1>Welcome back.</h1>
-    <p>Sign in with the email and password you created in Supabase.</p>
-    <label>Email</label><input id="email" type="email" autocomplete="email">
-    <label>Password</label><input id="password" type="password" autocomplete="current-password">
-    <button class="btn" id="login">Sign in</button>
-    <div class="status" id="loginStatus"></div>
+
+    <p>Sign in to manage your OnlyHers collection.</p>
+
+    <label>Email</label>
+    <input id="email" type="email">
+
+    <label>Password</label>
+    <input id="password" type="password">
+
+    <button id="login" class="btn">
+      Sign in
+    </button>
+
+    <div id="loginStatus" class="status"></div>
+
   </section>
 
+
+
+  <!-- DASHBOARD -->
+
   <div id="dashboard" class="hidden">
-    <section class="panel">
-      <h1>Add a new design</h1>
-      <div class="row">
-        <div><label>Product / dress name</label><input id="name" placeholder="Example: Midnight Bloom Dress"></div>
-        <div><label>Price (₹)</label><input id="price" type="number" min="0" placeholder="2999"></div>
-      </div>
-      <label>Description</label><textarea id="description" placeholder="A short description of the dress..."></textarea>
-      <label>Available sizes</label><input id="sizes" placeholder="XS, S, M, L, XL">
-      <label>Category (optional)</label><input id="category" placeholder="Dress, Kurta, Co-ord set...">
-      <label>Product image</label><input id="image" type="file" accept="image/*">
-      <button class="btn" id="upload">Upload design</button>
-      <div class="status" id="uploadStatus"></div>
-    </section>
+
+
+    <!-- ADD PRODUCT -->
 
     <section class="panel">
-      <h2>Your products</h2>
-      <div class="products" id="productList">Loading...</div>
+
+      <h1>Add a new design</h1>
+
+      <div class="row">
+
+        <div>
+          <label>Product name</label>
+          <input id="name" placeholder="Example: Midnight Bloom Dress">
+        </div>
+
+        <div>
+          <label>Price (₹)</label>
+          <input id="price" type="number" min="0" placeholder="2999">
+        </div>
+
+      </div>
+
+
+      <label>Description</label>
+
+      <textarea
+        id="description"
+        placeholder="Tell customers about this design..."
+      ></textarea>
+
+
+      <div class="row">
+
+        <div>
+          <label>Available sizes</label>
+          <input id="sizes" placeholder="XS, S, M, L, XL">
+        </div>
+
+        <div>
+          <label>Category</label>
+          <input id="category" placeholder="Dress, Kurta, Co-ord">
+        </div>
+
+      </div>
+
+
+      <label>Product photos</label>
+
+      <input
+        id="images"
+        type="file"
+        accept="image/*"
+        multiple
+      >
+
+
+      <p class="help-text">
+        Select multiple photos. The first photo becomes the cover image.
+        You can remove photos before uploading.
+      </p>
+
+
+      <div
+        id="imagePreviews"
+        class="image-preview-grid"
+      ></div>
+
+
+      <button id="upload" class="btn">
+        Upload design
+      </button>
+
+
+      <div id="uploadStatus" class="status"></div>
+
     </section>
+
+
+
+    <!-- PRODUCTS -->
+
+    <section class="panel">
+
+      <h2>Your products</h2>
+
+      <div id="productList" class="products">
+        Loading...
+      </div>
+
+    </section>
+
+
   </div>
+
 </div>
 
+
+
+<!-- EDIT MODAL -->
+
+<div id="editModal" class="modal">
+
+  <div class="modal-box">
+
+    <button
+      class="close-modal"
+      onclick="closeEditModal()"
+    >
+      ×
+    </button>
+
+
+    <h1>Edit product</h1>
+
+
+    <input id="editId" type="hidden">
+
+
+    <div class="row">
+
+      <div>
+
+        <label>Product name</label>
+
+        <input id="editName">
+
+      </div>
+
+
+      <div>
+
+        <label>Price (₹)</label>
+
+        <input
+          id="editPrice"
+          type="number"
+        >
+
+      </div>
+
+    </div>
+
+
+    <label>Description</label>
+
+    <textarea id="editDescription"></textarea>
+
+
+    <div class="row">
+
+      <div>
+
+        <label>Available sizes</label>
+
+        <input id="editSizes">
+
+      </div>
+
+
+      <div>
+
+        <label>Category</label>
+
+        <input id="editCategory">
+
+      </div>
+
+    </div>
+
+
+    <label>Current product photos</label>
+
+    <p class="help-text">
+
+      ⭐ Click “Make Cover” to choose the main collection image.
+      ❌ Remove deletes the image from the product.
+
+    </p>
+
+
+    <div
+      id="editImagePreviews"
+      class="image-preview-grid"
+    ></div>
+
+
+    <label>Add more photos</label>
+
+    <input
+      id="editImages"
+      type="file"
+      accept="image/*"
+      multiple
+    >
+
+
+    <div
+      id="editNewPreviews"
+      class="image-preview-grid"
+    ></div>
+
+
+    <div class="modal-actions">
+
+      <button
+        id="saveEdit"
+        class="btn"
+      >
+        Save changes
+      </button>
+
+
+      <button
+        class="btn secondary"
+        onclick="closeEditModal()"
+      >
+        Cancel
+      </button>
+
+    </div>
+
+
+    <div
+      id="editStatus"
+      class="status"
+    ></div>
+
+  </div>
+
+</div>
+
+
+
 <script type="module">
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const SUPABASE_URL = 'https://zeodtbgxadxfvexvywpm.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr';
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+import {
+  createClient
+} from 'https://esm.sh/@supabase/supabase-js@2';
 
-const $ = id => document.getElementById(id);
-const loginPanel=$('loginPanel'), dashboard=$('dashboard'), logout=$('logout');
 
-function status(id,msg,type=''){const el=$(id);el.textContent=msg;el.className=`status ${type}`}
+const SUPABASE_URL =
+  'https://zeodtbgxadxfvexvywpm.supabase.co';
 
-async function refreshAuth(){
-  const {data:{session}}=await supabase.auth.getSession();
-  if(session){loginPanel.classList.add('hidden');dashboard.classList.remove('hidden');logout.classList.remove('hidden');loadProducts();}
-  else{loginPanel.classList.remove('hidden');dashboard.classList.add('hidden');logout.classList.add('hidden');}
+
+const SUPABASE_ANON_KEY =
+  'sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr';
+
+
+const supabase =
+  createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+
+const $ = id =>
+  document.getElementById(id);
+
+
+let selectedFiles = [];
+
+
+/* Edit state */
+
+let editingProduct = null;
+
+let existingImages = [];
+
+let newEditFiles = [];
+
+
+/* =========================
+   STATUS
+========================= */
+
+function setStatus(
+  id,
+  message,
+  type = ''
+) {
+
+  const element = $(id);
+
+  element.textContent = message;
+
+  element.className =
+    `status ${type}`;
+
 }
-$('login').onclick=async()=>{
-  status('loginStatus','Signing in...');
-  const {error}=await supabase.auth.signInWithPassword({email:$('email').value,password:$('password').value});
-  if(error) status('loginStatus',error.message,'err'); else refreshAuth();
-};
-$('logout').onclick=async()=>{await supabase.auth.signOut();refreshAuth();};
 
-$('upload').onclick=async()=>{
-  const file=$('image').files[0], name=$('name').value.trim();
-  if(!name||!file){status('uploadStatus','Please add a product name and image.','err');return;}
-  status('uploadStatus','Uploading image and saving product...');
-  const ext=file.name.split('.').pop();
-  const path=`${Date.now()}-${crypto.randomUUID()}.${ext}`;
-  const {error:uploadError}=await supabase.storage.from('product-images').upload(path,file,{contentType:file.type});
-  if(uploadError){status('uploadStatus',uploadError.message,'err');return;}
-  const {data:urlData}=supabase.storage.from('product-images').getPublicUrl(path);
-  const sizes=$('sizes').value.split(',').map(x=>x.trim()).filter(Boolean);
-  const price=$('price').value ? Number($('price').value) : null;
-  const {error}=await supabase.from('products').insert({
-    name,
-    price,
-    description:$('description').value.trim(),
-    sizes,
-    category:$('category').value.trim() || null,
-    image_url:urlData.publicUrl,
-    is_available:true
-  });
-  if(error){status('uploadStatus',error.message,'err');return;}
-  status('uploadStatus','Design uploaded successfully!','ok');
-  ['name','price','description','sizes','category'].forEach(id=>$(id).value='');$('image').value='';
+
+
+/* =========================
+   AUTH
+========================= */
+
+async function refreshAuth() {
+
+  const {
+    data: { session }
+  } =
+    await supabase.auth.getSession();
+
+
+  if (session) {
+
+    $('loginPanel')
+      .classList
+      .add('hidden');
+
+
+    $('dashboard')
+      .classList
+      .remove('hidden');
+
+
+    $('logout')
+      .classList
+      .remove('hidden');
+
+
+    loadProducts();
+
+  }
+
+  else {
+
+    $('loginPanel')
+      .classList
+      .remove('hidden');
+
+
+    $('dashboard')
+      .classList
+      .add('hidden');
+
+
+    $('logout')
+      .classList
+      .add('hidden');
+
+  }
+
+}
+
+
+
+/* LOGIN */
+
+$('login').onclick =
+  async () => {
+
+    setStatus(
+      'loginStatus',
+      'Signing in...'
+    );
+
+
+    const { error } =
+      await supabase
+        .auth
+        .signInWithPassword({
+
+          email:
+            $('email').value,
+
+          password:
+            $('password').value
+
+        });
+
+
+    if (error) {
+
+      setStatus(
+        'loginStatus',
+        error.message,
+        'err'
+      );
+
+    }
+
+    else {
+
+      refreshAuth();
+
+    }
+
+  };
+
+
+
+/* LOGOUT */
+
+$('logout').onclick =
+  async () => {
+
+    await supabase.auth.signOut();
+
+    refreshAuth();
+
+  };
+
+
+
+/* =========================
+   ADD IMAGE PREVIEWS
+========================= */
+
+$('images').addEventListener(
+  'change',
+  event => {
+
+    selectedFiles =
+      Array.from(event.target.files);
+
+    renderAddPreviews();
+
+  }
+);
+
+
+
+function renderAddPreviews() {
+
+  const container =
+    $('imagePreviews');
+
+
+  container.innerHTML = '';
+
+
+  selectedFiles.forEach(
+    (file, index) => {
+
+      const url =
+        URL.createObjectURL(file);
+
+
+      const item =
+        document.createElement('div');
+
+
+      item.className =
+        `preview-item ${
+          index === 0
+            ? 'cover'
+            : ''
+        }`;
+
+
+      item.innerHTML = `
+
+        <img src="${url}">
+
+        ${
+          index === 0
+            ? '<div class="cover-label">COVER PHOTO</div>'
+            : ''
+        }
+
+        <div class="preview-actions">
+
+          <button
+            class="photo-action remove"
+          >
+            Remove
+          </button>
+
+        </div>
+
+      `;
+
+
+      item
+        .querySelector('.remove')
+        .onclick = () => {
+
+          selectedFiles.splice(
+            index,
+            1
+          );
+
+          renderAddPreviews();
+
+        };
+
+
+      container.appendChild(item);
+
+    }
+  );
+
+}
+
+
+
+/* =========================
+   STORAGE UPLOAD FUNCTION
+========================= */
+
+async function uploadFiles(files) {
+
+  const uploadedUrls = [];
+
+
+  for (let i = 0; i < files.length; i++) {
+
+    const file = files[i];
+
+
+    const extension =
+      file.name
+        .split('.')
+        .pop();
+
+
+    const path =
+      `products/${Date.now()}-${crypto.randomUUID()}.${extension}`;
+
+
+    const {
+      error: uploadError
+    } =
+      await supabase
+        .storage
+        .from('product-images')
+        .upload(
+          path,
+          file,
+          {
+            contentType:
+              file.type
+          }
+        );
+
+
+    if (uploadError) {
+
+      throw uploadError;
+
+    }
+
+
+    const {
+      data
+    } =
+      supabase
+        .storage
+        .from('product-images')
+        .getPublicUrl(path);
+
+
+    uploadedUrls.push(
+      data.publicUrl
+    );
+
+  }
+
+
+  return uploadedUrls;
+
+}
+
+
+
+/* =========================
+   ADD PRODUCT
+========================= */
+
+$('upload').onclick =
+  async () => {
+
+    const name =
+      $('name').value.trim();
+
+
+    if (!name) {
+
+      setStatus(
+        'uploadStatus',
+        'Please enter a product name.',
+        'err'
+      );
+
+      return;
+
+    }
+
+
+    if (!selectedFiles.length) {
+
+      setStatus(
+        'uploadStatus',
+        'Please select at least one photo.',
+        'err'
+      );
+
+      return;
+
+    }
+
+
+    try {
+
+      setStatus(
+        'uploadStatus',
+        'Uploading product photos...'
+      );
+
+
+      const imageUrls =
+        await uploadFiles(
+          selectedFiles
+        );
+
+
+      const sizes =
+        $('sizes')
+          .value
+          .split(',')
+          .map(x => x.trim())
+          .filter(Boolean);
+
+
+      const price =
+        $('price').value
+          ? Number($('price').value)
+          : null;
+
+
+      const { error } =
+        await supabase
+          .from('products')
+          .insert({
+
+            name,
+
+            price,
+
+            description:
+              $('description')
+                .value
+                .trim(),
+
+            category:
+              $('category')
+                .value
+                .trim()
+              || null,
+
+            sizes,
+
+            image_url:
+              imageUrls[0],
+
+            image_urls:
+              imageUrls,
+
+            is_available:
+              true
+
+          });
+
+
+      if (error)
+        throw error;
+
+
+      setStatus(
+        'uploadStatus',
+        'Product uploaded successfully! 🎉',
+        'ok'
+      );
+
+
+      [
+        'name',
+        'price',
+        'description',
+        'sizes',
+        'category'
+      ].forEach(
+        id => $(id).value = ''
+      );
+
+
+      $('images').value = '';
+
+      selectedFiles = [];
+
+      $('imagePreviews').innerHTML = '';
+
+
+      loadProducts();
+
+    }
+
+    catch (error) {
+
+      console.error(error);
+
+      setStatus(
+        'uploadStatus',
+        error.message,
+        'err'
+      );
+
+    }
+
+  };
+
+
+
+/* =========================
+   LOAD PRODUCTS
+========================= */
+
+async function loadProducts() {
+
+  const list =
+    $('productList');
+
+
+  list.textContent =
+    'Loading products...';
+
+
+  const {
+    data,
+    error
+  } =
+    await supabase
+      .from('products')
+      .select('*')
+      .order(
+        'created_at',
+        {
+          ascending: false
+        }
+      );
+
+
+  if (error) {
+
+    list.textContent =
+      error.message;
+
+    return;
+
+  }
+
+
+  if (!data.length) {
+
+    list.innerHTML =
+      '<p>No products yet.</p>';
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    data.map(product => {
+
+
+      const images =
+        Array.isArray(product.image_urls)
+          && product.image_urls.length
+
+          ? product.image_urls
+
+          : product.image_url
+
+            ? [product.image_url]
+
+            : [];
+
+
+      return `
+
+        <div class="product">
+
+          <img
+            src="${images[0] || ''}"
+            alt=""
+          >
+
+
+          <div>
+
+            <div class="product-name">
+              ${escapeHTML(product.name || '')}
+            </div>
+
+
+            <div class="product-meta">
+
+              ${
+                product.price
+                  ? '₹' + product.price
+                  : 'Price on request'
+              }
+
+              ·
+
+              ${
+                (
+                  product.sizes || []
+                ).join(', ')
+              }
+
+            </div>
+
+
+            <div class="photo-count">
+
+              📸 ${images.length} photo${
+                images.length === 1
+                  ? ''
+                  : 's'
+              }
+
+            </div>
+
+          </div>
+
+
+          <div class="product-actions">
+
+            <button
+              class="small-btn edit"
+              data-edit="${product.id}"
+            >
+              Edit
+            </button>
+
+
+            <button
+              class="small-btn delete"
+              data-delete="${product.id}"
+            >
+              Delete
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join('');
+
+
+
+  document
+    .querySelectorAll('[data-edit]')
+    .forEach(button => {
+
+      button.onclick = () => {
+
+        const product =
+          data.find(
+            item =>
+              item.id ===
+              button.dataset.edit
+          );
+
+
+        openEditModal(product);
+
+      };
+
+    });
+
+
+
+  document
+    .querySelectorAll('[data-delete]')
+    .forEach(button => {
+
+      button.onclick = () => {
+
+        deleteProduct(
+          button.dataset.delete
+        );
+
+      };
+
+    });
+
+}
+
+
+
+/* =========================
+   OPEN EDIT MODAL
+========================= */
+
+function openEditModal(product) {
+
+  editingProduct = product;
+
+
+  existingImages =
+    Array.isArray(product.image_urls)
+      && product.image_urls.length
+
+      ? [...product.image_urls]
+
+      : product.image_url
+
+        ? [product.image_url]
+
+        : [];
+
+
+  newEditFiles = [];
+
+
+  $('editId').value =
+    product.id;
+
+
+  $('editName').value =
+    product.name || '';
+
+
+  $('editPrice').value =
+    product.price ?? '';
+
+
+  $('editDescription').value =
+    product.description || '';
+
+
+  $('editSizes').value =
+    Array.isArray(product.sizes)
+
+      ? product.sizes.join(', ')
+
+      : product.sizes || '';
+
+
+  $('editCategory').value =
+    product.category || '';
+
+
+  $('editImages').value = '';
+
+
+  $('editStatus').textContent = '';
+
+
+  renderExistingImages();
+
+  renderNewEditPreviews();
+
+
+  $('editModal')
+    .classList
+    .add('open');
+
+}
+
+
+
+/* =========================
+   EXISTING IMAGE MANAGEMENT
+========================= */
+
+function renderExistingImages() {
+
+  const container =
+    $('editImagePreviews');
+
+
+  container.innerHTML = '';
+
+
+  if (!existingImages.length) {
+
+    container.innerHTML =
+      '<p class="help-text">No photos available.</p>';
+
+    return;
+
+  }
+
+
+  existingImages.forEach(
+    (url, index) => {
+
+      const item =
+        document.createElement('div');
+
+
+      item.className =
+        `preview-item ${
+          index === 0
+            ? 'cover'
+            : ''
+        }`;
+
+
+      item.innerHTML = `
+
+        <img src="${url}">
+
+        ${
+          index === 0
+
+            ? '<div class="cover-label">COVER PHOTO</div>'
+
+            : ''
+        }
+
+        <div class="preview-actions">
+
+          ${
+            index !== 0
+
+              ? `
+                <button
+                  class="photo-action make-cover"
+                >
+                  Make Cover
+                </button>
+              `
+
+              : ''
+          }
+
+
+          <button
+            class="photo-action remove"
+          >
+            Remove
+          </button>
+
+        </div>
+
+      `;
+
+
+      const makeCover =
+        item.querySelector(
+          '.make-cover'
+        );
+
+
+      if (makeCover) {
+
+        makeCover.onclick =
+          () => {
+
+            const image =
+              existingImages.splice(
+                index,
+                1
+              )[0];
+
+
+            existingImages.unshift(
+              image
+            );
+
+
+            renderExistingImages();
+
+          };
+
+      }
+
+
+      item
+        .querySelector('.remove')
+        .onclick = () => {
+
+          if (
+            !confirm(
+              'Remove this photo from the product?'
+            )
+          ) return;
+
+
+          existingImages.splice(
+            index,
+            1
+          );
+
+
+          renderExistingImages();
+
+        };
+
+
+      container.appendChild(item);
+
+    }
+  );
+
+}
+
+
+
+/* =========================
+   ADD NEW EDIT PHOTOS
+========================= */
+
+$('editImages')
+  .addEventListener(
+    'change',
+    event => {
+
+      const files =
+        Array.from(
+          event.target.files
+        );
+
+
+      newEditFiles.push(
+        ...files
+      );
+
+
+      $('editImages').value = '';
+
+
+      renderNewEditPreviews();
+
+    }
+  );
+
+
+
+function renderNewEditPreviews() {
+
+  const container =
+    $('editNewPreviews');
+
+
+  container.innerHTML = '';
+
+
+  newEditFiles.forEach(
+    (file, index) => {
+
+      const url =
+        URL.createObjectURL(file);
+
+
+      const item =
+        document.createElement('div');
+
+
+      item.className =
+        'preview-item';
+
+
+      item.innerHTML = `
+
+        <img src="${url}">
+
+        <div class="preview-actions">
+
+          <button
+            class="photo-action remove"
+          >
+            Remove
+          </button>
+
+        </div>
+
+      `;
+
+
+      item
+        .querySelector('.remove')
+        .onclick = () => {
+
+          newEditFiles.splice(
+            index,
+            1
+          );
+
+
+          renderNewEditPreviews();
+
+        };
+
+
+      container.appendChild(item);
+
+    }
+  );
+
+}
+
+
+
+/* =========================
+   SAVE EDIT
+========================= */
+
+$('saveEdit').onclick =
+  async () => {
+
+    const productId =
+      $('editId').value;
+
+
+    const name =
+      $('editName')
+        .value
+        .trim();
+
+
+    if (!name) {
+
+      setStatus(
+        'editStatus',
+        'Product name is required.',
+        'err'
+      );
+
+      return;
+
+    }
+
+
+    try {
+
+      setStatus(
+        'editStatus',
+        'Saving changes...'
+      );
+
+
+      /* Upload newly added photos */
+
+      let newUrls = [];
+
+
+      if (
+        newEditFiles.length
+      ) {
+
+        setStatus(
+          'editStatus',
+          'Uploading new photos...'
+        );
+
+
+        newUrls =
+          await uploadFiles(
+            newEditFiles
+          );
+
+      }
+
+
+      /* Combine existing + new */
+
+      const finalImages =
+        [
+          ...existingImages,
+          ...newUrls
+        ];
+
+
+      if (
+        !finalImages.length
+      ) {
+
+        setStatus(
+          'editStatus',
+          'A product must have at least one photo.',
+          'err'
+        );
+
+        return;
+
+      }
+
+
+      const sizes =
+        $('editSizes')
+          .value
+          .split(',')
+          .map(x => x.trim())
+          .filter(Boolean);
+
+
+      const price =
+        $('editPrice').value
+          ? Number(
+              $('editPrice').value
+            )
+          : null;
+
+
+      const { error } =
+        await supabase
+          .from('products')
+          .update({
+
+            name,
+
+            price,
+
+            description:
+              $('editDescription')
+                .value
+                .trim(),
+
+            category:
+              $('editCategory')
+                .value
+                .trim()
+              || null,
+
+            sizes,
+
+            /* First image = cover */
+
+            image_url:
+              finalImages[0],
+
+            /* All images */
+
+            image_urls:
+              finalImages
+
+          })
+          .eq(
+            'id',
+            productId
+          );
+
+
+      if (error)
+        throw error;
+
+
+      setStatus(
+        'editStatus',
+        'Product updated successfully! 🎉',
+        'ok'
+      );
+
+
+      loadProducts();
+
+
+      setTimeout(
+        closeEditModal,
+        1000
+      );
+
+    }
+
+    catch (error) {
+
+      console.error(error);
+
+
+      setStatus(
+        'editStatus',
+        error.message,
+        'err'
+      );
+
+    }
+
+  };
+
+
+
+/* =========================
+   CLOSE EDIT MODAL
+========================= */
+
+window.closeEditModal =
+  function () {
+
+    $('editModal')
+      .classList
+      .remove('open');
+
+
+    editingProduct = null;
+
+    existingImages = [];
+
+    newEditFiles = [];
+
+  };
+
+
+
+/* =========================
+   DELETE PRODUCT
+========================= */
+
+async function deleteProduct(id) {
+
+  const confirmed =
+    confirm(
+      'Are you sure you want to permanently delete this product?'
+    );
+
+
+  if (!confirmed)
+    return;
+
+
+  const {
+    error
+  } =
+    await supabase
+      .from('products')
+      .delete()
+      .eq(
+        'id',
+        id
+      );
+
+
+  if (error) {
+
+    alert(
+      error.message
+    );
+
+    return;
+
+  }
+
+
   loadProducts();
-};
 
-async function loadProducts(){
-  const list=$('productList');
-  const {data,error}=await supabase.from('products').select('*').order('created_at',{ascending:false});
-  if(error){list.textContent=error.message;return;}
-  if(!data.length){list.innerHTML='<p>No products yet.</p>';return;}
-  list.innerHTML=data.map(p=>`<div class="product">
-    <img src="${p.image_url}" alt="">
-    <div><strong>${p.name}</strong><br><small>${p.price ? '₹'+p.price : 'Price on request'} · ${(p.sizes||[]).join(', ')}</small></div>
-    <button class="delete" data-id="${p.id}">Delete</button>
-  </div>`).join('');
-  list.querySelectorAll('.delete').forEach(btn=>btn.onclick=async()=>{
-    if(!confirm('Delete this product?'))return;
-    const {error}=await supabase.from('products').delete().eq('id',btn.dataset.id);
-    if(error)alert(error.message); else loadProducts();
-  });
 }
+
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) return '';
+
+
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+
+}
+
+
+
+/* START */
+
 refreshAuth();
+
 </script>
+
 </body>
 </html>
