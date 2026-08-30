@@ -746,7 +746,6 @@
       link.addEventListener("click", () => nav.classList.remove("open"));
     });
   </script>
-<!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -759,7 +758,90 @@
     SUPABASE_KEY
   );
 
-  console.log("OnlyHers connected to Supabase!");
+  const homeProducts = document.getElementById("homeProducts");
+
+  function escapeHtml(text = "") {
+    return String(text).replace(/[&<>"']/g, char => {
+      return {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      }[char];
+    });
+  }
+
+  function formatPrice(price) {
+    if (price === null || price === undefined || price === "") {
+      return "";
+    }
+
+    return "₹" + Number(price).toLocaleString("en-IN");
+  }
+
+  async function loadHomeProducts() {
+
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("is_available", true)
+      .order("created_at", { ascending: false })
+      .limit(3);
+
+    if (error) {
+      console.error("Supabase error:", error);
+
+      homeProducts.innerHTML = `
+        <p class="loading-products">
+          Our collection is coming soon.
+        </p>
+      `;
+
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      homeProducts.innerHTML = `
+        <p class="loading-products">
+          Something beautiful is coming soon for her. ❤️
+        </p>
+      `;
+
+      return;
+    }
+
+    homeProducts.innerHTML = data.map(product => `
+      <a
+        href="products.html"
+        class="home-product"
+        style="text-decoration:none;color:#000;"
+      >
+
+        <img
+          src="${escapeHtml(product.image_url)}"
+          alt="${escapeHtml(product.name)} by OnlyHers"
+          loading="lazy"
+        >
+
+        <div class="home-product-info">
+
+          <h3>${escapeHtml(product.name)}</h3>
+
+          ${
+            product.price
+              ? `<p>${formatPrice(product.price)}</p>`
+              : ""
+          }
+
+        </div>
+
+      </a>
+    `).join("");
+
+  }
+
+  loadHomeProducts();
 </script>
   
 </body>
