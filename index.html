@@ -783,7 +783,129 @@ footer h3 {
   }
 
 }
+/* =========================
+   LOGIN & SIGNUP MODALS
+========================= */
 
+.auth-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(20, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+}
+
+.auth-modal.active {
+  display: flex;
+}
+
+.auth-box {
+  position: relative;
+  width: min(420px, 90%);
+  padding: 40px;
+
+  background: #fff8f5;
+  border-radius: 4px;
+
+  box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+  animation: modalPop 0.35s ease;
+}
+
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.auth-box h2 {
+  font-size: 32px;
+  margin-bottom: 8px;
+  color: #8f0d1c;
+}
+
+.auth-box p {
+  color: #555;
+  margin-bottom: 25px;
+}
+
+.auth-box input {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 14px 16px;
+  margin-bottom: 14px;
+
+  border: 1px solid #ddd;
+  border-radius: 3px;
+
+  font-size: 15px;
+}
+
+.auth-box input:focus {
+  outline: none;
+  border-color: #a80f22;
+}
+
+.auth-submit {
+  width: 100%;
+  padding: 14px;
+
+  background: #a80f22;
+  color: white;
+
+  border: none;
+  cursor: pointer;
+
+  font-weight: bold;
+  letter-spacing: 1px;
+
+  transition: 0.3s;
+}
+
+.auth-submit:hover {
+  background: #7d0715;
+  transform: translateY(-2px);
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.auth-switch button {
+  background: none;
+  border: none;
+  color: #a80f22;
+
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-auth {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+
+  background: none;
+  border: none;
+
+  font-size: 28px;
+  cursor: pointer;
+
+  color: #555;
+}
+  
 </style>
 </head>
 
