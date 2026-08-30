@@ -1,5 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
 
+.hers-signature {
+  font-family: 'Great Vibes', cursive;
+  font-size: 55px;
+  font-weight: 400;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.brand-story {
+  padding: 100px 10%;
+  background: #98131d;
+  color: white;
+  text-align: center;
+}
+
+.brand-story p {
+  max-width: 700px;
+  margin: auto;
+  font-size: 17px;
+  line-height: 1.8;
+}
 
 * {
   margin: 0;
