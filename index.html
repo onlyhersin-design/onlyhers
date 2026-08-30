@@ -656,6 +656,21 @@
       link.addEventListener("click", () => nav.classList.remove("open"));
     });
   </script>
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+  const SUPABASE_URL = "https://zeodtbgxadxfvexvywpm.supabase.co";
+
+  const SUPABASE_KEY = "sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr";
+
+  const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  console.log("OnlyHers connected to Supabase!");
+</script>
+  
 </body>
 </html>
