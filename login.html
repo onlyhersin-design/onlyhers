@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Login — OnlyHers</title>
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body class="auth-page">
+
+
+  <div class="auth-wrapper">
+
+
+    <a href="index.html" class="back-home">
+      ← Back to OnlyHers
+    </a>
+
+
+    <div class="auth-box">
+
+      <p class="section-tag">WELCOME BACK</p>
+
+      <h1>Login to<br><span>OnlyHers.</span></h1>
+
+      <p class="auth-description">
+        Your favourite pieces are waiting for you.
+      </p>
+
+
+      <form id="loginForm">
+
+        <label>Email</label>
+
+        <input
+          type="email"
+          id="email"
+          placeholder="Enter your email"
+          required
+        >
+
+
+        <label>Password</label>
+
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter your password"
+          required
+        >
+
+
+        <button type="submit" class="auth-button">
+          LOGIN →
+        </button>
+
+
+        <p id="message" class="message"></p>
+
+
+      </form>
+
+
+      <p class="switch-auth">
+
+        Don't have an account?
+
+        <a href="signup.html">
+          Sign up
+        </a>
+
+      </p>
+
+
+    </div>
+
+
+  </div>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+  <script>
+
+    const SUPABASE_URL =
+      "https://zeodtbgxadxfvexvywpm.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr";
+
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+    document
+      .getElementById("loginForm")
+      .addEventListener("submit", async function(e) {
+
+        e.preventDefault();
+
+
+        const email =
+          document.getElementById("email").value;
+
+        const password =
+          document.getElementById("password").value;
+
+        const message =
+          document.getElementById("message");
+
+
+        message.textContent =
+          "Logging in...";
+
+
+        const { data, error } =
+          await supabaseClient.auth.signInWithPassword({
+
+            email: email,
+
+            password: password
+
+          });
+
+
+        if (error) {
+
+          message.textContent =
+            error.message;
+
+          message.className =
+            "message error";
+
+          return;
+
+        }
+
+
+        message.textContent =
+          "Login successful!";
+
+
+        message.className =
+          "message success";
+
+
+        setTimeout(function() {
+
+          window.location.href =
+            "index.html";
+
+        }, 1000);
+
+
+      });
+
+  </script>
+
+
+</body>
+
+</html>
