@@ -357,7 +357,156 @@
       }
 
     }
+/* EDIT PROFILE MODAL */
 
+.edit-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(35, 0, 0, 0.72);
+  backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 9999;
+}
+
+.edit-modal.active {
+  display: flex;
+}
+
+.edit-modal-box {
+  width: 100%;
+  max-width: 520px;
+  background: #a91420;
+  border: 1px solid rgba(255,255,255,0.25);
+  padding: 45px;
+  position: relative;
+  box-shadow: 0 30px 100px rgba(0,0,0,0.35);
+}
+
+.edit-modal-small {
+  font-size: 11px;
+  letter-spacing: 3px;
+  opacity: 0.65;
+  margin-bottom: 16px;
+}
+
+.edit-modal-box h2 {
+  font-family: Georgia, serif;
+  font-size: 42px;
+  font-weight: normal;
+  margin-bottom: 12px;
+}
+
+.edit-modal-box > p {
+  opacity: 0.75;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.close-modal {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.close-modal:hover {
+  opacity: 1;
+}
+
+.edit-modal label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 2px;
+  margin-bottom: 9px;
+  margin-top: 20px;
+  opacity: 0.85;
+}
+
+.edit-modal input,
+.edit-modal select {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.08);
+  color: white;
+  font-size: 15px;
+  outline: none;
+}
+
+.edit-modal input::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+.edit-modal select option {
+  background: #a91420;
+  color: white;
+}
+
+.phone-edit-row {
+  display: flex;
+  gap: 10px;
+}
+
+.phone-edit-row select {
+  width: 130px;
+}
+
+.phone-edit-row input {
+  flex: 1;
+}
+
+.save-profile-btn {
+  width: 100%;
+  margin-top: 30px;
+  padding: 16px;
+  border: none;
+  background: #fff8f3;
+  color: #a91420;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.save-profile-btn:hover {
+  background: #111;
+  color: white;
+}
+
+.edit-message {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+  min-height: 20px;
+}
+
+@media (max-width: 600px) {
+
+  .edit-modal-box {
+    padding: 35px 22px;
+  }
+
+  .edit-modal-box h2 {
+    font-size: 34px;
+  }
+
+  .phone-edit-row {
+    gap: 7px;
+  }
+
+  .phone-edit-row select {
+    width: 110px;
+  }
+
+}
   </style>
 </head>
 
@@ -492,7 +641,9 @@
 
 
           <div class="actions-section">
-
+<button class="secondary-btn" id="editProfileBtn">
+  EDIT PROFILE
+</button>
             <a href="collection.html" class="primary-btn">
               SHOP COLLECTION
             </a>
@@ -574,7 +725,74 @@
     </p>
 
   </footer>
+<!-- EDIT PROFILE MODAL -->
+<div class="edit-modal" id="editModal">
 
+  <div class="edit-modal-box">
+
+    <button class="close-modal" id="closeEditModal">×</button>
+
+    <div class="edit-modal-small">ONLYHERS ACCOUNT</div>
+
+    <h2>Edit your profile</h2>
+
+    <p>
+      Keep your details updated so your OnlyHers experience stays personal.
+    </p>
+
+    <form id="editProfileForm">
+
+      <label for="editName">FULL NAME</label>
+
+      <input
+        type="text"
+        id="editName"
+        placeholder="Your full name"
+      >
+
+
+      <label for="editPhone">PHONE NUMBER</label>
+
+      <div class="phone-edit-row">
+
+        <select id="editCountryCode">
+
+          <option value="+91" selected>🇮🇳 +91</option>
+          <option value="+1">🇺🇸 +1</option>
+          <option value="+44">🇬🇧 +44</option>
+          <option value="+61">🇦🇺 +61</option>
+          <option value="+971">🇦🇪 +971</option>
+          <option value="+65">🇸🇬 +65</option>
+          <option value="+60">🇲🇾 +60</option>
+          <option value="+974">🇶🇦 +974</option>
+          <option value="+966">🇸🇦 +966</option>
+          <option value="+49">🇩🇪 +49</option>
+          <option value="+33">🇫🇷 +33</option>
+          <option value="+39">🇮🇹 +39</option>
+          <option value="+81">🇯🇵 +81</option>
+
+        </select>
+
+        <input
+          type="tel"
+          id="editPhone"
+          placeholder="9876543210"
+        >
+
+      </div>
+
+
+      <button type="submit" class="save-profile-btn">
+        SAVE CHANGES
+      </button>
+
+      <p id="editMessage" class="edit-message"></p>
+
+    </form>
+
+  </div>
+
+</div>
 
   <!-- SUPABASE -->
 
@@ -712,7 +930,266 @@ document.getElementById("phoneDetail").textContent = phoneNumber;
       document.getElementById("accountContent").style.display = "block";
 
     }
+/*
+==========================================
+EDIT PROFILE
+==========================================
+*/
 
+const editProfileBtn =
+  document.getElementById("editProfileBtn");
+
+const editModal =
+  document.getElementById("editModal");
+
+const closeEditModal =
+  document.getElementById("closeEditModal");
+
+const editProfileForm =
+  document.getElementById("editProfileForm");
+
+
+editProfileBtn.addEventListener("click", async () => {
+
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
+
+
+  if (!user) return;
+
+
+  const currentName =
+    user.user_metadata?.full_name ||
+    user.user_metadata?.name ||
+    "";
+
+
+  const currentPhone =
+    user.user_metadata?.phone ||
+    user.user_metadata?.phone_number ||
+    "";
+
+
+  document.getElementById("editName").value =
+    currentName;
+
+
+  /*
+  Try to separate country code and phone number
+  */
+
+  const countryCodes = [
+    "+971",
+    "+966",
+    "+974",
+    "+91",
+    "+65",
+    "+60",
+    "+61",
+    "+44",
+    "+49",
+    "+33",
+    "+39",
+    "+81",
+    "+1"
+  ];
+
+
+  let selectedCode = "+91";
+  let phoneOnly = currentPhone;
+
+
+  for (const code of countryCodes) {
+
+    if (currentPhone.startsWith(code)) {
+
+      selectedCode = code;
+
+      phoneOnly =
+        currentPhone
+          .replace(code, "")
+          .trim();
+
+      break;
+
+    }
+
+  }
+
+
+  document.getElementById("editCountryCode").value =
+    selectedCode;
+
+
+  document.getElementById("editPhone").value =
+    phoneOnly;
+
+
+  document.getElementById("editMessage").textContent =
+    "";
+
+
+  editModal.classList.add("active");
+
+});
+
+
+/*
+CLOSE MODAL
+*/
+
+closeEditModal.addEventListener("click", () => {
+
+  editModal.classList.remove("active");
+
+});
+
+
+/*
+CLICK OUTSIDE TO CLOSE
+*/
+
+editModal.addEventListener("click", (event) => {
+
+  if (event.target === editModal) {
+
+    editModal.classList.remove("active");
+
+  }
+
+});
+
+
+/*
+SAVE PROFILE
+*/
+
+editProfileForm.addEventListener(
+  "submit",
+  async (event) => {
+
+    event.preventDefault();
+
+
+    const name =
+      document
+        .getElementById("editName")
+        .value
+        .trim();
+
+
+    const countryCode =
+      document
+        .getElementById("editCountryCode")
+        .value;
+
+
+    const phoneOnly =
+      document
+        .getElementById("editPhone")
+        .value
+        .trim();
+
+
+    const phone =
+      phoneOnly
+        ? `${countryCode} ${phoneOnly}`
+        : "";
+
+
+    const message =
+      document.getElementById("editMessage");
+
+
+    message.textContent =
+      "Saving your changes...";
+
+
+    const {
+      data,
+      error
+    } = await supabaseClient.auth.updateUser({
+
+      data: {
+        full_name: name,
+        phone: phone
+      }
+
+    });
+
+
+    if (error) {
+
+      message.textContent =
+        error.message;
+
+      return;
+
+    }
+
+
+    message.textContent =
+      "Profile updated successfully ✓";
+
+
+    /*
+    UPDATE PAGE WITHOUT REFRESH
+    */
+
+const {
+  data: { user: updatedUser }
+} = await supabaseClient.auth.getUser();
+
+document.getElementById("userName").textContent =
+  name ||
+  updatedUser.email.split("@")[0];
+
+
+    document.getElementById("fullName").textContent =
+      name ||
+      "—";
+
+
+    document.getElementById("phoneDetail").textContent =
+      phone ||
+      "Not added yet";
+
+
+const {
+  data: { user: updatedUser }
+} = await supabaseClient.auth.getUser();
+
+document.getElementById("userName").textContent =
+  name || updatedUser.email.split("@")[0];
+
+document.getElementById("fullName").textContent =
+  name || "—";
+
+document.getElementById("phoneDetail").textContent =
+  phone || "Not added yet";
+
+const initial =
+  (name || updatedUser.email)
+    .charAt(0)
+    .toUpperCase();
+
+document.getElementById("avatar").textContent =
+  initial;
+
+
+    document.getElementById("avatar").textContent =
+      initial;
+
+
+    setTimeout(() => {
+
+      editModal.classList.remove("active");
+
+    }, 1200);
+
+  }
+);
 
     /*
     ==========================================
