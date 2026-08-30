@@ -1,2124 +1,590 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>OnlyHers | Made for Her</title>
-
-<meta name="description"
-content="OnlyHers is a women's fashion brand founded by Hari Venkatesh in 2026.">
-
-<link rel="icon" href="favicon.png">
-<img src="./onlyhers-logo.png" alt="OnlyHers">
-
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
-
-<style>
-
-:root{
-  --red:#a8242e;
-  --darkred:#7e141d;
-  --cream:#f5efe7;
-  --black:#171212;
-  --white:#ffffff;
-}
-
-*{
-  box-sizing:border-box;
-}
-
-html{
-  scroll-behavior:smooth;
-}
-
-body{
-  margin:0;
-  font-family:"DM Sans",sans-serif;
-  background:var(--cream);
-  color:var(--black);
-}
-
-/* NAVIGATION */
-
-nav{
-  height:75px;
-  background:var(--red);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 6%;
-  position:sticky;
-  top:0;
-  z-index:1000;
-  border-bottom:1px solid rgba(0,0,0,.15);
-}
-
-.logo img{
-  height:52px;
-  max-width:150px;
-  object-fit:contain;
-}
-
-.nav-links{
-  display:flex;
-  align-items:center;
-  gap:25px;
-}
-
-.nav-links a,
-.nav-links button{
-  text-decoration:none;
-  color:#111;
-  background:none;
-  border:none;
-  font-family:"DM Sans";
-  font-size:11px;
-  font-weight:600;
-  text-transform:uppercase;
-  letter-spacing:.1em;
-  cursor:pointer;
-}
-
-.cart-number{
-  background:#111;
-  color:white;
-  border-radius:50%;
-  padding:3px 7px;
-  font-size:10px;
-}
-
-/* HERO */
-
-.hero{
-  min-height:85vh;
-  background:
-  radial-gradient(circle at 20% 20%,rgba(255,255,255,.15),transparent 30%),
-  linear-gradient(135deg,var(--red),var(--darkred));
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:80px 20px;
-}
-
-.hero-content{
-  max-width:850px;
-}
-
-.hero-logo{
-  width:min(420px,80vw);
-  max-height:180px;
-  object-fit:contain;
-}
-
-.hero h1{
-  font-family:"Playfair Display";
-  font-size:clamp(55px,9vw,110px);
-  font-weight:400;
-  line-height:.95;
-  margin:35px 0 20px;
-}
-
-.hero p{
-  font-size:15px;
-  max-width:550px;
-  margin:auto;
-  line-height:1.8;
-}
-
-.btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:15px 24px;
-  background:#111;
-  color:white;
-  text-decoration:none;
-  border:1px solid #111;
-  font-size:11px;
-  font-weight:600;
-  letter-spacing:.1em;
-  text-transform:uppercase;
-  cursor:pointer;
-  transition:.25s;
-}
-
-.btn:hover{
-  background:transparent;
-  color:#111;
-}
-
-.btn-outline{
-  background:transparent;
-  color:#111;
-}
-
-/* PRODUCTS */
-
-.section{
-  padding:90px 7%;
-}
-
-.section-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:end;
-  margin-bottom:40px;
-}
-
-.section-header h2{
-  font-family:"Playfair Display";
-  font-size:clamp(45px,6vw,75px);
-  font-weight:400;
-  margin:0;
-}
-
-.section-header p{
-  font-size:11px;
-  letter-spacing:.15em;
-}
-
-.products-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:25px;
-}
-
-.product-card{
-  background:white;
-  position:relative;
-  cursor:pointer;
-}
-
-.product-card img{
-  width:100%;
-  aspect-ratio:3/4;
-  object-fit:cover;
-  display:block;
-}
-
-.product-info{
-  padding:18px;
-}
-
-.product-info h3{
-  font-family:"Playfair Display";
-  font-size:24px;
-  font-weight:400;
-  margin:0 0 8px;
-}
-
-.product-price{
-  font-size:14px;
-}
-
-.wishlist-btn{
-  position:absolute;
-  right:12px;
-  top:12px;
-
-  width:42px;
-  height:42px;
-
-  border:none;
-  border-radius:50%;
-
-  background:white;
-  font-size:20px;
-
-  cursor:pointer;
-}
-
-.loading{
-  grid-column:1/-1;
-  text-align:center;
-  padding:60px;
-}
-
-/* PRODUCT MODAL */
-
-.modal{
-  position:fixed;
-  inset:0;
-
-  background:rgba(0,0,0,.55);
-
-  display:none;
-
-  align-items:center;
-  justify-content:center;
-
-  z-index:2000;
-
-  padding:20px;
-}
+  <meta charset="UTF-8">
 
-.modal.active{
-  display:flex;
-}
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-.modal-box{
-  background:var(--cream);
+  <title>OnlyHers — Made For Her</title>
 
-  width:min(1000px,100%);
 
-  max-height:90vh;
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  overflow:auto;
+  <script src="app.js" defer></script>
 
-  position:relative;
-}
 
-.close{
-  position:absolute;
+  <style>
 
-  right:15px;
-  top:15px;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  z-index:2;
 
-  width:40px;
-  height:40px;
+    html {
+      scroll-behavior: smooth;
+    }
 
-  border:none;
-  border-radius:50%;
 
-  background:white;
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f8f5f0;
+      color: #181818;
+    }
 
-  cursor:pointer;
 
-  font-size:20px;
-}
+    /* NAVBAR */
 
-.product-modal-content{
-  display:grid;
+    nav {
 
-  grid-template-columns:1fr 1fr;
-}
+      position: fixed;
 
-.product-modal-content img{
-  width:100%;
-  height:100%;
-  max-height:700px;
-  object-fit:cover;
-}
+      top: 0;
+      left: 0;
 
-.product-details{
-  padding:55px 40px;
-}
+      width: 100%;
 
-.product-details h2{
-  font-family:"Playfair Display";
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
-  font-size:50px;
+      padding: 18px 7%;
 
-  font-weight:400;
+      background: rgba(248,245,240,0.95);
 
-  margin:10px 0;
-}
+      backdrop-filter: blur(10px);
 
-.product-description{
-  line-height:1.8;
-  color:#555;
-}
+      border-bottom: 1px solid #e2ddd6;
 
-.sizes{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin:15px 0 25px;
-}
+      z-index: 1000;
 
-.size-btn{
-  min-width:45px;
-  padding:11px;
+    }
 
-  border:1px solid #999;
 
-  background:white;
+    .logo {
 
-  cursor:pointer;
-}
+      font-family: Georgia, serif;
 
-.size-btn.active{
-  background:#111;
-  color:white;
-}
+      font-size: 30px;
 
-.quantity{
-  display:flex;
+      font-weight: bold;
 
-  align-items:center;
+      color: #181818;
 
-  gap:15px;
+      text-decoration: none;
 
-  margin:25px 0;
-}
+    }
 
-.quantity button{
-  width:35px;
-  height:35px;
 
-  border:1px solid #aaa;
+    .nav-right {
 
-  background:white;
+      display: flex;
+      align-items: center;
+      gap: 20px;
 
-  cursor:pointer;
-}
+    }
 
-/* CART */
 
-.cart-panel{
-  position:fixed;
+    #authArea {
 
-  right:-450px;
-  top:0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
 
-  width:min(420px,100%);
+    }
 
-  height:100vh;
 
-  background:var(--cream);
+    .login-link,
+    .account-link {
 
-  z-index:3000;
+      color: #181818;
 
-  padding:25px;
+      text-decoration: none;
 
-  transition:.35s;
+      font-size: 12px;
 
-  overflow:auto;
-}
+      letter-spacing: 1px;
 
-.cart-panel.active{
-  right:0;
-}
+    }
 
-.cart-header{
-  display:flex;
 
-  justify-content:space-between;
+    .signup-link {
 
-  align-items:center;
-}
+      background: #181818;
 
-.cart-item{
-  display:grid;
+      color: white;
 
-  grid-template-columns:80px 1fr;
+      padding: 12px 18px;
 
-  gap:15px;
+      text-decoration: none;
 
-  background:white;
+      font-size: 12px;
 
-  padding:12px;
+      letter-spacing: 1px;
 
-  margin:15px 0;
-}
+    }
 
-.cart-item img{
-  width:80px;
-  height:100px;
 
-  object-fit:cover;
-}
+    .logout-button {
 
-.remove-btn{
-  background:none;
-  border:none;
+      background: transparent;
 
-  color:var(--red);
+      border: none;
 
-  padding:0;
+      cursor: pointer;
 
-  cursor:pointer;
-}
+      font-size: 11px;
 
-/* AUTH */
+      color: #9b1c25;
 
-.auth-modal{
-  position:fixed;
+      letter-spacing: 1px;
 
-  inset:0;
+    }
 
-  background:rgba(0,0,0,.55);
 
-  display:none;
+    /* HERO */
 
-  align-items:center;
-  justify-content:center;
+    .hero {
 
-  z-index:4000;
+      min-height: 100vh;
 
-  padding:20px;
-}
+      background: linear-gradient(
+        135deg,
+        #b62b35,
+        #7e1019
+      );
 
-.auth-modal.active{
-  display:flex;
-}
+      display: flex;
 
-.auth-box{
-  width:min(430px,100%);
+      justify-content: center;
 
-  background:white;
+      align-items: center;
 
-  padding:35px;
+      text-align: center;
 
-  position:relative;
-}
+      padding: 120px 20px 60px;
 
-.auth-tabs{
-  display:flex;
+    }
 
-  gap:25px;
 
-  margin-bottom:25px;
-}
+    .hero-content {
 
-.auth-tab{
-  border:none;
+      max-width: 950px;
 
-  background:none;
+    }
 
-  font-size:14px;
 
-  cursor:pointer;
+    .hero-logo {
 
-  padding-bottom:8px;
-}
+      font-size: 20px;
 
-.auth-tab.active{
-  border-bottom:2px solid var(--red);
-}
+      margin-bottom: 50px;
 
-.auth-box input{
-  width:100%;
+      letter-spacing: 3px;
 
-  padding:14px;
+    }
 
-  margin:8px 0;
 
-  border:1px solid #ccc;
+    .hero h1 {
 
-  font-family:"DM Sans";
-}
+      font-family: Georgia, serif;
 
-.message{
-  padding:10px;
+      font-size: clamp(65px, 11vw, 150px);
 
-  margin:10px 0;
+      font-weight: normal;
 
-  background:#f5efe7;
+      line-height: 0.9;
 
-  font-size:13px;
-}
+      margin-bottom: 35px;
 
-/* ACCOUNT */
+    }
 
-.account-bar{
-  display:none;
 
-  background:white;
+    .hero p {
 
-  padding:15px 7%;
+      font-size: 18px;
 
-  justify-content:space-between;
+      line-height: 1.8;
 
-  align-items:center;
-}
+      max-width: 700px;
 
-/* FOOTER */
+      margin: auto;
 
-footer{
-  background:var(--darkred);
+      margin-bottom: 45px;
 
-  padding:35px;
+    }
 
-  text-align:center;
 
-  font-size:11px;
+    .shop-button {
 
-  letter-spacing:.12em;
-}
+      display: inline-block;
 
-/* MOBILE */
+      background: #181818;
 
-@media(max-width:750px){
+      color: white;
 
-  .nav-links{
-    gap:13px;
-  }
+      text-decoration: none;
 
-  .nav-links a:not(.mobile-keep){
-    display:none;
-  }
+      padding: 20px 40px;
 
-  .products-grid{
-    grid-template-columns:repeat(2,1fr);
+      font-size: 12px;
 
-    gap:12px;
-  }
+      font-weight: bold;
 
-  .product-info{
-    padding:12px;
-  }
+      letter-spacing: 2px;
 
-  .product-info h3{
-    font-size:19px;
-  }
+      transition: 0.3s;
 
-  .product-modal-content{
-    grid-template-columns:1fr;
-  }
+    }
 
-  .product-details{
-    padding:30px 20px;
-  }
 
-  .product-details h2{
-    font-size:40px;
-  }
+    .shop-button:hover {
 
-}
+      background: white;
 
-</style>
+      color: #181818;
+
+      transform: translateY(-3px);
+
+    }
+
+
+    /* ABOUT */
+
+    .about {
+
+      padding: 120px 10%;
+
+      text-align: center;
+
+    }
+
+
+    .label {
+
+      font-size: 11px;
+
+      letter-spacing: 3px;
+
+      margin-bottom: 25px;
+
+      text-transform: uppercase;
+
+    }
+
+
+    .about h2 {
+
+      font-family: Georgia, serif;
+
+      font-size: clamp(40px, 6vw, 75px);
+
+      font-weight: normal;
+
+      margin-bottom: 30px;
+
+    }
+
+
+    .about p {
+
+      max-width: 750px;
+
+      margin: auto;
+
+      line-height: 1.9;
+
+      color: #555;
+
+      font-size: 17px;
+
+    }
+
+
+    /* FEATURES */
+
+    .features {
+
+      display: grid;
+
+      grid-template-columns: repeat(3, 1fr);
+
+      background: #181818;
+
+      color: white;
+
+      padding: 80px 10%;
+
+      gap: 50px;
+
+    }
+
+
+    .feature h3 {
+
+      font-family: Georgia, serif;
+
+      font-size: 28px;
+
+      font-weight: normal;
+
+      margin-bottom: 15px;
+
+    }
+
+
+    .feature p {
+
+      color: #c9c9c9;
+
+      line-height: 1.8;
+
+      font-size: 14px;
+
+    }
+
+
+    /* CTA */
+
+    .cta {
+
+      text-align: center;
+
+      padding: 120px 20px;
+
+      background: #e9e1d7;
+
+    }
+
+
+    .cta h2 {
+
+      font-family: Georgia, serif;
+
+      font-size: clamp(40px, 6vw, 70px);
+
+      font-weight: normal;
+
+      margin-bottom: 35px;
+
+    }
+
+
+    footer {
+
+      background: #181818;
+
+      color: white;
+
+      text-align: center;
+
+      padding: 30px;
+
+      font-size: 12px;
+
+    }
+
+
+    @media(max-width: 700px) {
+
+      nav {
+        padding: 16px 5%;
+      }
+
+
+      .logo {
+        font-size: 24px;
+      }
+
+
+      .account-link {
+        display: none;
+      }
+
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+
+      .hero h1 {
+        font-size: 70px;
+      }
+
+    }
+
+  </style>
 
 </head>
+
 
 <body>
 
 
-<!-- NAVIGATION -->
+  <!-- NAVBAR -->
 
-<nav>
+  <nav>
 
-<a href="#" class="logo">
+    <a href="index.html" class="logo">
+      OnlyHers
+    </a>
 
-<img src="logo.png" alt="OnlyHers"
-onerror="this.style.display='none'">
 
-</a>
+    <div class="nav-right">
 
+      <a href="collection.html" class="login-link">
+        SHOP
+      </a>
 
-<div class="nav-links">
 
-<a href="#home" class="mobile-keep">Home</a>
+      <div id="authArea"></div>
 
-<a href="#shop" class="mobile-keep">Shop</a>
+    </div>
 
-<button onclick="showWishlist()">
-Wishlist
-</button>
+  </nav>
 
-<button onclick="toggleCart()">
 
-Cart
 
-<span class="cart-number"
-id="cartCount">0</span>
+  <!-- HERO -->
 
-</button>
+  <section class="hero">
 
+    <div class="hero-content">
 
-<button id="accountButton"
-onclick="openAccount()">
+      <div class="hero-logo">
+        ONLYHERS
+      </div>
 
-Login
 
-</button>
+      <h1>
+        Made For Her.
+      </h1>
 
-</div>
 
-</nav>
+      <p>
+        A little fashion, a little lifestyle, a little her.
+        Thoughtfully designed pieces made to feel like yours.
+      </p>
 
 
-<!-- ACCOUNT BAR -->
+      <a
+        href="collection.html"
+        class="shop-button"
+      >
+        SHOP COLLECTION
+      </a>
 
-<div class="account-bar" id="accountBar">
+    </div>
 
-<div>
-Hi, <strong id="userEmail"></strong> 🖤
-</div>
+  </section>
 
-<button class="btn btn-outline"
-onclick="logout()">
 
-Logout
 
-</button>
+  <!-- ABOUT -->
 
-</div>
+  <section class="about">
 
+    <div class="label">
+      ABOUT ONLYHERS
+    </div>
 
-<!-- HERO -->
 
-<section class="hero" id="home">
+    <h2>
+      Clothing that feels like you.
+    </h2>
 
-<div class="hero-content">
 
-<img src="logo.png"
-class="hero-logo"
-alt="OnlyHers">
+    <p>
+      OnlyHers is about creating pieces that feel personal.
+      Comfortable enough to live in and beautiful enough to remember.
+      Every piece is thoughtfully created for different moods,
+      moments and versions of her.
+    </p>
 
-<h1>
-Made for <em>her.</em>
-</h1>
+  </section>
 
-<p>
-A little fashion, a little lifestyle, a little her.
-Thoughtfully designed pieces made to feel like yours.
-</p>
 
-<br><br>
 
-<a href="#shop"
-class="btn">
+  <!-- FEATURES -->
 
-Shop collection
+  <section class="features">
 
-</a>
 
-</div>
+    <div class="feature">
 
-</section>
+      <h3>Thoughtful</h3>
 
+      <p>
+        Every piece starts with an idea, a feeling
+        and attention to the smallest details.
+      </p>
 
-<!-- SHOP -->
+    </div>
 
-<section class="section" id="shop">
 
-<div class="section-header">
 
-<div>
+    <div class="feature">
 
-<p>ONLYHERS COLLECTION</p>
+      <h3>Comfortable</h3>
 
-<h2>Latest pieces</h2>
+      <p>
+        Fashion should not only look good.
+        It should feel good too.
+      </p>
 
-</div>
+    </div>
 
-</div>
 
 
-<div class="products-grid"
-id="productsGrid">
+    <div class="feature">
 
-<div class="loading">
+      <h3>Made for her</h3>
 
-Loading our latest pieces...
+      <p>
+        Different moods. Different moments.
+        Different versions of you.
+      </p>
 
-</div>
+    </div>
 
-</div>
 
-</section>
+  </section>
 
 
-<!-- FOOTER -->
 
-<footer>
+  <!-- CTA -->
 
-© 2026 ONLYHERS · FOUNDED BY HARI VENKATESH
+  <section class="cta">
 
-</footer>
+    <h2>
+      Find something that's yours.
+    </h2>
 
 
+    <a
+      href="collection.html"
+      class="shop-button"
+    >
+      EXPLORE COLLECTION
+    </a>
 
-<!-- PRODUCT MODAL -->
+  </section>
 
-<div class="modal"
-id="productModal">
 
-<div class="modal-box">
 
-<button class="close"
-onclick="closeProduct()">
+  <footer>
 
-×
+    © 2026 OnlyHers — Made thoughtfully for her.
 
-</button>
+  </footer>
 
-<div id="productContent">
-
-</div>
-
-</div>
-
-</div>
-
-
-
-<!-- CART -->
-
-<div class="cart-panel"
-id="cartPanel">
-
-<div class="cart-header">
-
-<h2>Your cart</h2>
-
-<button class="close"
-onclick="toggleCart()">
-
-×
-
-</button>
-
-</div>
-
-
-<div id="cartItems">
-
-</div>
-
-
-<div id="cartTotal">
-
-</div>
-
-
-<button class="btn"
-style="width:100%;margin-top:20px"
-onclick="checkoutWhatsApp()">
-
-Checkout on WhatsApp
-
-</button>
-
-</div>
-
-
-
-<!-- AUTH MODAL -->
-
-<div class="auth-modal"
-id="authModal">
-
-<div class="auth-box">
-
-<button class="close"
-onclick="closeAuth()">
-
-×
-
-</button>
-
-
-<div class="auth-tabs">
-
-<button class="auth-tab active"
-id="loginTab"
-onclick="setAuthMode('login')">
-
-Login
-
-</button>
-
-
-<button class="auth-tab"
-id="signupTab"
-onclick="setAuthMode('signup')">
-
-Create account
-
-</button>
-
-</div>
-
-
-<div id="authMessage">
-
-</div>
-
-
-<input
-type="email"
-id="authEmail"
-placeholder="Email address">
-
-
-<input
-type="password"
-id="authPassword"
-placeholder="Password (minimum 6 characters)">
-
-
-<button
-class="btn"
-style="width:100%;margin-top:12px"
-id="authSubmit"
-onclick="submitAuth()">
-
-Login
-
-</button>
-
-
-<p style="font-size:12px;text-align:center">
-
-<a href="#"
-onclick="resetPassword()">
-
-Forgot password?
-
-</a>
-
-</p>
-
-</div>
-
-</div>
-
-
-
-<!-- SUPABASE -->
-
-<script type="module">
-
-import {
-createClient
-}
-from
-'https://esm.sh/@supabase/supabase-js@2';
-
-
-/* ============================= */
-/* YOUR SUPABASE DETAILS */
-/* ============================= */
-
-const SUPABASE_URL =
-'https://zeodtbgxadxfvexvywpm.supabase.co';
-
-
-const SUPABASE_KEY =
-'sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr';
-
-
-const supabase =
-createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
-
-
-/* ============================= */
-/* WHATSAPP */
-/* ============================= */
-
-const WHATSAPP_NUMBER =
-'919059828206';
-
-
-/* ============================= */
-/* VARIABLES */
-/* ============================= */
-
-let products = [];
-
-let selectedProduct = null;
-
-let selectedSize = null;
-
-let quantity = 1;
-
-let cart =
-JSON.parse(
-localStorage.getItem('onlyhers_cart')
-|| '[]'
-);
-
-
-let wishlist =
-JSON.parse(
-localStorage.getItem('onlyhers_wishlist')
-|| '[]'
-);
-
-
-let authMode = 'login';
-
-
-/* ============================= */
-/* LOAD PRODUCTS */
-/* ============================= */
-
-async function loadProducts(){
-
-const grid =
-document.getElementById('productsGrid');
-
-
-const {
-data,
-error
-}
-=
-await supabase
-.from('products')
-.select('*')
-.eq('is_available',true)
-.order(
-'created_at',
-{
-ascending:false
-}
-);
-
-
-if(error){
-
-console.error(error);
-
-grid.innerHTML = `
-<div class="loading">
-Unable to load products.
-Please try again later.
-</div>
-`;
-
-return;
-
-}
-
-
-products = data || [];
-
-
-if(products.length === 0){
-
-grid.innerHTML = `
-<div class="loading">
-
-Something beautiful is coming soon for her ❤️
-
-</div>
-`;
-
-return;
-
-}
-
-
-grid.innerHTML =
-products.map(product => `
-
-<div class="product-card">
-
-<button
-class="wishlist-btn"
-onclick="toggleWishlist('${product.id}')">
-
-${wishlist.includes(product.id) ? '♥' : '♡'}
-
-</button>
-
-
-<div
-onclick="openProduct('${product.id}')">
-
-<img
-src="${escapeHTML(product.image_url)}"
-alt="${escapeHTML(product.name)}">
-
-
-<div class="product-info">
-
-<h3>
-
-${escapeHTML(product.name)}
-
-</h3>
-
-
-<div class="product-price">
-
-${formatPrice(product.price)}
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-`).join('');
-
-}
-
-
-loadProducts();
-
-
-
-/* ============================= */
-/* PRODUCT DETAILS */
-/* ============================= */
-
-window.openProduct =
-function(id){
-
-selectedProduct =
-products.find(
-p => String(p.id) === String(id)
-);
-
-
-if(!selectedProduct) return;
-
-
-let sizes =
-selectedProduct.sizes;
-
-
-if(Array.isArray(sizes)){
-
-sizes = sizes;
-
-}
-else if(typeof sizes === 'string'){
-
-sizes =
-sizes
-.split(',')
-.map(s => s.trim())
-.filter(Boolean);
-
-}
-else{
-
-sizes =
-['XS','S','M','L','XL'];
-
-}
-
-
-selectedSize =
-sizes[0] || null;
-
-
-quantity = 1;
-
-
-const content =
-document.getElementById('productContent');
-
-
-content.innerHTML = `
-
-<div class="product-modal-content">
-
-
-<img
-src="${escapeHTML(selectedProduct.image_url)}"
-alt="${escapeHTML(selectedProduct.name)}">
-
-
-<div class="product-details">
-
-<p style="
-font-size:11px;
-letter-spacing:.15em;
-">
-
-ONLYHERS
-
-</p>
-
-
-<h2>
-
-${escapeHTML(selectedProduct.name)}
-
-</h2>
-
-
-<h3>
-
-${formatPrice(selectedProduct.price)}
-
-</h3>
-
-
-<p class="product-description">
-
-${escapeHTML(
-selectedProduct.description
-||
-'Designed thoughtfully and made beautifully for her.'
-)}
-
-</p>
-
-
-<p><strong>Select size</strong></p>
-
-
-<div class="sizes">
-
-${sizes.map((size,index)=>`
-
-<button
-class="size-btn ${index===0?'active':''}"
-onclick="selectSize('${escapeHTML(size)}',this)">
-
-${escapeHTML(size)}
-
-</button>
-
-`).join('')}
-
-</div>
-
-
-<div class="quantity">
-
-<button onclick="changeQuantity(-1)">
-
-−
-
-</button>
-
-
-<span id="quantityNumber">
-
-1
-
-</span>
-
-
-<button onclick="changeQuantity(1)">
-
-+
-
-</button>
-
-</div>
-
-
-<button
-class="btn"
-onclick="addToCart()">
-
-Add to cart
-
-</button>
-
-
-<button
-class="btn btn-outline"
-onclick="buyNow()">
-
-Order on WhatsApp
-
-</button>
-
-</div>
-
-</div>
-
-`;
-
-
-document
-.getElementById('productModal')
-.classList.add('active');
-
-};
-
-
-
-window.closeProduct =
-function(){
-
-document
-.getElementById('productModal')
-.classList.remove('active');
-
-};
-
-
-
-window.selectSize =
-function(size,element){
-
-selectedSize = size;
-
-
-document
-.querySelectorAll('.size-btn')
-.forEach(button =>
-button.classList.remove('active')
-);
-
-
-element.classList.add('active');
-
-};
-
-
-
-window.changeQuantity =
-function(change){
-
-quantity += change;
-
-
-if(quantity < 1){
-
-quantity = 1;
-
-}
-
-
-document
-.getElementById('quantityNumber')
-.textContent = quantity;
-
-};
-
-
-
-/* ============================= */
-/* CART */
-/* ============================= */
-
-window.addToCart =
-function(){
-
-if(!selectedProduct) return;
-
-
-const existing =
-cart.find(item =>
-
-String(item.id) ===
-String(selectedProduct.id)
-
-&&
-
-item.size === selectedSize
-
-);
-
-
-if(existing){
-
-existing.quantity += quantity;
-
-}
-else{
-
-cart.push({
-
-id:selectedProduct.id,
-
-name:selectedProduct.name,
-
-price:selectedProduct.price,
-
-image_url:selectedProduct.image_url,
-
-size:selectedSize,
-
-quantity:quantity
-
-});
-
-}
-
-
-saveCart();
-
-
-alert(
-'Added to your cart 🖤'
-);
-
-};
-
-
-function saveCart(){
-
-localStorage.setItem(
-'onlyhers_cart',
-JSON.stringify(cart)
-);
-
-
-updateCartCount();
-
-
-renderCart();
-
-}
-
-
-function updateCartCount(){
-
-const count =
-cart.reduce(
-(total,item) =>
-total + item.quantity,
-0
-);
-
-
-document
-.getElementById('cartCount')
-.textContent = count;
-
-}
-
-
-window.toggleCart =
-function(){
-
-document
-.getElementById('cartPanel')
-.classList.toggle('active');
-
-
-renderCart();
-
-};
-
-
-function renderCart(){
-
-const container =
-document.getElementById('cartItems');
-
-
-const totalElement =
-document.getElementById('cartTotal');
-
-
-if(cart.length === 0){
-
-container.innerHTML = `
-
-<div class="loading">
-
-Your cart is empty.
-
-</div>
-
-`;
-
-
-totalElement.innerHTML = '';
-
-return;
-
-}
-
-
-container.innerHTML =
-cart.map((item,index)=>`
-
-<div class="cart-item">
-
-<img
-src="${escapeHTML(item.image_url)}">
-
-
-<div>
-
-<strong>
-
-${escapeHTML(item.name)}
-
-</strong>
-
-
-<p>
-
-Size: ${escapeHTML(item.size)}
-
-</p>
-
-
-<p>
-
-Quantity: ${item.quantity}
-
-</p>
-
-
-<strong>
-
-${formatPrice(
-Number(item.price)
-*
-item.quantity
-)}
-
-</strong>
-
-
-<br><br>
-
-
-<button
-class="remove-btn"
-onclick="removeCartItem(${index})">
-
-Remove
-
-</button>
-
-</div>
-
-</div>
-
-`).join('');
-
-
-const total =
-cart.reduce(
-(sum,item)=>
-sum +
-(
-Number(item.price)
-*
-item.quantity
-),
-0
-);
-
-
-totalElement.innerHTML = `
-
-<h3>
-
-Total:
-${formatPrice(total)}
-
-</h3>
-
-`;
-
-}
-
-
-window.removeCartItem =
-function(index){
-
-cart.splice(index,1);
-
-
-saveCart();
-
-};
-
-
-updateCartCount();
-
-
-
-/* ============================= */
-/* WHATSAPP CHECKOUT */
-/* ============================= */
-
-window.checkoutWhatsApp =
-function(){
-
-if(cart.length === 0){
-
-alert(
-'Your cart is empty.'
-);
-
-return;
-
-}
-
-
-let message =
-'Hi OnlyHers! 👋\n\nI would like to place an order:\n\n';
-
-
-cart.forEach((item,index)=>{
-
-message +=
-`${index + 1}. ${item.name}\n`;
-
-message +=
-`Size: ${item.size}\n`;
-
-message +=
-`Quantity: ${item.quantity}\n`;
-
-message +=
-`Price: ${formatPrice(
-Number(item.price)
-*
-item.quantity
-)}\n\n`;
-
-});
-
-
-const total =
-cart.reduce(
-(sum,item)=>
-sum +
-(
-Number(item.price)
-*
-item.quantity
-),
-0
-);
-
-
-message +=
-`Total: ${formatPrice(total)}`;
-
-
-window.open(
-
-`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,
-
-'_blank'
-
-);
-
-};
-
-
-window.buyNow =
-function(){
-
-const message =
-`Hi OnlyHers! 👋
-
-I would like to order:
-
-${selectedProduct.name}
-
-Size: ${selectedSize}
-
-Quantity: ${quantity}
-
-Price: ${formatPrice(
-Number(selectedProduct.price)
-*
-quantity
-)}
-`;
-
-
-window.open(
-
-`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,
-
-'_blank'
-
-);
-
-};
-
-
-
-/* ============================= */
-/* WISHLIST */
-/* ============================= */
-
-window.toggleWishlist =
-function(id){
-
-if(wishlist.includes(id)){
-
-wishlist =
-wishlist.filter(
-item => item !== id
-);
-
-}
-else{
-
-wishlist.push(id);
-
-}
-
-
-localStorage.setItem(
-'onlyhers_wishlist',
-JSON.stringify(wishlist)
-);
-
-
-loadProducts();
-
-};
-
-
-window.showWishlist =
-function(){
-
-const wishlistProducts =
-products.filter(product =>
-wishlist.includes(product.id)
-);
-
-
-if(wishlistProducts.length === 0){
-
-alert(
-'Your wishlist is empty ♡'
-);
-
-return;
-
-}
-
-
-document
-.getElementById('shop')
-.scrollIntoView();
-
-
-const grid =
-document.getElementById('productsGrid');
-
-
-grid.innerHTML =
-wishlistProducts.map(product => `
-
-<div
-class="product-card"
-onclick="openProduct('${product.id}')">
-
-<img
-src="${escapeHTML(product.image_url)}">
-
-
-<div class="product-info">
-
-<h3>
-
-${escapeHTML(product.name)}
-
-</h3>
-
-
-<div>
-
-${formatPrice(product.price)}
-
-</div>
-
-</div>
-
-</div>
-
-`).join('');
-
-};
-
-
-
-/* ============================= */
-/* LOGIN / SIGNUP */
-/* ============================= */
-
-window.openAccount =
-async function(){
-
-const {
-data:{
-user
-}
-}
-=
-await supabase.auth.getUser();
-
-
-if(user){
-
-showAccount(user);
-
-return;
-
-}
-
-
-document
-.getElementById('authModal')
-.classList.add('active');
-
-};
-
-
-window.closeAuth =
-function(){
-
-document
-.getElementById('authModal')
-.classList.remove('active');
-
-};
-
-
-window.setAuthMode =
-function(mode){
-
-authMode = mode;
-
-
-document
-.getElementById('loginTab')
-.classList.toggle(
-'active',
-mode === 'login'
-);
-
-
-document
-.getElementById('signupTab')
-.classList.toggle(
-'active',
-mode === 'signup'
-);
-
-
-document
-.getElementById('authSubmit')
-.textContent =
-mode === 'login'
-?
-'Login'
-:
-'Create account';
-
-};
-
-
-window.submitAuth =
-async function(){
-
-const email =
-document
-.getElementById('authEmail')
-.value;
-
-
-const password =
-document
-.getElementById('authPassword')
-.value;
-
-
-const message =
-document
-.getElementById('authMessage');
-
-
-message.innerHTML = '';
-
-
-if(!email || !password){
-
-message.innerHTML =
-'<div class="message">Please enter your email and password.</div>';
-
-return;
-
-}
-
-
-let result;
-
-
-if(authMode === 'signup'){
-
-result =
-await supabase.auth.signUp({
-
-email,
-
-password
-
-});
-
-}
-else{
-
-result =
-await supabase.auth.signInWithPassword({
-
-email,
-
-password
-
-});
-
-}
-
-
-if(result.error){
-
-message.innerHTML = `
-
-<div class="message">
-
-${escapeHTML(result.error.message)}
-
-</div>
-
-`;
-
-return;
-
-}
-
-
-message.innerHTML = `
-
-<div class="message">
-
-${authMode === 'signup'
-?
-'Account created! Please check your email if confirmation is required.'
-:
-'Login successful! 🖤'}
-
-</div>
-
-`;
-
-
-setTimeout(
-async () => {
-
-closeAuth();
-
-checkUser();
-
-},
-800
-);
-
-};
-
-
-
-/* ============================= */
-/* PASSWORD RESET */
-/* ============================= */
-
-window.resetPassword =
-async function(){
-
-const email =
-document
-.getElementById('authEmail')
-.value;
-
-
-if(!email){
-
-alert(
-'Please enter your email first.'
-);
-
-return;
-
-}
-
-
-const {
-error
-}
-=
-await supabase
-.auth
-.resetPasswordForEmail(
-email,
-{
-redirectTo:
-window.location.origin
-}
-);
-
-
-if(error){
-
-alert(error.message);
-
-}
-else{
-
-alert(
-'Password reset link sent to your email.'
-);
-
-}
-
-};
-
-
-
-/* ============================= */
-/* USER ACCOUNT */
-/* ============================= */
-
-async function checkUser(){
-
-const {
-data:{
-user
-}
-}
-=
-await supabase.auth.getUser();
-
-
-const button =
-document
-.getElementById('accountButton');
-
-
-const accountBar =
-document
-.getElementById('accountBar');
-
-
-if(user){
-
-button.textContent =
-'Account';
-
-
-accountBar.style.display =
-'flex';
-
-
-document
-.getElementById('userEmail')
-.textContent =
-user.email;
-
-}
-else{
-
-button.textContent =
-'Login';
-
-
-accountBar.style.display =
-'none';
-
-}
-
-}
-
-
-function showAccount(user){
-
-document
-.getElementById('accountBar')
-.style.display =
-'flex';
-
-
-document
-.getElementById('userEmail')
-.textContent =
-user.email;
-
-
-window.scrollTo({
-
-top:0,
-
-behavior:'smooth'
-
-});
-
-}
-
-
-window.logout =
-async function(){
-
-await supabase.auth.signOut();
-
-
-alert(
-'Logged out successfully.'
-);
-
-
-checkUser();
-
-};
-
-
-checkUser();
-
-
-
-/* ============================= */
-/* HELPERS */
-/* ============================= */
-
-function formatPrice(price){
-
-if(
-price === null ||
-price === undefined
-){
-
-return '';
-
-}
-
-
-return
-'₹' +
-Number(price)
-.toLocaleString('en-IN');
-
-}
-
-
-function escapeHTML(value){
-
-return String(value ?? '')
-
-.replace(
-/&/g,
-'&amp;'
-)
-
-.replace(
-/</g,
-'&lt;'
-)
-
-.replace(
-/>/g,
-'&gt;'
-)
-
-.replace(
-/"/g,
-'&quot;'
-)
-
-.replace(
-/'/g,
-'&#039;'
-);
-
-}
-
-</script>
 
 </body>
+
 </html>
