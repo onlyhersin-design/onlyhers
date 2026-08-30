@@ -499,6 +499,83 @@
         padding:80px 22px;
       }
     }
+    .latest-products {
+  background: var(--cream);
+  padding: 90px clamp(20px, 8vw, 120px);
+}
+
+.latest-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.latest-head h2 {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(42px, 6vw, 72px);
+  font-weight: 400;
+}
+
+.view-all {
+  color: #000;
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: .12em;
+  border-bottom: 1px solid #000;
+  padding-bottom: 5px;
+}
+
+.home-products {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.home-product {
+  background: #fff;
+}
+
+.home-product img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  display: block;
+}
+
+.home-product-info {
+  padding: 18px;
+}
+
+.home-product-info h3 {
+  margin: 0 0 8px;
+  font-family: "Playfair Display", serif;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.home-product-info p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.loading-products {
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+@media (max-width: 750px) {
+  .latest-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .home-products {
+    grid-template-columns: 1fr;
+  }
+}
   </style>
 </head>
 
@@ -586,7 +663,20 @@
 
       </div>
     </section>
+<section class="latest-products">
+  <div class="latest-head">
+    <div>
+      <p class="collection-label">NEW FROM HERS</p>
+      <h2>Latest pieces.</h2>
+    </div>
 
+    <a href="products.html" class="view-all">VIEW ALL →</a>
+  </div>
+
+  <div id="homeProducts" class="home-products">
+    <p class="loading-products">Loading our latest pieces...</p>
+  </div>
+</section>
     <section class="collection-preview">
       <div class="collection-content">
         <p class="collection-label">THE COLLECTION</p>
