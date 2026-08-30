@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Login — OnlyHers</title>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script src="app.js" defer></script>
+
+
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+
+    body {
+
+      min-height: 100vh;
+
+      font-family: Arial, Helvetica, sans-serif;
+
+      background: #f8f5f0;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      padding: 30px;
+
+    }
+
+
+    .auth-container {
+
+      width: 100%;
+
+      max-width: 450px;
+
+      background: white;
+
+      padding: 50px 40px;
+
+      border: 1px solid #ddd;
+
+    }
+
+
+    .logo {
+
+      display: block;
+
+      text-align: center;
+
+      font-family: Georgia, serif;
+
+      font-size: 38px;
+
+      font-weight: bold;
+
+      color: #181818;
+
+      text-decoration: none;
+
+      margin-bottom: 40px;
+
+    }
+
+
+    h1 {
+
+      font-family: Georgia, serif;
+
+      font-size: 42px;
+
+      font-weight: normal;
+
+      margin-bottom: 12px;
+
+      text-align: center;
+
+    }
+
+
+    .subtitle {
+
+      text-align: center;
+
+      color: #777;
+
+      line-height: 1.6;
+
+      margin-bottom: 35px;
+
+      font-size: 14px;
+
+    }
+
+
+    .tabs {
+
+      display: flex;
+
+      margin-bottom: 30px;
+
+      border-bottom: 1px solid #ddd;
+
+    }
+
+
+    .tab {
+
+      width: 50%;
+
+      padding: 15px;
+
+      background: transparent;
+
+      border: none;
+
+      cursor: pointer;
+
+      font-size: 13px;
+
+      letter-spacing: 1px;
+
+    }
+
+
+    .tab.active {
+
+      border-bottom: 2px solid #181818;
+
+      font-weight: bold;
+
+    }
+
+
+    form {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 15px;
+
+    }
+
+
+    label {
+
+      font-size: 12px;
+
+      margin-top: 5px;
+
+    }
+
+
+    input {
+
+      width: 100%;
+
+      padding: 15px;
+
+      border: 1px solid #ccc;
+
+      font-size: 14px;
+
+    }
+
+
+    input:focus {
+
+      outline: none;
+
+      border-color: #181818;
+
+    }
+
+
+    .submit-button {
+
+      margin-top: 15px;
+
+      padding: 17px;
+
+      border: none;
+
+      background: #181818;
+
+      color: white;
+
+      cursor: pointer;
+
+      font-size: 12px;
+
+      font-weight: bold;
+
+      letter-spacing: 2px;
+
+    }
+
+
+    .submit-button:hover {
+
+      background: #a31d28;
+
+    }
+
+
+    #message {
+
+      margin-top: 20px;
+
+      text-align: center;
+
+      font-size: 13px;
+
+      line-height: 1.6;
+
+    }
+
+
+    .success {
+      color: #177245;
+    }
+
+
+    .error {
+      color: #b22222;
+    }
+
+
+    .home {
+
+      display: block;
+
+      text-align: center;
+
+      margin-top: 25px;
+
+      color: #777;
+
+      font-size: 12px;
+
+      text-decoration: none;
+
+    }
+
+
+    @media(max-width: 500px) {
+
+      .auth-container {
+
+        padding: 40px 25px;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <div class="auth-container">
+
+
+    <a href="index.html" class="logo">
+      OnlyHers
+    </a>
+
+
+    <h1 id="title">
+      Welcome back.
+    </h1>
+
+
+    <p class="subtitle" id="subtitle">
+      Login to continue your OnlyHers journey.
+    </p>
+
+
+
+    <!-- TABS -->
+
+    <div class="tabs">
+
+      <button
+        class="tab active"
+        id="loginTab"
+        onclick="switchMode('login')"
+      >
+        LOGIN
+      </button>
+
+
+      <button
+        class="tab"
+        id="signupTab"
+        onclick="switchMode('signup')"
+      >
+        SIGN UP
+      </button>
+
+    </div>
+
+
+
+    <!-- FORM -->
+
+    <form id="authForm">
+
+
+      <label>
+        Email Address
+      </label>
+
+
+      <input
+        type="email"
+        id="email"
+        required
+        placeholder="you@example.com"
+      >
+
+
+
+      <label>
+        Password
+      </label>
+
+
+      <input
+        type="password"
+        id="password"
+        required
+        minlength="6"
+        placeholder="Minimum 6 characters"
+      >
+
+
+
+      <button
+        type="submit"
+        class="submit-button"
+        id="submitButton"
+      >
+        LOGIN
+      </button>
+
+
+    </form>
+
+
+
+    <div id="message"></div>
+
+
+    <a href="index.html" class="home">
+      ← Back to OnlyHers
+    </a>
+
+
+  </div>
+
+
+
+  <script>
+
+    let currentMode = "login";
+
+
+    const params =
+      new URLSearchParams(window.location.search);
+
+
+    if (params.get("mode") === "signup") {
+      currentMode = "signup";
+    }
+
+
+    function switchMode(mode) {
+
+      currentMode = mode;
+
+
+      const loginTab =
+        document.getElementById("loginTab");
+
+
+      const signupTab =
+        document.getElementById("signupTab");
+
+
+      const title =
+        document.getElementById("title");
+
+
+      const subtitle =
+        document.getElementById("subtitle");
+
+
+      const button =
+        document.getElementById("submitButton");
+
+
+      document.getElementById("message").innerHTML = "";
+
+
+      if (mode === "login") {
+
+        loginTab.classList.add("active");
+
+        signupTab.classList.remove("active");
+
+        title.textContent = "Welcome back.";
+
+        subtitle.textContent =
+          "Login to continue your OnlyHers journey.";
+
+        button.textContent = "LOGIN";
+
+      }
+
+      else {
+
+        signupTab.classList.add("active");
+
+        loginTab.classList.remove("active");
+
+        title.textContent = "Join OnlyHers.";
+
+        subtitle.textContent =
+          "Create your account and be part of our journey.";
+
+        button.textContent = "CREATE ACCOUNT";
+
+      }
+
+    }
+
+
+    switchMode(currentMode);
+
+
+
+    document
+      .getElementById("authForm")
+      .addEventListener(
+        "submit",
+        async function(event) {
+
+          event.preventDefault();
+
+
+          const email =
+            document.getElementById("email").value;
+
+
+          const password =
+            document.getElementById("password").value;
+
+
+          const message =
+            document.getElementById("message");
+
+
+          const button =
+            document.getElementById("submitButton");
+
+
+          message.innerHTML = "";
+
+          button.disabled = true;
+
+          button.textContent = "PLEASE WAIT...";
+
+
+          /* =============================
+             LOGIN
+          ============================= */
+
+          if (currentMode === "login") {
+
+            const { error } =
+              await supabaseClient.auth
+                .signInWithPassword({
+                  email,
+                  password
+                });
+
+
+            if (error) {
+
+              message.innerHTML = `
+                <div class="error">
+                  ${escapeHTML(error.message)}
+                </div>
+              `;
+
+              button.disabled = false;
+
+              button.textContent = "LOGIN";
+
+              return;
+
+            }
+
+
+            const redirect =
+              params.get("redirect");
+
+
+            if (redirect) {
+
+              window.location.href = redirect;
+
+            }
+
+            else {
+
+              window.location.href = "account.html";
+
+            }
+
+          }
+
+
+          /* =============================
+             SIGN UP
+          ============================= */
+
+          else {
+
+            const {
+              data,
+              error
+            } =
+              await supabaseClient.auth
+                .signUp({
+
+                  email,
+
+                  password,
+
+                  options: {
+
+                    emailRedirectTo:
+                      window.location.origin +
+                      window.location.pathname
+                        .replace("auth.html", "account.html")
+
+                  }
+
+                });
+
+
+            if (error) {
+
+              message.innerHTML = `
+                <div class="error">
+                  ${escapeHTML(error.message)}
+                </div>
+              `;
+
+              button.disabled = false;
+
+              button.textContent =
+                "CREATE ACCOUNT";
+
+              return;
+
+            }
+
+
+            /*
+              If email confirmation is enabled
+            */
+
+            if (!data.session) {
+
+              message.innerHTML = `
+                <div class="success">
+                  Account created! 🎉<br><br>
+                  Please check your email and confirm
+                  your account before logging in.
+                </div>
+              `;
+
+            }
+
+            else {
+
+              message.innerHTML = `
+                <div class="success">
+                  Account created successfully! 🎉
+                </div>
+              `;
+
+
+              setTimeout(() => {
+
+                window.location.href =
+                  "account.html";
+
+              }, 1500);
+
+            }
+
+
+            button.disabled = false;
+
+            button.textContent =
+              "CREATE ACCOUNT";
+
+          }
+
+        }
+      );
+
+  </script>
+
+
+</body>
+
+</html>
