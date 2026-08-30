@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Product — OnlyHers</title>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script src="app.js" defer></script>
+
+
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f8f5f0;
+      color: #181818;
+    }
+
+
+    nav {
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      padding: 20px 7%;
+
+      border-bottom: 1px solid #ddd;
+
+    }
+
+
+    .logo {
+
+      font-family: Georgia, serif;
+
+      font-size: 30px;
+
+      font-weight: bold;
+
+      color: #181818;
+
+      text-decoration: none;
+
+    }
+
+
+    .back {
+
+      color: #181818;
+
+      text-decoration: none;
+
+      font-size: 12px;
+
+    }
+
+
+    .product-page {
+
+      max-width: 1300px;
+
+      margin: auto;
+
+      padding: 70px 7%;
+
+      display: grid;
+
+      grid-template-columns: 1.1fr 0.9fr;
+
+      gap: 80px;
+
+    }
+
+
+    .image-box {
+
+      width: 100%;
+
+      aspect-ratio: 3 / 4;
+
+      background: #e5dfd7;
+
+    }
+
+
+    .image-box img {
+
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+
+    }
+
+
+    .category {
+
+      font-size: 11px;
+
+      letter-spacing: 2px;
+
+      text-transform: uppercase;
+
+      color: #777;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    h1 {
+
+      font-family: Georgia, serif;
+
+      font-size: clamp(40px, 5vw, 70px);
+
+      font-weight: normal;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    .price {
+
+      font-size: 22px;
+
+      font-weight: bold;
+
+      margin-bottom: 35px;
+
+    }
+
+
+    .description {
+
+      line-height: 1.8;
+
+      color: #555;
+
+      margin-bottom: 35px;
+
+    }
+
+
+    .section-title {
+
+      font-size: 11px;
+
+      letter-spacing: 2px;
+
+      text-transform: uppercase;
+
+      margin-bottom: 15px;
+
+    }
+
+
+    .sizes {
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 10px;
+
+      margin-bottom: 40px;
+
+    }
+
+
+    .size {
+
+      padding: 12px 18px;
+
+      background: transparent;
+
+      border: 1px solid #181818;
+
+      cursor: pointer;
+
+    }
+
+
+    .size.active {
+
+      background: #181818;
+
+      color: white;
+
+    }
+
+
+    .cart-button {
+
+      width: 100%;
+
+      padding: 20px;
+
+      background: #181818;
+
+      color: white;
+
+      border: none;
+
+      cursor: pointer;
+
+      font-size: 12px;
+
+      font-weight: bold;
+
+      letter-spacing: 2px;
+
+    }
+
+
+    .cart-button:hover {
+
+      background: #a31d28;
+
+    }
+
+
+    .loading {
+
+      padding: 100px;
+
+      text-align: center;
+
+    }
+
+
+    @media(max-width: 800px) {
+
+      .product-page {
+
+        grid-template-columns: 1fr;
+
+        padding: 40px 6%;
+
+        gap: 40px;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <nav>
+
+    <a href="index.html" class="logo">
+      OnlyHers
+    </a>
+
+
+    <a href="collection.html" class="back">
+      ← COLLECTION
+    </a>
+
+  </nav>
+
+
+
+  <main id="productContainer">
+
+    <div class="loading">
+      Loading product...
+    </div>
+
+  </main>
+
+
+
+  <script>
+
+    const params =
+      new URLSearchParams(window.location.search);
+
+    const productId =
+      params.get("id");
+
+
+    let currentProduct = null;
+
+
+    async function loadProduct() {
+
+      const container =
+        document.getElementById("productContainer");
+
+
+      if (!productId) {
+
+        container.innerHTML = `
+          <div class="loading">
+            Product not found.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      const { data: product, error } =
+        await supabaseClient
+          .from("products")
+          .select("*")
+          .eq("id", productId)
+          .single();
+
+
+      if (error || !product) {
+
+        container.innerHTML = `
+          <div class="loading">
+            Product could not be loaded.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      currentProduct = product;
+
+
+      const name =
+        product.name ||
+        product.title ||
+        "Untitled Product";
+
+
+      const image =
+        product.image_url ||
+        product.image ||
+        "";
+
+
+      const category =
+        product.category || "";
+
+
+      const description =
+        product.description ||
+        "No description available.";
+
+
+      let sizes =
+        product.sizes ||
+        product.available_sizes ||
+        [];
+
+
+      if (typeof sizes === "string") {
+
+        sizes =
+          sizes
+            .split(",")
+            .map(size => size.trim())
+            .filter(Boolean);
+
+      }
+
+
+      if (!Array.isArray(sizes)) {
+        sizes = [];
+      }
+
+
+      const sizesHTML =
+        sizes.length
+
+          ? sizes.map(size => `
+
+              <button
+                class="size"
+                onclick="selectSize(this)"
+              >
+                ${escapeHTML(size)}
+              </button>
+
+            `).join("")
+
+          : `<p>Size information coming soon.</p>`;
+
+
+      document.title =
+        name + " — OnlyHers";
+
+
+      container.innerHTML = `
+
+        <div class="product-page">
+
+
+          <div class="image-box">
+
+            ${
+              image
+                ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(name)}">`
+                : ""
+            }
+
+          </div>
+
+
+
+          <div class="product-info">
+
+
+            <div class="category">
+              ${escapeHTML(category)}
+            </div>
+
+
+            <h1>
+              ${escapeHTML(name)}
+            </h1>
+
+
+            <div class="price">
+              ${formatPrice(product.price)}
+            </div>
+
+
+            <p class="description">
+              ${escapeHTML(description)}
+            </p>
+
+
+            <div class="section-title">
+              Available Sizes
+            </div>
+
+
+            <div class="sizes">
+              ${sizesHTML}
+            </div>
+
+
+            <button
+              class="cart-button"
+              onclick="addToCart()"
+            >
+              ADD TO CART
+            </button>
+
+
+          </div>
+
+
+        </div>
+
+      `;
+
+    }
+
+
+    function selectSize(button) {
+
+      document
+        .querySelectorAll(".size")
+        .forEach(item => {
+          item.classList.remove("active");
+        });
+
+
+      button.classList.add("active");
+
+    }
+
+
+    async function addToCart() {
+
+      const {
+        data: { session }
+      } =
+        await supabaseClient.auth.getSession();
+
+
+      if (!session) {
+
+        alert("Please login first.");
+
+        window.location.href =
+          "auth.html?redirect=" +
+          encodeURIComponent(window.location.href);
+
+        return;
+
+      }
+
+
+      const selectedSize =
+        document.querySelector(".size.active");
+
+
+      if (
+        document.querySelectorAll(".size").length > 0 &&
+        !selectedSize
+      ) {
+
+        alert("Please select a size.");
+
+        return;
+
+      }
+
+
+      alert(
+        "Added to cart! 🛍️"
+      );
+
+    }
+
+
+    loadProduct();
+
+  </script>
+
+
+</body>
+
+</html>
