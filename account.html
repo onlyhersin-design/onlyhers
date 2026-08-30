@@ -1142,25 +1142,6 @@ const {
 } = await supabaseClient.auth.getUser();
 
 document.getElementById("userName").textContent =
-  name ||
-  updatedUser.email.split("@")[0];
-
-
-    document.getElementById("fullName").textContent =
-      name ||
-      "—";
-
-
-    document.getElementById("phoneDetail").textContent =
-      phone ||
-      "Not added yet";
-
-
-const {
-  data: { user: updatedUser }
-} = await supabaseClient.auth.getUser();
-
-document.getElementById("userName").textContent =
   name || updatedUser.email.split("@")[0];
 
 document.getElementById("fullName").textContent =
@@ -1176,10 +1157,6 @@ const initial =
 
 document.getElementById("avatar").textContent =
   initial;
-
-
-    document.getElementById("avatar").textContent =
-      initial;
 
 
     setTimeout(() => {
