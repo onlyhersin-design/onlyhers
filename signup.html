@@ -300,11 +300,19 @@
             .value
             .trim();
 
-        const phone =
-          document
-            .getElementById("phone")
-            .value
-            .trim();
+       const countryCode =
+  document
+    .getElementById("countryCode")
+    .value;
+
+const phoneNumber =
+  document
+    .getElementById("phone")
+    .value
+    .trim();
+
+const phone =
+  `${countryCode} ${phoneNumber}`;
 
         const email =
           document
