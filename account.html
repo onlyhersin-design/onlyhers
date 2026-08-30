@@ -1,22 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <meta charset="UTF-8">
+  <title>My Account | OnlyHers</title>
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>My Account — OnlyHers</title>
-
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <script src="app.js" defer></script>
-
+  <link rel="icon" type="image/png" href="onlyhers-logo.png">
 
   <style>
 
@@ -26,252 +16,733 @@
       box-sizing: border-box;
     }
 
-
     body {
-
       font-family: Arial, Helvetica, sans-serif;
-
-      background: #f8f5f0;
-
-      color: #181818;
-
+      background: #a91420;
+      color: white;
+      min-height: 100vh;
     }
 
+    /* NAVBAR */
 
-    nav {
-
+    header {
+      height: 88px;
+      background: #c3202d;
       display: flex;
-
-      justify-content: space-between;
-
       align-items: center;
-
-      padding: 20px 7%;
-
-      border-bottom: 1px solid #ddd;
-
+      justify-content: space-between;
+      padding: 0 8%;
+      border-bottom: 1px solid rgba(255,255,255,0.18);
     }
-
 
     .logo {
-
       font-family: Georgia, serif;
-
-      font-size: 30px;
-
+      font-size: 34px;
       font-weight: bold;
-
+      color: #fff8f3;
       text-decoration: none;
-
-      color: #181818;
-
     }
 
-
-    .shop-link {
-
-      text-decoration: none;
-
-      color: #181818;
-
-      font-size: 12px;
-
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
     }
 
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 15px;
+      opacity: 0.9;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      opacity: 1;
+    }
+
+    /* MAIN */
 
     .account-container {
-
-      max-width: 800px;
-
+      max-width: 1100px;
       margin: auto;
-
-      padding: 100px 30px;
-
+      padding: 70px 25px;
     }
 
-
-    h1 {
-
-      font-family: Georgia, serif;
-
-      font-size: 65px;
-
-      font-weight: normal;
-
-      margin-bottom: 50px;
-
-    }
-
-
-    .card {
-
-      background: white;
-
-      border: 1px solid #ddd;
-
-      padding: 35px;
-
-    }
-
-
-    .label {
-
-      font-size: 11px;
-
-      letter-spacing: 2px;
-
-      color: #777;
-
-      margin-bottom: 12px;
-
-    }
-
-
-    .email {
-
-      font-size: 22px;
-
-      margin-bottom: 35px;
-
-    }
-
-
-    .logout {
-
-      padding: 15px 25px;
-
-      background: #181818;
-
-      color: white;
-
-      border: none;
-
-      cursor: pointer;
-
+    .small-title {
       font-size: 12px;
-
-      letter-spacing: 1px;
-
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-bottom: 18px;
     }
 
+    .page-title {
+      font-family: Georgia, serif;
+      font-size: clamp(48px, 7vw, 90px);
+      font-weight: normal;
+      margin-bottom: 18px;
+    }
+
+    .page-subtitle {
+      font-size: 17px;
+      opacity: 0.8;
+      max-width: 550px;
+      line-height: 1.7;
+      margin-bottom: 55px;
+    }
+
+    /* PROFILE CARD */
+
+    .profile-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(10px);
+      border-radius: 2px;
+      padding: 45px;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 50px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-card::after {
+      content: "HERS";
+      position: absolute;
+      right: -20px;
+      bottom: -50px;
+      font-family: Georgia, serif;
+      font-size: 220px;
+      font-weight: bold;
+      opacity: 0.035;
+      pointer-events: none;
+    }
+
+    /* PROFILE LEFT */
+
+    .profile-left {
+      border-right: 1px solid rgba(255,255,255,0.18);
+      padding-right: 40px;
+    }
+
+    .avatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: #fff7f1;
+      color: #a91420;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Georgia, serif;
+      font-size: 42px;
+      margin-bottom: 25px;
+    }
+
+    .user-name {
+      font-family: Georgia, serif;
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .user-email {
+      font-size: 14px;
+      opacity: 0.7;
+      word-break: break-word;
+    }
+
+    .member-badge {
+      display: inline-block;
+      margin-top: 22px;
+      padding: 9px 14px;
+      border: 1px solid rgba(255,255,255,0.35);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* PROFILE RIGHT */
+
+    .profile-right h2 {
+      font-family: Georgia, serif;
+      font-size: 32px;
+      font-weight: normal;
+      margin-bottom: 30px;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+
+    .detail-box {
+      border-bottom: 1px solid rgba(255,255,255,0.18);
+      padding-bottom: 18px;
+    }
+
+    .detail-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.55;
+      margin-bottom: 10px;
+    }
+
+    .detail-value {
+      font-size: 16px;
+    }
+
+    /* ACTIONS */
+
+    .actions-section {
+      margin-top: 35px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .primary-btn {
+      background: #fff8f3;
+      color: #a91420;
+      padding: 15px 25px;
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 1px;
+      font-weight: bold;
+      transition: 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .primary-btn:hover {
+      background: #111;
+      color: white;
+    }
+
+    .secondary-btn {
+      background: transparent;
+      color: white;
+      border: 1px solid rgba(255,255,255,0.45);
+      padding: 15px 25px;
+      text-decoration: none;
+      font-size: 13px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .secondary-btn:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .logout-btn {
+      background: transparent;
+      color: #ffd9d9;
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 15px 25px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: 0.3s;
+    }
+
+    .logout-btn:hover {
+      background: #8e0f18;
+    }
+
+    /* QUICK SECTION */
+
+    .quick-section {
+      margin-top: 35px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .quick-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      padding: 28px;
+      text-decoration: none;
+      color: white;
+      transition: 0.3s;
+    }
+
+    .quick-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255,255,255,0.1);
+    }
+
+    .quick-number {
+      font-family: Georgia, serif;
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .quick-card h3 {
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .quick-card p {
+      font-size: 13px;
+      opacity: 0.65;
+      line-height: 1.5;
+    }
+
+    /* LOADING */
 
     .loading {
-
-      padding: 50px;
-
       text-align: center;
-
+      padding: 100px 20px;
+      font-size: 16px;
+      opacity: 0.7;
     }
 
+    /* FOOTER */
 
-    @media(max-width: 600px) {
+    footer {
+      margin-top: 60px;
+      padding: 35px 8%;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      text-align: center;
+    }
 
-      h1 {
-        font-size: 48px;
+    .hers-by {
+      font-family: cursive;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    footer p {
+      font-size: 12px;
+      opacity: 0.6;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 750px) {
+
+      header {
+        padding: 0 25px;
       }
 
+      nav {
+        gap: 16px;
+      }
 
-      .account-container {
-        padding: 60px 20px;
+      nav a {
+        font-size: 13px;
+      }
+
+      .profile-card {
+        grid-template-columns: 1fr;
+        padding: 30px;
+        gap: 35px;
+      }
+
+      .profile-left {
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.18);
+        padding-right: 0;
+        padding-bottom: 30px;
+      }
+
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .quick-section {
+        grid-template-columns: 1fr;
       }
 
     }
 
   </style>
-
 </head>
-
 
 <body>
 
+  <!-- NAVBAR -->
 
-  <nav>
+  <header>
 
     <a href="index.html" class="logo">
       OnlyHers
     </a>
 
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="collection.html">Collection</a>
+    </nav>
 
-    <a href="collection.html" class="shop-link">
-      SHOP COLLECTION →
-    </a>
-
-  </nav>
+  </header>
 
 
+  <!-- LOADING -->
 
-  <main
-    class="account-container"
-    id="accountContainer"
-  >
+  <div id="loading" class="loading">
+    Loading your OnlyHers account...
+  </div>
 
-    <div class="loading">
-      Loading your account...
+
+  <!-- ACCOUNT CONTENT -->
+
+  <main id="accountContent" style="display:none;">
+
+    <div class="account-container">
+
+      <div class="small-title">
+        Your OnlyHers
+      </div>
+
+      <h1 class="page-title">
+        My Account.
+      </h1>
+
+      <p class="page-subtitle">
+        A little space for everything that's yours. Your account,
+        your collection, your OnlyHers journey.
+      </p>
+
+
+      <!-- PROFILE -->
+
+      <section class="profile-card">
+
+        <div class="profile-left">
+
+          <div class="avatar" id="avatar">
+            H
+          </div>
+
+          <h2 class="user-name" id="userName">
+            OnlyHers Member
+          </h2>
+
+          <p class="user-email" id="userEmail">
+            Loading...
+          </p>
+
+          <div class="member-badge">
+            OnlyHers Member
+          </div>
+
+        </div>
+
+
+        <div class="profile-right">
+
+          <h2>Your identity</h2>
+
+          <div class="details-grid">
+
+            <div class="detail-box">
+              <div class="detail-label">
+                Full Name
+              </div>
+
+              <div class="detail-value" id="fullName">
+                —
+              </div>
+            </div>
+<div class="detail-box">
+  <div class="detail-label">
+    Phone Number
+  </div>
+
+  <div class="detail-value" id="phoneDetail">
+    —
+  </div>
+</div>
+
+            <div class="detail-box">
+              <div class="detail-label">
+                Email
+              </div>
+
+              <div class="detail-value" id="emailDetail">
+                —
+              </div>
+            </div>
+
+
+            <div class="detail-box">
+              <div class="detail-label">
+                Member Since
+              </div>
+
+              <div class="detail-value" id="memberSince">
+                —
+              </div>
+            </div>
+
+
+            <div class="detail-box">
+              <div class="detail-label">
+                Account Status
+              </div>
+
+              <div class="detail-value" id="accountStatus">
+                Active
+              </div>
+            </div>
+
+          </div>
+
+
+          <div class="actions-section">
+
+            <a href="collection.html" class="primary-btn">
+              SHOP COLLECTION
+            </a>
+
+            <a href="index.html" class="secondary-btn">
+              BACK TO HOME
+            </a>
+
+            <button class="logout-btn" id="logoutBtn">
+              LOG OUT
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- QUICK CARDS -->
+
+      <section class="quick-section">
+
+        <a href="collection.html" class="quick-card">
+
+          <div class="quick-number">01</div>
+
+          <h3>Explore Collection</h3>
+
+          <p>
+            Discover pieces thoughtfully designed for every version of her.
+          </p>
+
+        </a>
+
+
+        <a href="collection.html" class="quick-card">
+
+          <div class="quick-number">02</div>
+
+          <h3>My Style</h3>
+
+          <p>
+            Find your next favourite piece from the OnlyHers collection.
+          </p>
+
+        </a>
+
+
+        <a href="index.html" class="quick-card">
+
+          <div class="quick-number">03</div>
+
+          <h3>Our Story</h3>
+
+          <p>
+            A little fashion, a little lifestyle, a little her.
+          </p>
+
+        </a>
+
+      </section>
+
     </div>
 
   </main>
 
 
+  <!-- FOOTER -->
+
+  <footer>
+
+    <div class="hers-by">
+      Hers by Hari Venkatesh
+    </div>
+
+    <p>
+      © 2026 OnlyHers · Made thoughtfully for her.
+    </p>
+
+  </footer>
+
+
+  <!-- SUPABASE -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
   <script>
 
-    async function loadAccount() {
+    /*
+    ==========================================
+    SUPABASE CONFIGURATION
+    ==========================================
 
-      const container =
-        document.getElementById("accountContainer");
+    Use the SAME URL and publishable key
+    you are already using in your other pages.
+    */
 
+    const SUPABASE_URL = "https://zeodtbgxadxfvexvywpm.supabase.co";
 
-      const session =
-        await requireLogin();
+    const SUPABASE_KEY = "sb_publishable_ywvo11SASIHo-oeNZasF0__LmK-oxr";
 
-
-      if (!session) return;
-
-
-      const user =
-        session.user;
-
-
-      container.innerHTML = `
-
-        <h1>
-          My Account
-        </h1>
+    const supabaseClient = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
 
 
-        <div class="card">
+    /*
+    ==========================================
+    LOAD USER
+    ==========================================
+    */
+
+    async function loadUser() {
+
+      const {
+        data: { user },
+        error
+      } = await supabaseClient.auth.getUser();
 
 
-          <div class="label">
-            LOGGED IN AS
-          </div>
+      // If user is not logged in
+
+      if (error || !user) {
+
+        window.location.href = "login.html";
+
+        return;
+
+      }
 
 
-          <div class="email">
-            ${escapeHTML(user.email)}
-          </div>
+      /*
+      ==========================================
+      GET USER NAME
+      ==========================================
+      */
+
+      let name =
+        user.user_metadata?.full_name ||
+        user.user_metadata?.name ||
+        user.email.split("@")[0];
 
 
-          <button
-            class="logout"
-            onclick="logoutUser()"
-          >
-            LOGOUT
-          </button>
+      /*
+      ==========================================
+      AVATAR INITIAL
+      ==========================================
+      */
+
+      const initial = name.charAt(0).toUpperCase();
 
 
-        </div>
+      document.getElementById("avatar").textContent = initial;
 
-      `;
+      document.getElementById("userName").textContent = name;
+
+      document.getElementById("fullName").textContent = name;
+
+      document.getElementById("userEmail").textContent = user.email;
+
+      document.getElementById("emailDetail").textContent = user.email;
+
+
+      /*
+      ==========================================
+      MEMBER SINCE
+      ==========================================
+      */
+
+      if (user.created_at) {
+
+        const date = new Date(user.created_at);
+
+        document.getElementById("memberSince").textContent =
+          date.toLocaleDateString("en-IN", {
+            month: "long",
+            year: "numeric"
+          });
+
+      }
+
+
+      /*
+      ==========================================
+      EMAIL STATUS
+      ==========================================
+      */
+
+      if (user.email_confirmed_at) {
+
+        document.getElementById("accountStatus").textContent =
+          "Verified Member";
+
+      } else {
+
+        document.getElementById("accountStatus").textContent =
+          "Email Verification Pending";
+
+      }
+
+
+      /*
+      SHOW PAGE
+      */
+
+      document.getElementById("loading").style.display = "none";
+
+      document.getElementById("accountContent").style.display = "block";
 
     }
 
 
-    loadAccount();
+    /*
+    ==========================================
+    LOGOUT
+    ==========================================
+    */
+
+    document
+      .getElementById("logoutBtn")
+      .addEventListener("click", async () => {
+
+        const { error } =
+          await supabaseClient.auth.signOut();
+
+
+        if (error) {
+
+          alert(error.message);
+
+          return;
+
+        }
+
+
+        window.location.href = "index.html";
+
+      });
+
+
+    /*
+    LOAD ACCOUNT
+    */
+
+    loadUser();
 
   </script>
 
-
 </body>
-
 </html>
