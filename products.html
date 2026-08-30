@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Shop | OnlyHers</title>
+  <meta name="description" content="Explore OnlyHers women's fashion. Select your size and order directly on WhatsApp.">
+  <link rel="canonical" href="https://onlyhers.in/products.html">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap');
+    :root{--red:#a8242e;--dark:#7e141d;--cream:#f5efe7;--ink:#181313}
+    *{box-sizing:border-box} body{margin:0;font-family:"DM Sans",Arial,sans-serif;background:var(--cream);color:var(--ink)}
+    nav{height:72px;background:var(--red);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,5vw,70px)}
+    .brand{font-weight:600;letter-spacing:.22em;text-decoration:none;color:#000;font-size:13px}
+    .links{display:flex;gap:24px}.links a{color:#000;text-decoration:none;text-transform:uppercase;font-size:11px;letter-spacing:.1em}
+    .hero{background:linear-gradient(135deg,var(--red),var(--dark));text-align:center;padding:90px 20px 70px}
+    h1{font-family:"Playfair Display",serif;font-size:clamp(50px,8vw,100px);font-weight:500;letter-spacing:-.04em;margin:0 0 14px}
+    .hero p{margin:0 auto;max-width:600px;line-height:1.8}
+    main{max-width:1200px;margin:auto;padding:65px 24px}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;gap:15px}
+    .toolbar h2{font-family:"Playfair Display",serif;font-size:36px;font-weight:500;margin:0}
+    .count{font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+    .card{background:#fff;border:1px solid rgba(0,0,0,.12);overflow:hidden}
+    .image{aspect-ratio:3/4;background:#eadfd8;overflow:hidden}.image img{width:100%;height:100%;object-fit:cover;display:block}
+    .details{padding:18px}.name{font-family:"Playfair Display",serif;font-size:27px;margin:0 0 8px}
+    .desc{font-size:13px;line-height:1.6;color:#554b48;min-height:42px}.price{font-weight:600;margin:14px 0}
+    .sizes{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}.size{border:1px solid #222;background:#fff;min-width:42px;padding:9px 10px;cursor:pointer;font-size:12px}
+    .size.selected{background:#000;color:#fff}.order{width:100%;border:0;background:var(--red);color:#000;padding:14px;cursor:pointer;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:11px}
+    .order:hover{background:#000;color:#fff}.empty{grid-column:1/-1;text-align:center;padding:80px 20px;border:1px dashed rgba(0,0,0,.2)}
+    footer{text-align:center;background:var(--red);padding:25px;font-size:10px;letter-spacing:.15em}
+    @media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr);gap:14px}.links{gap:14px}.name{font-size:22px}}
+    @media(max-width:520px){.grid{grid-template-columns:1fr}.links a:not(:last-child){display:none}main{padding:40px 16px}}
+  </style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="index.html">ONLYHERS</a>
+  <div class="links"><a href="index.html">Home</a><a href="products.html">Shop</a><a href="index.html#connect">Connect</a></div>
+</nav>
+
+<section class="hero">
+  <h1>Made for her.</h1>
+  <p>Explore thoughtfully designed pieces from OnlyHers. Choose your size and place your order directly with us on WhatsApp.</p>
+</section>
+
+<main>
+  <div class="toolbar"><h2>Latest pieces</h2><span class="count" id="count">Loading...</span></div>
+  <div class="grid" id="products"></div>
+</main>
+
+<footer>HERS · ONLYHERS.IN · © 2026 ONLYHERS</footer>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'PASTE_YOUR_SUPABASE_URL_HERE';
+const SUPABASE_ANON_KEY = 'PASTE_YOUR_SUPABASE_ANON_KEY_HERE';
+const WHATSAPP_NUMBER = '919059828206';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const grid = document.getElementById('products');
+const count = document.getElementById('count');
+
+function money(price){
+  return price === null || price === undefined || price === '' ? '' : `₹${Number(price).toLocaleString('en-IN')}`;
+}
+function escapeHtml(s=''){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+async function loadProducts(){
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .eq('is_available', true)
+    .order('created_at', { ascending:false });
+
+  if(error){
+    grid.innerHTML = `<div class="empty">Could not load products yet. Please check the Supabase setup.</div>`;
+    count.textContent = 'Unavailable';
+    console.error(error);
+    return;
+  }
+
+  count.textContent = `${data.length} piece${data.length === 1 ? '' : 's'}`;
+
+  if(!data.length){
+    grid.innerHTML = `<div class="empty"><h3>Your collection is coming soon.</h3><p>New pieces will appear here soon.</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = data.map(p => {
+    const sizes = Array.isArray(p.sizes) ? p.sizes : [];
+    return `<article class="card" data-id="${p.id}">
+      <div class="image"><img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.name)} by OnlyHers"></div>
+      <div class="details">
+        <h2 class="name">${escapeHtml(p.name)}</h2>
+        <div class="desc">${escapeHtml(p.description || '')}</div>
+        <div class="price">${money(p.price)}</div>
+        <div class="sizes">
+          ${sizes.map(s => `<button class="size" type="button" data-size="${escapeHtml(s)}">${escapeHtml(s)}</button>`).join('')}
+        </div>
+        <button class="order" type="button">Order on WhatsApp</button>
+      </div>
+    </article>`;
+  }).join('');
+
+  document.querySelectorAll('.card').forEach(card => {
+    let selectedSize = '';
+    card.querySelectorAll('.size').forEach(btn => {
+      btn.addEventListener('click', () => {
+        card.querySelectorAll('.size').forEach(x => x.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedSize = btn.dataset.size;
+      });
+    });
+
+    card.querySelector('.order').addEventListener('click', () => {
+      const p = data.find(x => x.id === card.dataset.id);
+      if(Array.isArray(p.sizes) && p.sizes.length && !selectedSize){
+        alert('Please select your size first.');
+        return;
+      }
+      const message = `Hi OnlyHers ❤️\n\nI would like to order:\n\nDress: ${p.name}\n${selectedSize ? `Size: ${selectedSize}\n` : ''}${p.price ? `Price: ₹${p.price}\n` : ''}\nProduct ID: ${p.id}\n\nPlease let me know the next steps.`;
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
+    });
+  });
+}
+loadProducts();
+</script>
+</body>
+</html>

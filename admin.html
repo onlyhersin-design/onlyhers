@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OnlyHers Dashboard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap');
+:root{--red:#a8242e;--cream:#f5efe7}*{box-sizing:border-box}body{margin:0;background:var(--cream);font-family:"DM Sans",sans-serif;color:#181313}
+header{background:var(--red);padding:25px clamp(20px,5vw,70px);display:flex;justify-content:space-between;align-items:center}header b{letter-spacing:.2em}button{cursor:pointer}
+.wrap{max-width:1050px;margin:45px auto;padding:0 20px}.panel{background:#fff;border:1px solid rgba(0,0,0,.12);padding:30px;margin-bottom:25px}
+h1,h2{font-family:"Playfair Display",serif;font-weight:500}.login{max-width:460px;margin:70px auto}.hidden{display:none!important}
+label{display:block;font-size:12px;font-weight:600;margin:18px 0 7px}input,textarea{width:100%;padding:13px;border:1px solid #bbb;font:inherit;background:#fff}textarea{min-height:110px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:18px}.btn{border:0;background:var(--red);padding:14px 18px;font-weight:600;margin-top:22px}.btn:hover{background:#000;color:#fff}.logout{border:1px solid #000;background:transparent;padding:9px 14px}
+.products{display:grid;gap:12px}.product{display:grid;grid-template-columns:70px 1fr auto;gap:15px;align-items:center;border-top:1px solid #ddd;padding:12px 0}.product img{width:70px;height:85px;object-fit:cover;background:#eee}.delete{background:#fff;border:1px solid #a00;color:#a00;padding:9px 12px}.status{font-size:13px;margin-top:12px}.ok{color:green}.err{color:#b00020}
+@media(max-width:650px){.row{grid-template-columns:1fr}.product{grid-template-columns:60px 1fr}.product button{grid-column:2}}
+</style>
+</head>
+<body>
+<header><b>ONLYHERS · DASHBOARD</b><button class="logout hidden" id="logout">Log out</button></header>
+
+<div class="wrap">
+  <section class="panel login" id="loginPanel">
+    <h1>Welcome back.</h1>
+    <p>Sign in with the email and password you created in Supabase.</p>
+    <label>Email</label><input id="email" type="email" autocomplete="email">
+    <label>Password</label><input id="password" type="password" autocomplete="current-password">
+    <button class="btn" id="login">Sign in</button>
+    <div class="status" id="loginStatus"></div>
+  </section>
+
+  <div id="dashboard" class="hidden">
+    <section class="panel">
+      <h1>Add a new design</h1>
+      <div class="row">
+        <div><label>Product / dress name</label><input id="name" placeholder="Example: Midnight Bloom Dress"></div>
+        <div><label>Price (₹)</label><input id="price" type="number" min="0" placeholder="2999"></div>
+      </div>
+      <label>Description</label><textarea id="description" placeholder="A short description of the dress..."></textarea>
+      <label>Available sizes</label><input id="sizes" placeholder="XS, S, M, L, XL">
+      <label>Product image</label><input id="image" type="file" accept="image/*">
+      <button class="btn" id="upload">Upload design</button>
+      <div class="status" id="uploadStatus"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Your products</h2>
+      <div class="products" id="productList">Loading...</div>
+    </section>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'PASTE_YOUR_SUPABASE_URL_HERE';
+const SUPABASE_ANON_KEY = 'PASTE_YOUR_SUPABASE_ANON_KEY_HERE';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const $ = id => document.getElementById(id);
+const loginPanel=$('loginPanel'), dashboard=$('dashboard'), logout=$('logout');
+
+function status(id,msg,type=''){const el=$(id);el.textContent=msg;el.className=`status ${type}`}
+
+async function refreshAuth(){
+  const {data:{session}}=await supabase.auth.getSession();
+  if(session){loginPanel.classList.add('hidden');dashboard.classList.remove('hidden');logout.classList.remove('hidden');loadProducts();}
+  else{loginPanel.classList.remove('hidden');dashboard.classList.add('hidden');logout.classList.add('hidden');}
+}
+$('login').onclick=async()=>{
+  status('loginStatus','Signing in...');
+  const {error}=await supabase.auth.signInWithPassword({email:$('email').value,password:$('password').value});
+  if(error) status('loginStatus',error.message,'err'); else refreshAuth();
+};
+$('logout').onclick=async()=>{await supabase.auth.signOut();refreshAuth();};
+
+$('upload').onclick=async()=>{
+  const file=$('image').files[0], name=$('name').value.trim();
+  if(!name||!file){status('uploadStatus','Please add a product name and image.','err');return;}
+  status('uploadStatus','Uploading image and saving product...');
+  const ext=file.name.split('.').pop();
+  const path=`${Date.now()}-${crypto.randomUUID()}.${ext}`;
+  const {error:uploadError}=await supabase.storage.from('product-images').upload(path,file,{contentType:file.type});
+  if(uploadError){status('uploadStatus',uploadError.message,'err');return;}
+  const {data:urlData}=supabase.storage.from('product-images').getPublicUrl(path);
+  const sizes=$('sizes').value.split(',').map(x=>x.trim()).filter(Boolean);
+  const price=$('price').value ? Number($('price').value) : null;
+  const {error}=await supabase.from('products').insert({
+    name,
+    price,
+    description:$('description').value.trim(),
+    sizes,
+    image_url:urlData.publicUrl,
+    is_available:true
+  });
+  if(error){status('uploadStatus',error.message,'err');return;}
+  status('uploadStatus','Design uploaded successfully!','ok');
+  ['name','price','description','sizes'].forEach(id=>$(id).value='');$('image').value='';
+  loadProducts();
+};
+
+async function loadProducts(){
+  const list=$('productList');
+  const {data,error}=await supabase.from('products').select('*').order('created_at',{ascending:false});
+  if(error){list.textContent=error.message;return;}
+  if(!data.length){list.innerHTML='<p>No products yet.</p>';return;}
+  list.innerHTML=data.map(p=>`<div class="product">
+    <img src="${p.image_url}" alt="">
+    <div><strong>${p.name}</strong><br><small>${p.price ? '₹'+p.price : 'Price on request'} · ${(p.sizes||[]).join(', ')}</small></div>
+    <button class="delete" data-id="${p.id}">Delete</button>
+  </div>`).join('');
+  list.querySelectorAll('.delete').forEach(btn=>btn.onclick=async()=>{
+    if(!confirm('Delete this product?'))return;
+    const {error}=await supabase.from('products').delete().eq('id',btn.dataset.id);
+    if(error)alert(error.message); else loadProducts();
+  });
+}
+refreshAuth();
+</script>
+</body>
+</html>
