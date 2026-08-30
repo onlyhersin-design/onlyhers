@@ -657,7 +657,13 @@
       document.getElementById("userEmail").textContent = user.email;
 
       document.getElementById("emailDetail").textContent = user.email;
+const phoneNumber =
+  user.phone ||
+  user.user_metadata?.phone ||
+  user.user_metadata?.phone_number ||
+  "Not added yet";
 
+document.getElementById("phoneDetail").textContent = phoneNumber;
 
       /*
       ==========================================
