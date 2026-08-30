@@ -1,590 +1,1504 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <meta charset="UTF-8">
+  <title>OnlyHers — Made For Her</title>
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Onlyhers — Made For Her</title>
-
-
+  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <script src="app.js" defer></script>
-
-
   <style>
-
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-
-    html {
-      scroll-behavior: smooth;
+    :root {
+      --red: #9e1c24;
+      --dark: #171717;
+      --cream: #f7f3ee;
+      --white: #ffffff;
+      --text: #1d1d1d;
+      --gray: #777;
     }
-
 
     body {
       font-family: Arial, Helvetica, sans-serif;
-      background: #f8f5f0;
-      color: #181818;
+      background: var(--cream);
+      color: var(--text);
     }
 
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
 
-    /* NAVBAR */
+    /* ================= NAVBAR ================= */
 
     nav {
-
-      position: fixed;
-
-      top: 0;
-      left: 0;
-
-      width: 100%;
-
+      height: 75px;
+      background: #fff;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-
-      padding: 18px 7%;
-
-      background: rgba(248,245,240,0.95);
-
-      backdrop-filter: blur(10px);
-
-      border-bottom: 1px solid #e2ddd6;
-
-      z-index: 1000;
-
+      justify-content: space-between;
+      padding: 0 7%;
+      border-bottom: 1px solid #eee;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
-
-    .logo {
-
+    .brand {
       font-family: Georgia, serif;
-
       font-size: 30px;
-
       font-weight: bold;
-
-      color: #181818;
-
-      text-decoration: none;
-
+      cursor: pointer;
     }
-
 
     .nav-right {
-
       display: flex;
       align-items: center;
-      gap: 20px;
-
+      gap: 18px;
     }
 
-
-    #authArea {
-
-      display: flex;
-      align-items: center;
-      gap: 15px;
-
-    }
-
-
-    .login-link,
-    .account-link {
-
-      color: #181818;
-
-      text-decoration: none;
-
-      font-size: 12px;
-
-      letter-spacing: 1px;
-
-    }
-
-
-    .signup-link {
-
-      background: #181818;
-
-      color: white;
-
-      padding: 12px 18px;
-
-      text-decoration: none;
-
-      font-size: 12px;
-
-      letter-spacing: 1px;
-
-    }
-
-
-    .logout-button {
-
-      background: transparent;
-
+    .nav-link {
       border: none;
-
+      background: transparent;
+      font-size: 14px;
       cursor: pointer;
-
-      font-size: 11px;
-
-      color: #9b1c25;
-
-      letter-spacing: 1px;
-
     }
 
+    .auth-btn {
+      border: 1px solid var(--dark);
+      background: transparent;
+      padding: 10px 18px;
+      font-size: 13px;
+    }
 
-    /* HERO */
+    .signup-btn {
+      background: var(--dark);
+      color: white;
+      border: 1px solid var(--dark);
+      padding: 10px 18px;
+      font-size: 13px;
+    }
+
+    .user-area {
+      display: none;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-email {
+      font-size: 13px;
+      color: var(--gray);
+      max-width: 180px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ================= HERO ================= */
+
+    #homePage {
+      display: block;
+    }
 
     .hero {
-
-      min-height: 100vh;
-
+      min-height: calc(100vh - 75px);
       background: linear-gradient(
         135deg,
-        #b62b35,
-        #7e1019
+        #b13a43,
+        #9e1c24 55%,
+        #86151c
       );
-
+      color: #111;
       display: flex;
-
       justify-content: center;
-
       align-items: center;
-
       text-align: center;
-
-      padding: 120px 20px 60px;
-
+      padding: 60px 20px;
     }
-
 
     .hero-content {
-
       max-width: 950px;
-
     }
-
 
     .hero-logo {
-
-      font-size: 20px;
-
-      margin-bottom: 50px;
-
-      letter-spacing: 3px;
-
+      width: 120px;
+      max-height: 100px;
+      object-fit: contain;
+      margin-bottom: 25px;
     }
-
 
     .hero h1 {
-
       font-family: Georgia, serif;
-
       font-size: clamp(65px, 11vw, 150px);
-
-      font-weight: normal;
-
-      line-height: 0.9;
-
-      margin-bottom: 35px;
-
+      font-weight: 500;
+      line-height: 1;
+      margin-bottom: 25px;
     }
-
 
     .hero p {
-
       font-size: 18px;
-
-      line-height: 1.8;
-
+      letter-spacing: 0.3px;
       max-width: 700px;
-
       margin: auto;
-
-      margin-bottom: 45px;
-
-    }
-
-
-    .shop-button {
-
-      display: inline-block;
-
-      background: #181818;
-
-      color: white;
-
-      text-decoration: none;
-
-      padding: 20px 40px;
-
-      font-size: 12px;
-
-      font-weight: bold;
-
-      letter-spacing: 2px;
-
-      transition: 0.3s;
-
-    }
-
-
-    .shop-button:hover {
-
-      background: white;
-
-      color: #181818;
-
-      transform: translateY(-3px);
-
-    }
-
-
-    /* ABOUT */
-
-    .about {
-
-      padding: 120px 10%;
-
-      text-align: center;
-
-    }
-
-
-    .label {
-
-      font-size: 11px;
-
-      letter-spacing: 3px;
-
-      margin-bottom: 25px;
-
-      text-transform: uppercase;
-
-    }
-
-
-    .about h2 {
-
-      font-family: Georgia, serif;
-
-      font-size: clamp(40px, 6vw, 75px);
-
-      font-weight: normal;
-
-      margin-bottom: 30px;
-
-    }
-
-
-    .about p {
-
-      max-width: 750px;
-
-      margin: auto;
-
-      line-height: 1.9;
-
-      color: #555;
-
-      font-size: 17px;
-
-    }
-
-
-    /* FEATURES */
-
-    .features {
-
-      display: grid;
-
-      grid-template-columns: repeat(3, 1fr);
-
-      background: #181818;
-
-      color: white;
-
-      padding: 80px 10%;
-
-      gap: 50px;
-
-    }
-
-
-    .feature h3 {
-
-      font-family: Georgia, serif;
-
-      font-size: 28px;
-
-      font-weight: normal;
-
-      margin-bottom: 15px;
-
-    }
-
-
-    .feature p {
-
-      color: #c9c9c9;
-
       line-height: 1.8;
-
-      font-size: 14px;
-
     }
 
-
-    /* CTA */
-
-    .cta {
-
-      text-align: center;
-
-      padding: 120px 20px;
-
-      background: #e9e1d7;
-
+    .shop-btn {
+      margin-top: 55px;
+      background: #151515;
+      color: white;
+      border: none;
+      padding: 22px 40px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      font-size: 13px;
+      transition: 0.3s;
     }
 
+    .shop-btn:hover {
+      transform: translateY(-3px);
+    }
 
-    .cta h2 {
+    /* ================= SHOP ================= */
 
+    #shopPage {
+      display: none;
+      padding: 70px 7%;
+      min-height: 100vh;
+    }
+
+    .page-title {
       font-family: Georgia, serif;
-
-      font-size: clamp(40px, 6vw, 70px);
-
-      font-weight: normal;
-
-      margin-bottom: 35px;
-
+      font-size: 50px;
+      margin-bottom: 12px;
     }
 
+    .page-subtitle {
+      color: var(--gray);
+      margin-bottom: 45px;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .product-card {
+      background: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+      background: #eee;
+    }
+
+    .product-info {
+      padding: 18px;
+    }
+
+    .product-category {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--gray);
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .product-name {
+      font-family: Georgia, serif;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .product-price {
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    /* ================= PRODUCT DETAIL ================= */
+
+    #productPage {
+      display: none;
+      padding: 60px 7%;
+      min-height: 100vh;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      margin-bottom: 35px;
+      font-size: 14px;
+      text-decoration: underline;
+    }
+
+    .product-detail {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 70px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .detail-image {
+      width: 100%;
+      height: 600px;
+      object-fit: cover;
+      background: #eee;
+    }
+
+    .detail-category {
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-size: 12px;
+      color: var(--gray);
+      margin-bottom: 15px;
+    }
+
+    .detail-name {
+      font-family: Georgia, serif;
+      font-size: 50px;
+      margin-bottom: 20px;
+    }
+
+    .detail-price {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+
+    .detail-description {
+      color: #555;
+      line-height: 1.8;
+      margin-bottom: 30px;
+    }
+
+    .sizes-title {
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .sizes-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 35px;
+    }
+
+    .size-btn {
+      min-width: 50px;
+      padding: 12px;
+      background: white;
+      border: 1px solid #ddd;
+    }
+
+    .size-btn.selected {
+      background: var(--dark);
+      color: white;
+      border-color: var(--dark);
+    }
+
+    .buy-btn {
+      width: 100%;
+      padding: 18px;
+      background: var(--red);
+      color: white;
+      border: none;
+      font-size: 14px;
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+
+    /* ================= MODAL ================= */
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal {
+      background: white;
+      width: 100%;
+      max-width: 430px;
+      padding: 40px;
+      position: relative;
+    }
+
+    .close-modal {
+      position: absolute;
+      right: 18px;
+      top: 15px;
+      border: none;
+      background: transparent;
+      font-size: 25px;
+    }
+
+    .modal h2 {
+      font-family: Georgia, serif;
+      font-size: 35px;
+      margin-bottom: 10px;
+    }
+
+    .modal-subtitle {
+      color: var(--gray);
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+    }
+
+    .form-submit {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      background: var(--dark);
+      color: white;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .switch-auth {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+    }
+
+    .switch-auth button {
+      border: none;
+      background: none;
+      text-decoration: underline;
+    }
+
+    .message {
+      margin-top: 15px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .success {
+      color: green;
+    }
+
+    .error {
+      color: #b00020;
+    }
+
+    /* ================= LOADING ================= */
+
+    .loading {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 60px;
+      color: var(--gray);
+    }
+
+    .empty {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 60px;
+      color: var(--gray);
+    }
+
+    /* ================= FOOTER ================= */
 
     footer {
-
-      background: #181818;
-
+      background: #171717;
       color: white;
-
+      padding: 40px 7%;
       text-align: center;
-
-      padding: 30px;
-
-      font-size: 12px;
-
+      margin-top: 60px;
     }
 
+    footer h3 {
+      font-family: Georgia, serif;
+      font-size: 25px;
+      margin-bottom: 10px;
+    }
 
-    @media(max-width: 700px) {
+    footer p {
+      color: #aaa;
+      font-size: 13px;
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 768px) {
 
       nav {
-        padding: 16px 5%;
+        padding: 0 5%;
       }
 
-
-      .logo {
-        font-size: 24px;
-      }
-
-
-      .account-link {
+      .nav-link {
         display: none;
       }
 
-
-      .features {
-        grid-template-columns: 1fr;
+      .auth-btn,
+      .signup-btn {
+        padding: 8px 10px;
+        font-size: 11px;
       }
-
 
       .hero h1 {
         font-size: 70px;
       }
 
+      .hero p {
+        font-size: 15px;
+      }
+
+      .product-detail {
+        grid-template-columns: 1fr;
+        gap: 35px;
+      }
+
+      .detail-image {
+        height: 450px;
+      }
+
+      .detail-name {
+        font-size: 40px;
+      }
+
+      .user-email {
+        display: none;
+      }
     }
-
   </style>
-
 </head>
-
 
 <body>
 
-
-  <!-- NAVBAR -->
+  <!-- ================= NAVIGATION ================= -->
 
   <nav>
 
-    <a href="index.html" class="logo">
+    <div class="brand" onclick="showHome()">
       OnlyHers
-    </a>
-
+    </div>
 
     <div class="nav-right">
 
-      <a href="collection.html" class="login-link">
+      <button class="nav-link" onclick="showHome()">
+        HOME
+      </button>
+
+      <button class="nav-link" onclick="showShop()">
         SHOP
-      </a>
+      </button>
 
+      <!-- Not logged in -->
+      <div id="guestArea">
 
-      <div id="authArea"></div>
+        <button class="auth-btn" onclick="openLogin()">
+          LOGIN
+        </button>
+
+        <button class="signup-btn" onclick="openSignup()">
+          SIGN UP
+        </button>
+
+      </div>
+
+      <!-- Logged in -->
+      <div id="userArea" class="user-area">
+
+        <span id="userEmail" class="user-email"></span>
+
+        <button class="auth-btn" onclick="logout()">
+          LOGOUT
+        </button>
+
+      </div>
 
     </div>
 
   </nav>
 
 
+  <!-- ================= HOME ================= -->
 
-  <!-- HERO -->
+  <section id="homePage">
 
-  <section class="hero">
+    <div class="hero">
 
-    <div class="hero-content">
+      <div class="hero-content">
 
-      <div class="hero-logo">
-        ONLYHERS
+        <!-- Change this path if your logo filename is different -->
+        <img
+          src="onlyhers-logo.png"
+          alt="OnlyHers"
+          class="hero-logo"
+          onerror="this.style.display='none'"
+        />
+
+        <h1>Made for Her.</h1>
+
+        <p>
+          A little fashion, a little lifestyle, a little her.
+          Thoughtfully designed pieces made to feel like yours.
+        </p>
+
+        <button class="shop-btn" onclick="showShop()">
+          SHOP COLLECTION
+        </button>
+
       </div>
 
-
-      <h1>
-        Made For Her.
-      </h1>
-
-
-      <p>
-        A little fashion, a little lifestyle, a little her.
-        Thoughtfully designed pieces made to feel like yours.
-      </p>
-
-
-      <a
-        href="collection.html"
-        class="shop-button"
-      >
-        SHOP COLLECTION
-      </a>
-
     </div>
 
   </section>
 
 
+  <!-- ================= SHOP ================= -->
 
-  <!-- ABOUT -->
+  <section id="shopPage">
 
-  <section class="about">
+    <h1 class="page-title">The Collection</h1>
 
-    <div class="label">
-      ABOUT ONLYHERS
-    </div>
-
-
-    <h2>
-      Clothing that feels like you.
-    </h2>
-
-
-    <p>
-      OnlyHers is about creating pieces that feel personal.
-      Comfortable enough to live in and beautiful enough to remember.
-      Every piece is thoughtfully created for different moods,
-      moments and versions of her.
+    <p class="page-subtitle">
+      Pieces thoughtfully designed for her.
     </p>
 
-  </section>
+    <div id="productsGrid" class="products-grid">
 
-
-
-  <!-- FEATURES -->
-
-  <section class="features">
-
-
-    <div class="feature">
-
-      <h3>Thoughtful</h3>
-
-      <p>
-        Every piece starts with an idea, a feeling
-        and attention to the smallest details.
-      </p>
+      <div class="loading">
+        Loading collection...
+      </div>
 
     </div>
-
-
-
-    <div class="feature">
-
-      <h3>Comfortable</h3>
-
-      <p>
-        Fashion should not only look good.
-        It should feel good too.
-      </p>
-
-    </div>
-
-
-
-    <div class="feature">
-
-      <h3>Made for her</h3>
-
-      <p>
-        Different moods. Different moments.
-        Different versions of you.
-      </p>
-
-    </div>
-
 
   </section>
 
 
+  <!-- ================= PRODUCT DETAIL ================= -->
 
-  <!-- CTA -->
+  <section id="productPage">
 
-  <section class="cta">
+    <button class="back-btn" onclick="showShop()">
+      ← BACK TO COLLECTION
+    </button>
 
-    <h2>
-      Find something that's yours.
-    </h2>
-
-
-    <a
-      href="collection.html"
-      class="shop-button"
-    >
-      EXPLORE COLLECTION
-    </a>
+    <div id="productDetail">
+      <!-- Product details load here -->
+    </div>
 
   </section>
 
 
+  <!-- ================= LOGIN MODAL ================= -->
+
+  <div id="loginModal" class="modal-overlay">
+
+    <div class="modal">
+
+      <button class="close-modal" onclick="closeModals()">
+        ×
+      </button>
+
+      <h2>Welcome back</h2>
+
+      <p class="modal-subtitle">
+        Login to your OnlyHers account.
+      </p>
+
+      <form id="loginForm">
+
+        <div class="form-group">
+
+          <label>Email</label>
+
+          <input
+            type="email"
+            id="loginEmail"
+            required
+            placeholder="you@example.com"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Password</label>
+
+          <input
+            type="password"
+            id="loginPassword"
+            required
+            placeholder="Your password"
+          />
+
+        </div>
+
+        <button type="submit" class="form-submit">
+          LOGIN
+        </button>
+
+        <div id="loginMessage" class="message"></div>
+
+      </form>
+
+      <div class="switch-auth">
+
+        Don't have an account?
+
+        <button onclick="switchToSignup()">
+          Sign up
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ================= SIGNUP MODAL ================= -->
+
+  <div id="signupModal" class="modal-overlay">
+
+    <div class="modal">
+
+      <button class="close-modal" onclick="closeModals()">
+        ×
+      </button>
+
+      <h2>Create account</h2>
+
+      <p class="modal-subtitle">
+        Join the OnlyHers community.
+      </p>
+
+      <form id="signupForm">
+
+        <div class="form-group">
+
+          <label>Email</label>
+
+          <input
+            type="email"
+            id="signupEmail"
+            required
+            placeholder="you@example.com"
+          />
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Password</label>
+
+          <input
+            type="password"
+            id="signupPassword"
+            required
+            minlength="6"
+            placeholder="Minimum 6 characters"
+          />
+
+        </div>
+
+        <button type="submit" class="form-submit">
+          CREATE ACCOUNT
+        </button>
+
+        <div id="signupMessage" class="message"></div>
+
+      </form>
+
+      <div class="switch-auth">
+
+        Already have an account?
+
+        <button onclick="switchToLogin()">
+          Login
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ================= FOOTER ================= -->
 
   <footer>
 
-    © 2026 OnlyHers — Made thoughtfully for her.
+    <h3>OnlyHers</h3>
+
+    <p>
+      A little fashion, a little lifestyle, a little her.
+    </p>
 
   </footer>
 
 
-</body>
+  <!-- ================= JAVASCRIPT ================= -->
 
+  <script>
+
+    /* ==========================================
+       SUPABASE CONFIGURATION
+    ========================================== */
+
+    const SUPABASE_URL =
+      "https://zeodtbgxadxfvexvywpm.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr";
+
+
+    const supabaseClient =
+      supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+    /* ==========================================
+       PAGE NAVIGATION
+    ========================================== */
+
+    function hideAllPages() {
+
+      document.getElementById("homePage").style.display = "none";
+
+      document.getElementById("shopPage").style.display = "none";
+
+      document.getElementById("productPage").style.display = "none";
+
+    }
+
+
+    function showHome() {
+
+      hideAllPages();
+
+      document.getElementById("homePage").style.display = "block";
+
+      window.scrollTo(0, 0);
+
+    }
+
+
+    function showShop() {
+
+      hideAllPages();
+
+      document.getElementById("shopPage").style.display = "block";
+
+      window.scrollTo(0, 0);
+
+      loadProducts();
+
+    }
+
+
+    /* ==========================================
+       LOAD PRODUCTS FROM SUPABASE
+    ========================================== */
+
+    async function loadProducts() {
+
+      const productsGrid =
+        document.getElementById("productsGrid");
+
+
+      productsGrid.innerHTML = `
+        <div class="loading">
+          Loading collection...
+        </div>
+      `;
+
+
+      const { data, error } =
+        await supabaseClient
+          .from("products")
+          .select("*")
+          .order("created_at", {
+            ascending: false
+          });
+
+
+      if (error) {
+
+        console.error(error);
+
+        productsGrid.innerHTML = `
+          <div class="empty">
+            Unable to load products.<br><br>
+            ${error.message}
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      if (!data || data.length === 0) {
+
+        productsGrid.innerHTML = `
+          <div class="empty">
+            No products available yet.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      productsGrid.innerHTML = "";
+
+
+      data.forEach(product => {
+
+
+        /*
+          Supports different possible image column names
+        */
+
+        const image =
+          product.image_url ||
+          product.image ||
+          product.product_image ||
+          "";
+
+
+        const category =
+          product.category || "OnlyHers";
+
+
+        const price =
+          product.price
+            ? `₹${product.price}`
+            : "Price on request";
+
+
+        productsGrid.innerHTML += `
+
+          <div
+            class="product-card"
+            onclick="showProduct('${product.id}')"
+          >
+
+            <img
+              class="product-image"
+              src="${image}"
+              alt="${product.name || "OnlyHers Product"}"
+              onerror="this.src='https://via.placeholder.com/500x650?text=OnlyHers'"
+            />
+
+            <div class="product-info">
+
+              <div class="product-category">
+                ${category}
+              </div>
+
+              <h2 class="product-name">
+                ${product.name || "Untitled Product"}
+              </h2>
+
+              <div class="product-price">
+                ${price}
+              </div>
+
+            </div>
+
+          </div>
+
+        `;
+
+      });
+
+    }
+
+
+    /* ==========================================
+       PRODUCT DETAIL PAGE
+    ========================================== */
+
+    async function showProduct(productId) {
+
+      hideAllPages();
+
+      document.getElementById("productPage").style.display =
+        "block";
+
+
+      window.scrollTo(0, 0);
+
+
+      const detailContainer =
+        document.getElementById("productDetail");
+
+
+      detailContainer.innerHTML =
+        `<div class="loading">Loading product...</div>`;
+
+
+      const { data: product, error } =
+        await supabaseClient
+          .from("products")
+          .select("*")
+          .eq("id", productId)
+          .single();
+
+
+      if (error) {
+
+        detailContainer.innerHTML =
+          `<div class="empty">${error.message}</div>`;
+
+        return;
+
+      }
+
+
+      const image =
+        product.image_url ||
+        product.image ||
+        product.product_image ||
+        "";
+
+
+      const category =
+        product.category || "OnlyHers";
+
+
+      const price =
+        product.price
+          ? `₹${product.price}`
+          : "Price on request";
+
+
+      const description =
+        product.description ||
+        "A thoughtfully designed piece from OnlyHers.";
+
+
+      /*
+        Supports sizes stored as:
+        XS, S, M
+
+        or:
+
+        XS S M
+      */
+
+      let sizes = [];
+
+
+      if (product.sizes) {
+
+        if (Array.isArray(product.sizes)) {
+
+          sizes = product.sizes;
+
+        } else {
+
+          sizes =
+            String(product.sizes)
+              .split(/[, ]+/)
+              .filter(Boolean);
+
+        }
+
+      }
+
+
+      let sizesHTML = "";
+
+
+      if (sizes.length > 0) {
+
+        sizes.forEach(size => {
+
+          sizesHTML += `
+            <button
+              class="size-btn"
+              onclick="selectSize(this)"
+            >
+              ${size}
+            </button>
+          `;
+
+        });
+
+      } else {
+
+        sizesHTML =
+          `<p>No size information available.</p>`;
+
+      }
+
+
+      detailContainer.innerHTML = `
+
+        <div class="product-detail">
+
+          <div>
+
+            <img
+              class="detail-image"
+              src="${image}"
+              alt="${product.name}"
+              onerror="this.src='https://via.placeholder.com/600x800?text=OnlyHers'"
+            />
+
+          </div>
+
+
+          <div>
+
+            <div class="detail-category">
+              ${category}
+            </div>
+
+
+            <h1 class="detail-name">
+              ${product.name || "OnlyHers"}
+            </h1>
+
+
+            <div class="detail-price">
+              ${price}
+            </div>
+
+
+            <p class="detail-description">
+              ${description}
+            </p>
+
+
+            <div class="sizes-title">
+              Available Sizes
+            </div>
+
+
+            <div class="sizes-container">
+              ${sizesHTML}
+            </div>
+
+
+            <button
+              class="buy-btn"
+              onclick="handleBuy('${product.id}')"
+            >
+              BUY NOW
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+
+    function selectSize(button) {
+
+      document
+        .querySelectorAll(".size-btn")
+        .forEach(btn => {
+
+          btn.classList.remove("selected");
+
+        });
+
+
+      button.classList.add("selected");
+
+    }
+
+
+    /* ==========================================
+       BUY BUTTON
+    ========================================== */
+
+    async function handleBuy(productId) {
+
+      const {
+        data: {
+          user
+        }
+      } =
+        await supabaseClient
+          .auth
+          .getUser();
+
+
+      if (!user) {
+
+        openLogin();
+
+        alert(
+          "Please login or create an account to continue."
+        );
+
+        return;
+
+      }
+
+
+      alert(
+        "You're logged in! Ordering functionality can be connected next."
+      );
+
+    }
+
+
+    /* ==========================================
+       LOGIN / SIGNUP MODALS
+    ========================================== */
+
+    function openLogin() {
+
+      closeModals();
+
+      document.getElementById("loginModal").style.display =
+        "flex";
+
+    }
+
+
+    function openSignup() {
+
+      closeModals();
+
+      document.getElementById("signupModal").style.display =
+        "flex";
+
+    }
+
+
+    function closeModals() {
+
+      document.getElementById("loginModal").style.display =
+        "none";
+
+      document.getElementById("signupModal").style.display =
+        "none";
+
+    }
+
+
+    function switchToSignup() {
+
+      openSignup();
+
+    }
+
+
+    function switchToLogin() {
+
+      openLogin();
+
+    }
+
+
+    /* ==========================================
+       LOGIN
+    ========================================== */
+
+    document
+      .getElementById("loginForm")
+      .addEventListener(
+        "submit",
+        async function(event) {
+
+          event.preventDefault();
+
+
+          const email =
+            document.getElementById("loginEmail").value;
+
+
+          const password =
+            document.getElementById("loginPassword").value;
+
+
+          const message =
+            document.getElementById("loginMessage");
+
+
+          message.innerHTML = "Logging in...";
+
+          message.className = "message";
+
+
+          const { data, error } =
+            await supabaseClient.auth.signInWithPassword({
+
+              email: email,
+
+              password: password
+
+            });
+
+
+          if (error) {
+
+            message.innerHTML = error.message;
+
+            message.className =
+              "message error";
+
+            return;
+
+          }
+
+
+          message.innerHTML =
+            "Login successful!";
+
+          message.className =
+            "message success";
+
+
+          updateAuthUI(data.user);
+
+
+          setTimeout(() => {
+
+            closeModals();
+
+          }, 800);
+
+        }
+      );
+
+
+    /* ==========================================
+       SIGN UP
+    ========================================== */
+
+    document
+      .getElementById("signupForm")
+      .addEventListener(
+        "submit",
+        async function(event) {
+
+          event.preventDefault();
+
+
+          const email =
+            document.getElementById("signupEmail").value;
+
+
+          const password =
+            document.getElementById("signupPassword").value;
+
+
+          const message =
+            document.getElementById("signupMessage");
+
+
+          message.innerHTML =
+            "Creating your account...";
+
+          message.className =
+            "message";
+
+
+          const { data, error } =
+            await supabaseClient.auth.signUp({
+
+              email: email,
+
+              password: password
+
+            });
+
+
+          if (error) {
+
+            message.innerHTML =
+              error.message;
+
+            message.className =
+              "message error";
+
+            return;
+
+          }
+
+
+          message.innerHTML =
+            "Account created successfully! Check your email if confirmation is required.";
+
+          message.className =
+            "message success";
+
+
+          if (data.user) {
+
+            updateAuthUI(data.user);
+
+          }
+
+        }
+      );
+
+
+    /* ==========================================
+       LOGOUT
+    ========================================== */
+
+    async function logout() {
+
+      await supabaseClient.auth.signOut();
+
+
+      updateAuthUI(null);
+
+
+      showHome();
+
+    }
+
+
+    /* ==========================================
+       UPDATE LOGIN UI
+    ========================================== */
+
+    function updateAuthUI(user) {
+
+      const guestArea =
+        document.getElementById("guestArea");
+
+
+      const userArea =
+        document.getElementById("userArea");
+
+
+      const userEmail =
+        document.getElementById("userEmail");
+
+
+      if (user) {
+
+        guestArea.style.display = "none";
+
+        userArea.style.display = "flex";
+
+        userEmail.textContent =
+          user.email;
+
+      } else {
+
+        guestArea.style.display = "block";
+
+        userArea.style.display = "none";
+
+        userEmail.textContent = "";
+
+      }
+
+    }
+
+
+    /* ==========================================
+       CHECK EXISTING LOGIN SESSION
+    ========================================== */
+
+    async function checkUser() {
+
+      const {
+        data: {
+          user
+        }
+      } =
+        await supabaseClient
+          .auth
+          .getUser();
+
+
+      updateAuthUI(user);
+
+    }
+
+
+    checkUser();
+
+
+    /* ==========================================
+       LISTEN FOR AUTH CHANGES
+    ========================================== */
+
+    supabaseClient.auth.onAuthStateChange(
+      (event, session) => {
+
+        updateAuthUI(
+          session ? session.user : null
+        );
+
+      }
+    );
+
+
+    /* ==========================================
+       CLOSE MODAL WHEN CLICKING OUTSIDE
+    ========================================== */
+
+    document
+      .querySelectorAll(".modal-overlay")
+      .forEach(overlay => {
+
+        overlay.addEventListener(
+          "click",
+          function(event) {
+
+            if (event.target === overlay) {
+
+              closeModals();
+
+            }
+
+          }
+        );
+
+      });
+
+  </script>
+
+</body>
 </html>
