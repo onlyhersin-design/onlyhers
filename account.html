@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>My Account — OnlyHers</title>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script src="app.js" defer></script>
+
+
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+
+    body {
+
+      font-family: Arial, Helvetica, sans-serif;
+
+      background: #f8f5f0;
+
+      color: #181818;
+
+    }
+
+
+    nav {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      padding: 20px 7%;
+
+      border-bottom: 1px solid #ddd;
+
+    }
+
+
+    .logo {
+
+      font-family: Georgia, serif;
+
+      font-size: 30px;
+
+      font-weight: bold;
+
+      text-decoration: none;
+
+      color: #181818;
+
+    }
+
+
+    .shop-link {
+
+      text-decoration: none;
+
+      color: #181818;
+
+      font-size: 12px;
+
+    }
+
+
+    .account-container {
+
+      max-width: 800px;
+
+      margin: auto;
+
+      padding: 100px 30px;
+
+    }
+
+
+    h1 {
+
+      font-family: Georgia, serif;
+
+      font-size: 65px;
+
+      font-weight: normal;
+
+      margin-bottom: 50px;
+
+    }
+
+
+    .card {
+
+      background: white;
+
+      border: 1px solid #ddd;
+
+      padding: 35px;
+
+    }
+
+
+    .label {
+
+      font-size: 11px;
+
+      letter-spacing: 2px;
+
+      color: #777;
+
+      margin-bottom: 12px;
+
+    }
+
+
+    .email {
+
+      font-size: 22px;
+
+      margin-bottom: 35px;
+
+    }
+
+
+    .logout {
+
+      padding: 15px 25px;
+
+      background: #181818;
+
+      color: white;
+
+      border: none;
+
+      cursor: pointer;
+
+      font-size: 12px;
+
+      letter-spacing: 1px;
+
+    }
+
+
+    .loading {
+
+      padding: 50px;
+
+      text-align: center;
+
+    }
+
+
+    @media(max-width: 600px) {
+
+      h1 {
+        font-size: 48px;
+      }
+
+
+      .account-container {
+        padding: 60px 20px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <nav>
+
+    <a href="index.html" class="logo">
+      OnlyHers
+    </a>
+
+
+    <a href="collection.html" class="shop-link">
+      SHOP COLLECTION →
+    </a>
+
+  </nav>
+
+
+
+  <main
+    class="account-container"
+    id="accountContainer"
+  >
+
+    <div class="loading">
+      Loading your account...
+    </div>
+
+  </main>
+
+
+
+  <script>
+
+    async function loadAccount() {
+
+      const container =
+        document.getElementById("accountContainer");
+
+
+      const session =
+        await requireLogin();
+
+
+      if (!session) return;
+
+
+      const user =
+        session.user;
+
+
+      container.innerHTML = `
+
+        <h1>
+          My Account
+        </h1>
+
+
+        <div class="card">
+
+
+          <div class="label">
+            LOGGED IN AS
+          </div>
+
+
+          <div class="email">
+            ${escapeHTML(user.email)}
+          </div>
+
+
+          <button
+            class="logout"
+            onclick="logoutUser()"
+          >
+            LOGOUT
+          </button>
+
+
+        </div>
+
+      `;
+
+    }
+
+
+    loadAccount();
+
+  </script>
+
+
+</body>
+
+</html>
