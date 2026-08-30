@@ -2,8 +2,8 @@
    ONLYHERS — SUPABASE CONFIGURATION
 ========================================= */
 
-const SUPABASE_URL = "YOUR_SUPABASE_URL";
-const SUPABASE_KEY = "YOUR_SUPABASE_PUBLISHABLE_KEY";
+const SUPABASE_URL = "https://zeodtbgxadxfvexvywpm.supabase.co";
+const SUPABASE_KEY = "sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr";
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
