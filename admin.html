@@ -37,6 +37,7 @@ label{display:block;font-size:12px;font-weight:600;margin:18px 0 7px}input,texta
       </div>
       <label>Description</label><textarea id="description" placeholder="A short description of the dress..."></textarea>
       <label>Available sizes</label><input id="sizes" placeholder="XS, S, M, L, XL">
+      <label>Category (optional)</label><input id="category" placeholder="Dress, Kurta, Co-ord set...">
       <label>Product image</label><input id="image" type="file" accept="image/*">
       <button class="btn" id="upload">Upload design</button>
       <div class="status" id="uploadStatus"></div>
@@ -52,8 +53,8 @@ label{display:block;font-size:12px;font-weight:600;margin:18px 0 7px}input,texta
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const SUPABASE_URL = 'PASTE_YOUR_SUPABASE_URL_HERE';
-const SUPABASE_ANON_KEY = 'PASTE_YOUR_SUPABASE_ANON_KEY_HERE';
+const SUPABASE_URL = 'https://zeodtbgxadxfvexvywpm.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const $ = id => document.getElementById(id);
@@ -89,12 +90,13 @@ $('upload').onclick=async()=>{
     price,
     description:$('description').value.trim(),
     sizes,
+    category:$('category').value.trim() || null,
     image_url:urlData.publicUrl,
     is_available:true
   });
   if(error){status('uploadStatus',error.message,'err');return;}
   status('uploadStatus','Design uploaded successfully!','ok');
-  ['name','price','description','sizes'].forEach(id=>$(id).value='');$('image').value='';
+  ['name','price','description','sizes','category'].forEach(id=>$(id).value='');$('image').value='';
   loadProducts();
 };
 
