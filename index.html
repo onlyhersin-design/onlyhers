@@ -51,90 +51,73 @@
       Onlyhers
     </a>
 
-    <nav class="nav-links">
-      <a href="login.html" id="loginNav">Login</a>
-      <a href="signup.html" class="signup-nav" id="signupNav">Sign Up</a>
-    </nav>
+<nav class="nav-links">
+
+  <a href="about.html">
+    About
+  </a>
+
+  <a href="collection.html">
+    Collection
+  </a>
+
+  <a
+    href="login.html"
+    id="loginNav"
+  >
+    Login
+  </a>
+
+  <a
+    href="signup.html"
+    class="signup-nav"
+    id="signupNav"
+  >
+    Sign Up
+  </a>
+
+</nav>
 
   </header>
 
 
-  <!-- HERO -->
-  <main class="hero">
+  <!-- FULL SCREEN PRODUCT HOME -->
 
-    <!-- Decorative animations -->
-    <div class="floating-shape shape1"></div>
-    <div class="floating-shape shape2"></div>
-    <div class="floating-shape shape3"></div>
+<main class="home-product-feed">
 
-    <div class="hero-content">
+  <div
+    id="homeProductsFeed"
+    class="home-products-feed"
+  >
 
-      <p class="small-title">O N L Y H E R S</p>
+    <div class="products-loading">
 
-      <h1>Made For <span>Her.</span></h1>
-
-      <p class="hero-description">
-        A little fashion, a little lifestyle, a little her.
-        <br>
-        Thoughtfully designed pieces made to feel like yours.
-      </p>
-
-      <a href="collection.html" class="shop-button">
-        SHOP COLLECTION
-        <span>→</span>
-      </a>
+      Loading collection...
 
     </div>
 
-  </main>
+  </div>
 
+</main>
+<footer>
 
-  <!-- ABOUT -->
-  <section class="about-section">
-
-    <p class="section-tag">ONLYHERS</p>
-
-    <h2>More than just<br>something to wear.</h2>
-
-    <p>
-      OnlyHers is about finding pieces that feel like you.
-      Comfortable, expressive, thoughtful and made for everyday moments.
-    </p>
-
-    <a href="collection.html" class="text-link">
-      Explore our collection →
-    </a>
-
-  </section>
-<section class="brand-story">
-
-  <h2 class="hers-signature">Hers by Hari Venkatesh</h2>
-
-  <p>
-    <strong>OnlyHers</strong> is a women's clothing brand founded by
-    <strong>Hari Venkatesh in 2026</strong>. Built around the idea of
-    thoughtfully designed fashion, OnlyHers creates pieces made to feel
-    personal, comfortable, and uniquely hers.
-  </p>
-
-</section>
+ <!-- FOOTER -->
 
 <footer>
 
-  <!-- FOOTER -->
-  <footer>
+  <h2>Onlyhers</h2>
 
-    <h2>Onlyhers</h2>
+  <p>
+    A little fashion,
+    a little lifestyle,
+    a little her.
+  </p>
 
-    <p>
-      A little fashion, a little lifestyle, a little her.
-    </p>
+  <p class="copyright">
+    © 2026 Onlyhers. Made for her.
+  </p>
 
-    <p class="copyright">
-      © 2026 Onlyhers. Made for her.
-    </p>
-
-  </footer>
+</footer>
 
 
   <!-- SUPABASE CHECK -->
@@ -172,9 +155,128 @@
       }
 
     }
+async function loadHomeProducts() {
 
-    checkUser();
+  const feed =
+    document.getElementById(
+      "homeProductsFeed"
+    );
 
+
+  if (!feed) return;
+
+
+  try {
+
+    const {
+      data: products,
+      error
+    } = await supabaseClient
+      .from("products")
+      .select("*")
+      .order("created_at", {
+        ascending: false
+      });
+
+
+    if (error) throw error;
+
+
+    if (!products || products.length === 0) {
+
+      feed.innerHTML = `
+
+        <div class="no-home-products">
+          No products available yet.
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    feed.innerHTML =
+      products.map((product) => {
+
+
+        /*
+        ONLY COVER PHOTO ON HOMEPAGE
+        */
+
+        const coverImage =
+
+          product.cover_image ||
+
+          product.image_url ||
+
+          product.image ||
+
+          product.images?.[0] ||
+
+          "";
+
+
+        return `
+
+          <section
+            class="home-product-slide"
+          >
+
+            <a
+              href="product.html?id=${product.id}"
+              class="home-product-link"
+            >
+
+              <img
+
+                src="${coverImage}"
+
+                alt="${
+                  product.name ||
+                  "OnlyHers Product"
+                }"
+
+                class="home-product-cover"
+
+                loading="lazy"
+
+              >
+
+            </a>
+
+          </section>
+
+        `;
+
+      }).join("");
+
+
+  } catch (error) {
+
+    console.error(
+      "Homepage products error:",
+      error
+    );
+
+
+    feed.innerHTML = `
+
+      <div class="no-home-products">
+
+        Unable to load products.
+
+      </div>
+
+    `;
+
+  }
+
+}
+   checkUser();
+
+loadHomeProducts();
   </script>
 
 </body>
