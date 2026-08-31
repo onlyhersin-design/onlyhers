@@ -788,9 +788,12 @@ footer p {
 ========================================= */
 
 html {
-  scroll-padding-top: var(--onlyhers-header-height);
-  scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
+}
+
+.home-page {
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: var(--onlyhers-header-height);
 }
 
 :root {
