@@ -791,7 +791,7 @@ html {
   scroll-behavior: smooth;
 }
 
-.home-page {
+body.home-page {
   scroll-snap-type: y mandatory;
   scroll-padding-top: var(--onlyhers-header-height);
 }
@@ -838,13 +838,15 @@ html {
 
   width: 100%;
 
-  min-height: calc(100svh - var(--onlyhers-header-height));
+  height: calc(100dvh - var(--onlyhers-header-height));
 
-  height: calc(100svh - var(--onlyhers-header-height));
+  min-height: calc(100dvh - var(--onlyhers-header-height));
 
   scroll-snap-align: start;
 
   scroll-snap-stop: always;
+
+  overflow: hidden;
 
 }
 
@@ -883,7 +885,27 @@ html {
   user-select: none;
 
 }
+/* =========================================
+   SMOOTH PRODUCT ZOOM EFFECT
+========================================= */
 
+.home-product-cover {
+
+  transition:
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+
+  will-change: transform;
+
+}
+
+
+/* PRODUCT CURRENTLY IN VIEW */
+
+.home-product-slide.active .home-product-cover {
+
+  transform: scale(1.04);
+
+}
 
 /* =========================================
    LOADING / EMPTY STATE
