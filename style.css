@@ -787,6 +787,12 @@ footer p {
    SINGLE SMOOTH PAGE SCROLL
 ========================================= */
 
+html {
+  scroll-padding-top: var(--onlyhers-header-height);
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
 :root {
   --onlyhers-header-height: 75px;
 }
@@ -832,6 +838,10 @@ footer p {
   min-height: calc(100svh - var(--onlyhers-header-height));
 
   height: calc(100svh - var(--onlyhers-header-height));
+
+  scroll-snap-align: start;
+
+  scroll-snap-stop: always;
 
 }
 
@@ -908,6 +918,10 @@ footer p {
   width: 100%;
 
   min-height: calc(100svh - var(--onlyhers-header-height));
+
+  scroll-snap-align: start;
+
+  scroll-snap-stop: always;
 
   display: flex;
 
