@@ -276,5 +276,51 @@ async function loadHomeProducts() {
 loadHomeProducts();
   </script>
 
+  <script>
+
+function enableProductZoom() {
+
+  const slides =
+    document.querySelectorAll(".home-product-slide");
+
+  if (!slides.length) return;
+
+
+  const observer =
+    new IntersectionObserver(
+
+      (entries) => {
+
+        entries.forEach((entry) => {
+
+          if (entry.isIntersecting) {
+
+            slides.forEach((slide) => {
+              slide.classList.remove("active");
+            });
+
+            entry.target.classList.add("active");
+
+          }
+
+        });
+
+      },
+
+      {
+        threshold: 0.7
+      }
+
+    );
+
+
+  slides.forEach((slide) => {
+    observer.observe(slide);
+  });
+
+}
+
+</script>
+  
 </body>
 </html>
