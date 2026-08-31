@@ -782,3 +782,197 @@ footer p {
   }
 
 }
+/* =========================================
+   ONLYHERS FULL SCREEN PRODUCT HOME
+========================================= */
+
+:root {
+
+  --onlyhers-header-height: 75px;
+
+}
+
+
+/* PRODUCT HOME AREA */
+
+.home-product-feed {
+
+  width: 100%;
+
+  height:
+    calc(
+      100vh -
+      var(--onlyhers-header-height)
+    );
+
+  margin-top:
+    var(--onlyhers-header-height);
+
+  overflow: hidden;
+
+  background: #a71924;
+
+}
+
+
+/* SWIPE CONTAINER */
+
+.home-products-feed {
+
+  width: 100%;
+
+  height: 100%;
+
+  overflow-y: auto;
+
+  scroll-snap-type:
+    y mandatory;
+
+  scroll-behavior: smooth;
+
+  -webkit-overflow-scrolling: touch;
+
+  scrollbar-width: none;
+
+}
+
+
+.home-products-feed::-webkit-scrollbar {
+
+  display: none;
+
+}
+
+
+/* ONE PRODUCT = ONE SCREEN */
+
+.home-product-slide {
+
+  width: 100%;
+
+  height:
+    calc(
+      100vh -
+      var(--onlyhers-header-height)
+    );
+
+  scroll-snap-align: start;
+
+  scroll-snap-stop: always;
+
+}
+
+
+/* CLICKABLE PRODUCT */
+
+.home-product-link {
+
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+}
+
+
+/* PRODUCT COVER IMAGE */
+
+.home-product-cover {
+
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+}
+
+
+/* LOADING / EMPTY STATE */
+
+.products-loading,
+
+.no-home-products {
+
+  width: 100%;
+
+  height: 100%;
+
+  min-height: 100%;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  color: white;
+
+  font-size: 14px;
+
+  letter-spacing: 1px;
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+  :root {
+
+    --onlyhers-header-height: 65px;
+
+  }
+
+
+  .navbar {
+
+    height:
+      var(--onlyhers-header-height);
+
+    padding: 0 16px;
+
+  }
+
+
+  .brand {
+
+    font-size: 25px;
+
+  }
+
+
+  .nav-links {
+
+    gap: 13px;
+
+  }
+
+
+  .nav-links a {
+
+    font-size: 11px;
+
+  }
+
+
+  .signup-nav {
+
+    padding: 6px 8px;
+
+  }
+
+
+  .home-product-cover {
+
+    object-fit: cover;
+
+  }
+
+}
