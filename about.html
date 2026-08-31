@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    About OnlyHers | Women's Clothing Brand
+  </title>
+
+  <meta
+    name="description"
+    content="OnlyHers is a women's clothing brand founded by Hari Venkatesh in 2026. Discover the story behind thoughtfully designed fashion made for her."
+  >
+
+  <link rel="stylesheet" href="style.css">
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="onlyhers-logo.png"
+  >
+
+  <link
+    rel="apple-touch-icon"
+    href="/favicon.png"
+  >
+
+</head>
+
+
+<body class="home-page">
+
+
+  <!-- HEADER -->
+
+  <header class="navbar">
+
+    <a href="index.html" class="brand">
+      Onlyhers
+    </a>
+
+
+    <nav class="nav-links">
+
+      <a href="index.html">
+        Home
+      </a>
+
+      <a href="collection.html">
+        Collection
+      </a>
+
+      <a href="login.html" id="loginNav">
+        Login
+      </a>
+
+      <a
+        href="signup.html"
+        class="signup-nav"
+        id="signupNav"
+      >
+        Sign Up
+      </a>
+
+    </nav>
+
+  </header>
+
+
+
+  <!-- HERO -->
+
+  <main class="hero">
+
+
+    <div class="floating-shape shape1"></div>
+
+    <div class="floating-shape shape2"></div>
+
+    <div class="floating-shape shape3"></div>
+
+
+    <div class="hero-content">
+
+      <p class="small-title">
+        O N L Y H E R S
+      </p>
+
+
+      <h1>
+        Made For <span>Her.</span>
+      </h1>
+
+
+      <p class="hero-description">
+
+        A little fashion, a little lifestyle,
+        a little her.
+
+        <br>
+
+        Thoughtfully designed pieces made
+        to feel like yours.
+
+      </p>
+
+
+      <a
+        href="collection.html"
+        class="shop-button"
+      >
+
+        SHOP COLLECTION
+
+        <span>→</span>
+
+      </a>
+
+    </div>
+
+  </main>
+
+
+
+  <!-- ABOUT -->
+
+  <section class="about-section">
+
+    <p class="section-tag">
+      ONLYHERS
+    </p>
+
+
+    <h2>
+      More than just
+      <br>
+      something to wear.
+    </h2>
+
+
+    <p>
+
+      OnlyHers is about finding pieces
+      that feel like you.
+
+      Comfortable, expressive,
+      thoughtful and made for
+      everyday moments.
+
+    </p>
+
+
+    <a
+      href="collection.html"
+      class="text-link"
+    >
+
+      Explore our collection →
+
+    </a>
+
+  </section>
+
+
+
+  <!-- BRAND STORY -->
+
+  <section class="brand-story">
+
+
+    <h2 class="hers-signature">
+
+      Hers by Hari Venkatesh
+
+    </h2>
+
+
+    <p>
+
+      <strong>OnlyHers</strong>
+      is a women's clothing brand founded by
+
+      <strong>
+        Hari Venkatesh in 2026
+      </strong>.
+
+      Built around the idea of thoughtfully
+      designed fashion, OnlyHers creates
+      pieces made to feel personal,
+      comfortable, and uniquely hers.
+
+    </p>
+
+  </section>
+
+
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    <h2>Onlyhers</h2>
+
+    <p>
+      A little fashion,
+      a little lifestyle,
+      a little her.
+    </p>
+
+    <p class="copyright">
+      © 2026 Onlyhers. Made for her.
+    </p>
+
+  </footer>
+
+
+
+  <!-- SUPABASE -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+  <script>
+
+    const SUPABASE_URL =
+      "https://zeodtbgxadxfvexvywpm.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr";
+
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+    async function checkUser() {
+
+      const {
+        data: { session }
+      } = await supabaseClient.auth.getSession();
+
+
+      if (session) {
+
+        document
+          .getElementById("loginNav")
+          .textContent =
+          "My Account";
+
+
+        document
+          .getElementById("loginNav")
+          .href =
+          "account.html";
+
+
+        document
+          .getElementById("signupNav")
+          .style.display =
+          "none";
+
+      }
+
+    }
+
+
+    checkUser();
+
+  </script>
+
+
+</body>
+
+</html>
