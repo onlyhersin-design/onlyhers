@@ -791,7 +791,7 @@ html {
   scroll-behavior: smooth;
 }
 
-body.home-page {
+html:has(body.home-page) {
   scroll-snap-type: y mandatory;
   scroll-padding-top: var(--onlyhers-header-height);
 }
@@ -1032,13 +1032,13 @@ body.home-page {
   }
 
 
-  .home-product-slide {
+.home-product-slide {
 
-    min-height: calc(100svh - var(--onlyhers-header-height));
+  min-height: calc(100dvh - var(--onlyhers-header-height));
 
-    height: calc(100svh - var(--onlyhers-header-height));
+  height: calc(100dvh - var(--onlyhers-header-height));
 
-  }
+}
 
 
   .home-page > footer {
