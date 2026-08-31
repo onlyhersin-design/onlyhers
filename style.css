@@ -784,6 +784,7 @@ footer p {
 }
 /* =========================================
    ONLYHERS FULL SCREEN PRODUCT HOME
+   SINGLE SMOOTH PAGE SCROLL
 ========================================= */
 
 :root {
@@ -791,13 +792,13 @@ footer p {
 }
 
 
-/* PRODUCT HOME AREA */
+/* =========================================
+   HOME PRODUCT AREA
+========================================= */
 
 .home-product-feed {
 
   width: 100%;
-
-  height: calc(100dvh - var(--onlyhers-header-height));
 
   margin-top: var(--onlyhers-header-height);
 
@@ -806,50 +807,38 @@ footer p {
 }
 
 
-/* SWIPE CONTAINER */
+/* IMPORTANT:
+   No internal scrolling here.
+   The browser handles all scrolling naturally.
+*/
 
 .home-products-feed {
 
   width: 100%;
 
-  height: 100%;
-
-  overflow-y: scroll;
-
-  overflow-x: hidden;
-
-  scroll-snap-type: y proximity;
-
-  -webkit-overflow-scrolling: touch;
-
-  overscroll-behavior-y: contain;
-
-  scrollbar-width: none;
+  overflow: visible;
 
 }
 
 
-.home-products-feed::-webkit-scrollbar {
-  display: none;
-}
-
-
-/* ONE PRODUCT = ONE SCREEN */
+/* =========================================
+   ONE PRODUCT = ONE FULL SCREEN
+========================================= */
 
 .home-product-slide {
 
   width: 100%;
 
-  height: calc(100dvh - var(--onlyhers-header-height));
+  min-height: calc(100svh - var(--onlyhers-header-height));
 
-  scroll-snap-align: start;
-
-  scroll-snap-stop: normal;
+  height: calc(100svh - var(--onlyhers-header-height));
 
 }
 
 
-/* CLICKABLE PRODUCT */
+/* =========================================
+   CLICKABLE PRODUCT
+========================================= */
 
 .home-product-link {
 
@@ -862,7 +851,9 @@ footer p {
 }
 
 
-/* PRODUCT COVER IMAGE */
+/* =========================================
+   PRODUCT COVER IMAGE
+========================================= */
 
 .home-product-cover {
 
@@ -881,14 +872,16 @@ footer p {
 }
 
 
-/* LOADING / EMPTY STATE */
+/* =========================================
+   LOADING / EMPTY STATE
+========================================= */
 
 .products-loading,
 .no-home-products {
 
   width: 100%;
 
-  min-height: calc(100dvh - var(--onlyhers-header-height));
+  min-height: calc(100svh - var(--onlyhers-header-height));
 
   display: flex;
 
@@ -901,6 +894,61 @@ footer p {
   font-size: 14px;
 
   letter-spacing: 1px;
+
+}
+
+
+/* =========================================
+   FULL SCREEN FOOTER
+   AFTER THE LAST PRODUCT
+========================================= */
+
+.home-page > footer {
+
+  width: 100%;
+
+  min-height: calc(100svh - var(--onlyhers-header-height));
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  text-align: center;
+
+  padding: 60px 20px;
+
+  background: #6f0912;
+
+}
+
+
+.home-page > footer h2 {
+
+  font-family: "Playfair Display", serif;
+
+  font-size: clamp(50px, 7vw, 85px);
+
+  margin-bottom: 20px;
+
+}
+
+
+.home-page > footer p {
+
+  max-width: 400px;
+
+  line-height: 1.7;
+
+}
+
+
+.home-page > footer .copyright {
+
+  margin-top: 55px;
 
 }
 
@@ -945,16 +993,18 @@ footer p {
   }
 
 
-  .home-product-feed {
+  .home-product-slide {
 
-    height: calc(100dvh - var(--onlyhers-header-height));
+    min-height: calc(100svh - var(--onlyhers-header-height));
+
+    height: calc(100svh - var(--onlyhers-header-height));
 
   }
 
 
-  .home-product-slide {
+  .home-page > footer {
 
-    height: calc(100dvh - var(--onlyhers-header-height));
+    min-height: calc(100svh - var(--onlyhers-header-height));
 
   }
 
