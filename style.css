@@ -1083,7 +1083,11 @@ html:has(body.home-page) {
     padding: 0 7% !important;
     box-sizing: border-box !important;
 
-    background: #b1121c !important;
+    background: rgba(35, 10, 13, 0.32) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(125%) !important;
+    backdrop-filter: blur(18px) saturate(125%) !important;
+    border-bottom: 1px solid rgba(255,255,255,.16) !important;
+    box-shadow: 0 8px 28px rgba(0,0,0,.10) !important;
 
     z-index: 9999 !important;
 }
