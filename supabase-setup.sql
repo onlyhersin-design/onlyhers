@@ -7,9 +7,16 @@ create table if not exists public.products (
   price numeric,
   sizes jsonb default '[]'::jsonb,
   image_url text not null,
+  image_urls jsonb default '[]'::jsonb,
+  category text,
   is_available boolean default true,
   created_at timestamptz default now()
 );
+
+-- Support newer product fields even if the table was created with an older version.
+alter table public.products
+  add column if not exists image_urls jsonb default '[]'::jsonb,
+  add column if not exists category text;
 
 alter table public.products enable row level security;
 
@@ -23,6 +30,12 @@ using (true);
 
 create policy "Authenticated users can insert products"
 on public.products for insert to authenticated
+with check (true);
+
+-- Required for editing products from admin.html.
+create policy "Authenticated users can update products"
+on public.products for update to authenticated
+using (true)
 with check (true);
 
 create policy "Authenticated users can delete products"
