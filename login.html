@@ -1,276 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Login | OnlyHers</title>
-
+  <title>Login | OnlyHers</title>
   <link rel="icon" type="image/png" href="favicon.png">
-<link rel="apple-touch-icon" href="favicon.png">
-  
-<link rel="stylesheet" href="style.css">
-
-<style>
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #a91420;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 30px 20px;
-    }
-
-    .auth-box {
-      width: 100%;
-      max-width: 460px;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.2);
-      padding: 45px 35px;
-    }
-
-    .logo {
-      display: block;
-      text-align: center;
-      color: white;
-      text-decoration: none;
-      font-family: Georgia, serif;
-      font-size: 36px;
-      margin-bottom: 35px;
-    }
-
-    h1 {
-      font-family: Georgia, serif;
-      font-size: 42px;
-      font-weight: normal;
-      margin-bottom: 10px;
-    }
-
-    .subtitle {
-      opacity: .75;
-      margin-bottom: 30px;
-    }
-
-    label {
-      display: block;
-      font-size: 12px;
-      letter-spacing: 1px;
-      margin: 20px 0 8px;
-      text-transform: uppercase;
-    }
-
-    input {
-      width: 100%;
-      padding: 15px;
-      border: 1px solid rgba(255,255,255,.35);
-      background: rgba(255,255,255,.08);
-      color: white;
-      font-size: 15px;
-    }
-
-    button {
-      width: 100%;
-      margin-top: 28px;
-      padding: 16px;
-      border: none;
-      background: white;
-      color: #a91420;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .message {
-      margin-top: 18px;
-      text-align: center;
-      font-size: 14px;
-      min-height: 20px;
-    }
-
-    .error {
-      color: #ffd0d0;
-    }
-
-    .bottom-text {
-      text-align: center;
-      margin-top: 25px;
-      font-size: 14px;
-      opacity: .8;
-    }
-
-    .bottom-text a {
-      color: white;
-      font-weight: bold;
-    }
-
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    *{box-sizing:border-box} body{margin:0;min-height:100vh;font-family:Arial,Helvetica,sans-serif;background:#a91420;color:white;display:flex;align-items:center;justify-content:center;padding:95px 20px 30px}
+    .auth-box{width:100%;max-width:460px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);padding:45px 35px;backdrop-filter:blur(12px)}
+    .logo{display:block;text-align:center;color:white;text-decoration:none;font-family:Georgia,serif;font-size:36px;margin-bottom:35px}h1{font-family:Georgia,serif;font-size:42px;font-weight:normal;margin-bottom:10px}.subtitle{opacity:.75;margin-bottom:30px;line-height:1.6}
+    label{display:block;font-size:12px;letter-spacing:1px;margin:20px 0 8px;text-transform:uppercase}input{width:100%;padding:15px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:white;font-size:15px;outline:none}input::placeholder{color:rgba(255,255,255,.55)}
+    button{width:100%;margin-top:28px;padding:16px;border:none;background:white;color:#a91420;font-weight:bold;cursor:pointer;font-size:14px}.message{margin-top:18px;text-align:center;font-size:14px;min-height:20px}.error{color:#ffd0d0}.success{color:#d5ffd9}.bottom-text{text-align:center;margin-top:25px;font-size:14px;opacity:.8}.bottom-text a{color:white;font-weight:bold}
   </style>
-
 </head>
-
-
 <body>
-<!-- AUTH HEADER START -->
-<header class="auth-header">
-    <a href="index.html" class="auth-logo">Onlyhers</a>
-    <a href="index.html" class="auth-home-btn">HOME</a>
-</header>
-<!-- AUTH HEADER END -->
-  <div class="auth-box">
-
-    <a href="index.html" class="logo">
-      OnlyHers
-    </a>
-
-    <h1>Welcome back.</h1>
-
-    <p class="subtitle">
-      Sign in to continue your OnlyHers journey.
-    </p>
-
-
+<header class="auth-header"><a href="index.html" class="auth-logo">Onlyhers</a><a href="index.html" class="auth-home-btn">HOME</a></header>
+<div class="auth-box">
+  <a href="index.html" class="logo">OnlyHers</a>
+  <h1>Welcome back.</h1>
+  <p class="subtitle">Enter your email and we'll send you a one-time code.</p>
+  <div id="emailStep">
     <label>Email</label>
-
-    <input
-      type="email"
-      id="email"
-      placeholder="Enter your email"
-    >
-
-
-    <label>Password</label>
-
-    <input
-      type="password"
-      id="password"
-      placeholder="Enter your password"
-    >
-
-
-    <button id="loginBtn">
-      LOGIN
-    </button>
-
-
-    <div
-      id="message"
-      class="message"
-    ></div>
-
-
-    <div class="bottom-text">
-
-      New to OnlyHers?
-
-      <a href="signup.html">
-        Create an account
-      </a>
-
-    </div>
-
+    <input type="email" id="email" placeholder="Enter your email" autocomplete="email">
+    <button id="sendOtpBtn">SEND OTP</button>
   </div>
-
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-  <script>
-
-    const SUPABASE_URL =
-      "https://zeodtbgxadxfvexvywpm.supabase.co";
-
-    const SUPABASE_KEY =
-      "sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr";
-
-
-    const supabaseClient =
-      supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-      );
-
-
-    document
-      .getElementById("loginBtn")
-      .addEventListener("click", async () => {
-
-        const email =
-          document
-            .getElementById("email")
-            .value
-            .trim();
-
-
-        const password =
-          document
-            .getElementById("password")
-            .value;
-
-
-        const message =
-          document.getElementById("message");
-
-
-        if (!email || !password) {
-
-          message.textContent =
-            "Please enter your email and password.";
-
-          message.className =
-            "message error";
-
-          return;
-
-        }
-
-
-        message.textContent =
-          "Signing you in...";
-
-        message.className =
-          "message";
-
-
-        const {
-          error
-        } =
-          await supabaseClient
-            .auth
-            .signInWithPassword({
-
-              email: email,
-
-              password: password
-
-            });
-
-
-        if (error) {
-
-          message.textContent =
-            error.message;
-
-          message.className =
-            "message error";
-
-          return;
-
-        }
-
-
-        window.location.href =
-          "account.html";
-
-      });
-
-  </script>
-
-</body>
-</html>
+  <div id="otpStep" hidden>
+    <label>Verification Code</label>
+    <input type="text" id="otp" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit OTP" autocomplete="one-time-code">
+    <button id="verifyOtpBtn">VERIFY & LOGIN</button>
+    <button id="resendOtpBtn" style="background:transparent;color:white;border:1px solid rgba(255,255,255,.5);margin-top:12px">RESEND OTP</button>
+  </div>
+  <div id="message" class="message"></div>
+  <div class="bottom-text">New to OnlyHers? <a href="signup.html">Create an account</a></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL="https://zeodtbgxadxfvexvywpm.supabase.co";
+const SUPABASE_KEY="sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr";
+const supabaseClient=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=id=>document.getElementById(id); let loginEmail="";
+function message(text,type=""){ $("message").textContent=text;$("message").className="message "+type; }
+async function sendOtp(){
+ const email=$("email").value.trim().toLowerCase();
+ if(!email){message("Please enter your email.","error");return;}
+ loginEmail=email; message("Sending your OTP...");
+ const {error}=await supabaseClient.auth.signInWithOtp({email,options:{shouldCreateUser:false}});
+ if(error){message(error.message,"error");return;}
+ $("emailStep").hidden=true;$("otpStep").hidden=false;message("OTP sent. Check your email.","success");$("otp").focus();
+}
+async function verifyOtp(){
+ const token=$("otp").value.trim();
+ if(!/^[0-9]{6}$/.test(token)){message("Please enter the 6-digit OTP.","error");return;}
+ message("Verifying...");
+ const {error}=await supabaseClient.auth.verifyOtp({email:loginEmail,token,type:"email"});
+ if(error){message(error.message,"error");return;}
+ message("Verified! Redirecting...","success");window.location.href="account.html";
+}
+$("sendOtpBtn").onclick=sendOtp;$("verifyOtpBtn").onclick=verifyOtp;$("resendOtpBtn").onclick=sendOtp;
+$("email").addEventListener("keydown",e=>{if(e.key==="Enter")sendOtp()});$("otp").addEventListener("keydown",e=>{if(e.key==="Enter")verifyOtp()});
+</script>
+</body></html>
