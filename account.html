@@ -21,13 +21,22 @@
       background: #a91420;
       color: white;
       min-height: 100vh;
+      padding-top: 75px;
     }
 
     /* NAVBAR */
 
     header {
-      height: 88px;
-      background: #c3202d;
+      height: 75px;
+      background: rgba(35, 10, 13, .32);
+      -webkit-backdrop-filter: blur(18px) saturate(125%);
+      backdrop-filter: blur(18px) saturate(125%);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 8px 28px rgba(0,0,0,.10);
       display: flex;
       align-items: center;
       justify-content: space-between;
