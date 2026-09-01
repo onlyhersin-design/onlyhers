@@ -677,6 +677,9 @@ let existingImages = [];
 
 let newEditFiles = [];
 
+/* Keep the latest loaded products available for button actions */
+let loadedProducts = [];
+
 
 /* =========================
    STATUS
@@ -1160,6 +1163,9 @@ async function loadProducts() {
   }
 
 
+  /* Keep a fresh copy for Edit/Delete button actions */
+  loadedProducts = data || [];
+
   if (!data.length) {
 
     list.innerHTML =
@@ -1239,6 +1245,7 @@ async function loadProducts() {
           <div class="product-actions">
 
             <button
+              type="button"
               class="small-btn edit"
               data-edit="${product.id}"
             >
@@ -1247,6 +1254,7 @@ async function loadProducts() {
 
 
             <button
+              type="button"
               class="small-btn delete"
               data-delete="${product.id}"
             >
@@ -1263,41 +1271,35 @@ async function loadProducts() {
 
 
 
-  document
-    .querySelectorAll('[data-edit]')
-    .forEach(button => {
+  /* Button handling is delegated to the product list so it keeps working
+     after the list is refreshed. */
+  list.onclick = event => {
 
-      button.onclick = () => {
+    const editButton = event.target.closest('[data-edit]');
+    const deleteButton = event.target.closest('[data-delete]');
 
-        const product =
-          data.find(
-            item =>
-              item.id ===
-              button.dataset.edit
-          );
+    if (editButton) {
+      event.preventDefault();
 
+      const product = loadedProducts.find(
+        item => String(item.id) === String(editButton.dataset.edit)
+      );
 
-        openEditModal(product);
+      if (!product) {
+        console.error('Product not found for editing:', editButton.dataset.edit);
+        return;
+      }
 
-      };
+      openEditModal(product);
+      return;
+    }
 
-    });
+    if (deleteButton) {
+      event.preventDefault();
+      deleteProduct(deleteButton.dataset.delete);
+    }
 
-
-
-  document
-    .querySelectorAll('[data-delete]')
-    .forEach(button => {
-
-      button.onclick = () => {
-
-        deleteProduct(
-          button.dataset.delete
-        );
-
-      };
-
-    });
+  };
 
 }
 
