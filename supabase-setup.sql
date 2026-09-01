@@ -20,27 +20,34 @@ alter table public.products
 
 alter table public.products enable row level security;
 
+-- Remove the old broad policies. Only the Onlyhers owner can manage products.
+drop policy if exists "Authenticated users can view all products" on public.products;
+drop policy if exists "Authenticated users can insert products" on public.products;
+drop policy if exists "Authenticated users can update products" on public.products;
+drop policy if exists "Authenticated users can delete products" on public.products;
+
+-- Public storefront users can only see available products.
 create policy "Public can view available products"
 on public.products for select
 using (is_available = true);
 
-create policy "Authenticated users can view all products"
+-- The owner can view and manage every product.
+create policy "Onlyhers owner can view all products"
 on public.products for select to authenticated
-using (true);
+using ((auth.jwt() ->> 'email') = 'onlyhers.in@gmail.com');
 
-create policy "Authenticated users can insert products"
+create policy "Onlyhers owner can insert products"
 on public.products for insert to authenticated
-with check (true);
+with check ((auth.jwt() ->> 'email') = 'onlyhers.in@gmail.com');
 
--- Required for editing products from admin.html.
-create policy "Authenticated users can update products"
+create policy "Onlyhers owner can update products"
 on public.products for update to authenticated
-using (true)
-with check (true);
+using ((auth.jwt() ->> 'email') = 'onlyhers.in@gmail.com')
+with check ((auth.jwt() ->> 'email') = 'onlyhers.in@gmail.com');
 
-create policy "Authenticated users can delete products"
+create policy "Onlyhers owner can delete products"
 on public.products for delete to authenticated
-using (true);
+using ((auth.jwt() ->> 'email') = 'onlyhers.in@gmail.com');
 
 -- Create a PUBLIC Storage bucket named exactly: product-images
 -- Then add these Storage policies:
