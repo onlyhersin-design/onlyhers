@@ -275,6 +275,13 @@ async function loadHomeProducts() {
    checkUser();
 
 loadHomeProducts();
+
+/* Add a slightly deeper glass effect after scrolling */
+const navbar = document.querySelector('.navbar');
+
+window.addEventListener('scroll', () => {
+  navbar?.classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
   </script>
 
   <script>
