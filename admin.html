@@ -775,28 +775,36 @@ async function refreshAuth() {
     await supabase.auth.getSession();
 
 
-  if (session) {
+  const ADMIN_EMAIL = 'onlyhers.in@gmail.com';
+
+  if (session && session.user?.email?.toLowerCase() === ADMIN_EMAIL) {
 
     $('loginPanel')
       .classList
       .add('hidden');
 
-
     $('dashboard')
       .classList
       .remove('hidden');
 
-
     $('logout')
       .classList
       .remove('hidden');
-
 
     loadProducts();
 
   }
 
   else {
+
+    if (session) {
+      await supabase.auth.signOut();
+      setStatus(
+        'loginStatus',
+        'This account is not authorized to access the Onlyhers admin dashboard.',
+        'err'
+      );
+    }
 
     $('loginPanel')
       .classList
