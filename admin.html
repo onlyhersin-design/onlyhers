@@ -487,6 +487,10 @@
           <label>Price (₹)</label>
           <input id="price" type="number" min="0" placeholder="2999">
         </div>
+        <div>
+          <label>Product code</label>
+          <input id="productCode" placeholder="Example: OH-D-001">
+        </div>
 
       </div>
 
@@ -512,6 +516,18 @@
         </div>
 
       </div>
+
+      <label>Size chart image</label>
+      <input id="sizeChart" type="file" accept="image/*">
+      <p class="help-text">Optional. Customers can open this image beside the size selection.</p>
+
+      <div class="row">
+        <div><label>Material</label><input id="material" placeholder="Example: Cotton, Viscose, Linen"></div>
+        <div><label>Wash care</label><input id="washCare" placeholder="Example: Hand wash separately"></div>
+      </div>
+
+      <label>More product details</label>
+      <textarea id="moreDetails" placeholder="Add fit, lining, sleeve details, styling notes or other product information..."></textarea>
 
 
       <label>Product photos</label>
@@ -608,6 +624,11 @@
 
       </div>
 
+      <div>
+        <label>Product code</label>
+        <input id="editProductCode">
+      </div>
+
     </div>
 
 
@@ -636,6 +657,18 @@
       </div>
 
     </div>
+
+    <label>Size chart image</label>
+    <div id="editSizeChartPreview" class="help-text"></div>
+    <input id="editSizeChart" type="file" accept="image/*">
+
+    <div class="row">
+      <div><label>Material</label><input id="editMaterial"></div>
+      <div><label>Wash care</label><input id="editWashCare"></div>
+    </div>
+
+    <label>More product details</label>
+    <textarea id="editMoreDetails"></textarea>
 
 
     <label>Current product photos</label>
@@ -1109,6 +1142,13 @@ $('upload').onclick =
           ? Number($('price').value)
           : null;
 
+      let sizeChartUrl = null;
+      const sizeChartFile = $('sizeChart').files[0];
+      if (sizeChartFile) {
+        setStatus('uploadStatus', 'Uploading size chart...');
+        [sizeChartUrl] = await uploadFiles([sizeChartFile]);
+      }
+
 
       const { error } =
         await supabase
@@ -1116,6 +1156,9 @@ $('upload').onclick =
           .insert({
 
             name,
+
+            product_code:
+              $('productCode').value.trim() || null,
 
             price,
 
@@ -1131,6 +1174,17 @@ $('upload').onclick =
               || null,
 
             sizes,
+
+            size_chart_url: sizeChartUrl,
+
+            material:
+              $('material').value.trim() || null,
+
+            wash_care:
+              $('washCare').value.trim() || null,
+
+            more_details:
+              $('moreDetails').value.trim() || null,
 
             image_url:
               imageUrls[0],
@@ -1158,15 +1212,20 @@ $('upload').onclick =
       [
         'name',
         'price',
+        'productCode',
         'description',
         'sizes',
-        'category'
+        'category',
+        'material',
+        'washCare',
+        'moreDetails'
       ].forEach(
         id => $(id).value = ''
       );
 
 
       $('images').value = '';
+      $('sizeChart').value = '';
 
       selectedFiles = [];
 
@@ -1281,6 +1340,7 @@ async function loadProducts() {
 
             <div class="product-meta">
 
+              ${product.product_code ? 'Code: ' + escapeHTML(product.product_code) + ' · ' : ''}
               ${
                 product.price
                   ? '₹' + product.price
@@ -1410,6 +1470,9 @@ function openEditModal(product) {
   $('editPrice').value =
     product.price ?? '';
 
+  $('editProductCode').value =
+    product.product_code || '';
+
 
   $('editDescription').value =
     product.description || '';
@@ -1425,6 +1488,16 @@ function openEditModal(product) {
 
   $('editCategory').value =
     product.category || '';
+
+  $('editMaterial').value = product.material || '';
+  $('editWashCare').value = product.wash_care || '';
+  $('editMoreDetails').value = product.more_details || '';
+
+  $('editSizeChart').value = '';
+  $('editSizeChartPreview').innerHTML =
+    product.size_chart_url
+      ? '<a href="' + escapeHTML(product.size_chart_url) + '" target="_blank">View current size chart</a>'
+      : 'No size chart uploaded.';
 
 
   $('editImages').value = '';
@@ -1780,6 +1853,13 @@ $('saveEdit').onclick =
             )
           : null;
 
+      let sizeChartUrl = editingProduct.size_chart_url || null;
+      const editChartFile = $('editSizeChart').files[0];
+      if (editChartFile) {
+        setStatus('editStatus', 'Uploading size chart...');
+        [sizeChartUrl] = await uploadFiles([editChartFile]);
+      }
+
 
       const { error } =
         await supabase
@@ -1787,6 +1867,9 @@ $('saveEdit').onclick =
           .update({
 
             name,
+
+            product_code:
+              $('editProductCode').value.trim() || null,
 
             price,
 
@@ -1802,6 +1885,17 @@ $('saveEdit').onclick =
               || null,
 
             sizes,
+
+            size_chart_url: sizeChartUrl,
+
+            material:
+              $('editMaterial').value.trim() || null,
+
+            wash_care:
+              $('editWashCare').value.trim() || null,
+
+            more_details:
+              $('editMoreDetails').value.trim() || null,
 
             /* First image = cover */
 
