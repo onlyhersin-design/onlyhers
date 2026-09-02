@@ -16,7 +16,12 @@ create table if not exists public.products (
 -- Support newer product fields even if the table was created with an older version.
 alter table public.products
   add column if not exists image_urls jsonb default '[]'::jsonb,
-  add column if not exists category text;
+  add column if not exists category text,
+  add column if not exists product_code text,
+  add column if not exists size_chart_url text,
+  add column if not exists material text,
+  add column if not exists wash_care text,
+  add column if not exists more_details text;
 
 alter table public.products enable row level security;
 
