@@ -256,19 +256,26 @@
 
     /* PRODUCT DETAILS */
 
+    .product-label-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
     .product-category {
       font-size: 11px;
       letter-spacing: 3px;
       text-transform: uppercase;
       color: #f4c7cb;
-      margin-bottom: 18px;
     }
 
     .product-code {
       display: inline-flex;
       align-items: center;
       width: fit-content;
-      margin: 0 0 12px;
+      margin: 0;
       padding: 7px 11px;
       border: 1px solid rgba(255,255,255,.28);
       background: rgba(255,255,255,.06);
@@ -885,13 +892,12 @@
 
           <div class="product-details">
 
-            <div class="product-category">
-              ${escapeHTML(productCategory)}
+            <div class="product-label-row">
+              <div class="product-category">
+                ${escapeHTML(productCategory)}
+              </div>
+              ${productCode ? `<div class="product-code">Code: ${escapeHTML(productCode)}</div>` : ""}
             </div>
-
-            ${productCode ? `
-              <div class="product-code">Code: ${escapeHTML(productCode)}</div>
-            ` : ""}
 
             <h1 class="product-name">
               ${escapeHTML(productName)}
