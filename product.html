@@ -264,6 +264,20 @@
       margin-bottom: 18px;
     }
 
+    .product-code {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      margin: 0 0 12px;
+      padding: 7px 11px;
+      border: 1px solid rgba(255,255,255,.28);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.88);
+      font-size: 11px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
     .product-name {
       font-family: "Playfair Display", serif;
       font-size: clamp(42px, 5vw, 68px);
@@ -323,6 +337,72 @@
     .size-btn:hover {
       background: white;
       color: #8f0d1b;
+    }
+
+    .size-chart-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: -18px 0 34px;
+      padding: 10px 14px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.45);
+      color: white;
+      cursor: pointer;
+      font-size: 12px;
+      letter-spacing: .5px;
+    }
+
+    .size-chart-btn:hover {
+      background: white;
+      color: #8f0d1b;
+    }
+
+    .details-accordion {
+      border-top: 1px solid rgba(255,255,255,.2);
+      margin: 8px 0 28px;
+    }
+
+    .details-item {
+      border-bottom: 1px solid rgba(255,255,255,.2);
+    }
+
+    .details-summary {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 17px 0;
+      background: transparent;
+      border: 0;
+      color: white;
+      font: inherit;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .details-summary span:last-child {
+      font-size: 22px;
+      font-weight: 400;
+      transition: transform .25s ease;
+    }
+
+    .details-item.open .details-summary span:last-child {
+      transform: rotate(45deg);
+    }
+
+    .details-content {
+      display: none;
+      padding: 0 0 18px;
+      color: rgba(255,255,255,.78);
+      line-height: 1.7;
+      font-size: 14px;
+      white-space: pre-line;
+    }
+
+    .details-item.open .details-content {
+      display: block;
     }
 
     /* BUTTON */
@@ -543,6 +623,11 @@
 
   </div>
 
+  <div class="image-modal" id="sizeChartModal">
+    <button class="close-modal" onclick="closeSizeChartModal()">×</button>
+    <img id="sizeChartImage" class="modal-image" alt="Size chart">
+  </div>
+
 
   <script>
 
@@ -613,6 +698,12 @@
       const productCategory =
         product.category ||
         "OnlyHers Collection";
+
+      const productCode = product.product_code || "";
+      const productMaterial = product.material || "";
+      const productWashCare = product.wash_care || "";
+      const productMoreDetails = product.more_details || "";
+      const sizeChartUrl = product.size_chart_url || "";
 
 
       /* =========================
@@ -798,6 +889,9 @@
               ${escapeHTML(productCategory)}
             </div>
 
+            ${productCode ? `
+              <div class="product-code">Code: ${escapeHTML(productCode)}</div>
+            ` : ""}
 
             <h1 class="product-name">
               ${escapeHTML(productName)}
@@ -825,6 +919,38 @@
             <div class="sizes">
               ${sizesHTML}
             </div>
+
+            ${sizeChartUrl ? `
+              <button class="size-chart-btn" onclick="openSizeChart('${escapeHTML(sizeChartUrl)}')">
+                ↗ View Size Chart
+              </button>
+            ` : ""}
+
+            ${(productMaterial || productWashCare || productMoreDetails) ? `
+              <div class="details-accordion">
+                ${productMaterial ? `
+                  <div class="details-item">
+                    <button class="details-summary" type="button" onclick="toggleDetails(this)">
+                      <span>Material</span><span>+</span>
+                    </button>
+                    <div class="details-content">${escapeHTML(productMaterial)}</div>
+                  </div>` : ""}
+                ${productWashCare ? `
+                  <div class="details-item">
+                    <button class="details-summary" type="button" onclick="toggleDetails(this)">
+                      <span>Wash Care</span><span>+</span>
+                    </button>
+                    <div class="details-content">${escapeHTML(productWashCare)}</div>
+                  </div>` : ""}
+                ${productMoreDetails ? `
+                  <div class="details-item">
+                    <button class="details-summary" type="button" onclick="toggleDetails(this)">
+                      <span>More Details</span><span>+</span>
+                    </button>
+                    <div class="details-content">${escapeHTML(productMoreDetails)}</div>
+                  </div>` : ""}
+              </div>
+            ` : ""}
 
 
             <button
@@ -929,6 +1055,24 @@
 
     }
 
+
+    function openSizeChart(url) {
+      const modal = document.getElementById("sizeChartModal");
+      document.getElementById("sizeChartImage").src = url;
+      modal.classList.add("open");
+    }
+
+    function closeSizeChartModal() {
+      document.getElementById("sizeChartModal").classList.remove("open");
+    }
+
+    function toggleDetails(button) {
+      button.closest(".details-item").classList.toggle("open");
+    }
+
+    document.getElementById("sizeChartModal").addEventListener("click", function(event) {
+      if (event.target === this) closeSizeChartModal();
+    });
 
     /* =========================
        IMAGE MODAL
