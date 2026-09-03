@@ -529,7 +529,28 @@
 
     /* MOBILE */
 
+    /* Visual focal correction for the affected product image. */
+    .product-id-5 .main-image {
+      object-position: 53% 47%;
+    }
+
     @media (max-width: 850px) {
+
+      .main-image-container {
+        aspect-ratio: 4 / 5;
+      }
+
+      .main-image {
+        object-position: 50% 48%;
+      }
+
+      .product-id-5 .main-image {
+        object-position: 53% 46%;
+      }
+
+      .main-image:hover {
+        transform: none;
+      }
 
       header {
         padding: 18px 6%;
@@ -815,7 +836,7 @@
 
       productContent.innerHTML = `
 
-        <div class="product-container">
+        <div class="product-container product-id-${productId}">
 
 
           <!-- GALLERY -->
