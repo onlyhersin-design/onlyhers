@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
   <title>Product | OnlyHers</title>
 
@@ -27,7 +27,18 @@
       box-sizing: border-box;
     }
 
+    html {
+      width: 100%;
+      min-width: 100%;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
     body {
+      width: 100%;
+      min-width: 100%;
+      margin: 0;
       font-family: "DM Sans", sans-serif;
       /* Keep the maroon background consistent across the full mobile width.
          The previous lower-right radial shadow created a visible dark vertical patch. */
@@ -505,6 +516,9 @@
     /* FOOTER */
 
     footer {
+      width: 100%;
+      max-width: none;
+      margin: 0;
       background: #670914;
       padding: 60px 20px 35px;
       text-align: center;
@@ -554,7 +568,15 @@
       }
 
       .product-page {
+        width: 100%;
+        max-width: none;
         padding: 40px 20px 70px;
+      }
+
+      footer {
+        width: 100vw;
+        max-width: 100vw;
+        margin-left: calc(50% - 50vw);
       }
 
       .product-container {
