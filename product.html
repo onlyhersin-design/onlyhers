@@ -152,7 +152,7 @@
     .main-image {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       object-position: center center;
       display: block;
       cursor: zoom-in;
@@ -529,11 +529,6 @@
 
     /* MOBILE */
 
-    /* Visual focal correction for the affected product image. */
-    .product-id-5 .main-image {
-      object-position: 53% 47%;
-    }
-
     @media (max-width: 850px) {
 
       .main-image-container {
@@ -541,11 +536,8 @@
       }
 
       .main-image {
-        object-position: 50% 48%;
-      }
-
-      .product-id-5 .main-image {
-        object-position: 53% 46%;
+        object-fit: contain;
+        object-position: center center;
       }
 
       .main-image:hover {
@@ -836,7 +828,7 @@
 
       productContent.innerHTML = `
 
-        <div class="product-container product-id-${productId}">
+        <div class="product-container">
 
 
           <!-- GALLERY -->
