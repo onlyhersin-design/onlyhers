@@ -29,10 +29,11 @@
 
     body {
       font-family: "DM Sans", sans-serif;
+      /* Keep the maroon background consistent across the full mobile width.
+         The previous lower-right radial shadow created a visible dark vertical patch. */
       background:
-        radial-gradient(circle at 10% 10%, rgba(210,60,70,.22), transparent 28%),
-        radial-gradient(circle at 90% 85%, rgba(50,0,8,.35), transparent 30%),
-        #8f0d1b;
+        radial-gradient(circle at 50% 0%, rgba(210,60,70,.16), transparent 42%),
+        linear-gradient(180deg, #970f1e 0%, #8f0d1b 100%);
 
       color: white;
       min-height: 100vh;
