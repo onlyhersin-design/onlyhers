@@ -627,8 +627,14 @@
       }
 
       .thumbnails {
-        justify-content: center;
+        width: 100%;
+        justify-content: flex-start;
+        align-items: center;
+        flex-wrap: nowrap;
+        overflow-x: auto;
         max-width: 100%;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
       }
 
       .product-details {
@@ -636,28 +642,25 @@
         max-width: 620px;
         min-width: 0;
         margin: 0 auto;
-        text-align: center;
+        text-align: left;
       }
 
       .product-label-row {
-        justify-content: center;
+        justify-content: flex-start;
       }
 
       .product-category,
       .product-description,
       .size-title,
-      .product-note {
-        text-align: center;
-      }
-
+      .product-note,
       .product-name {
         width: 100%;
         text-align: left;
       }
 
       .product-description {
-        margin-left: auto;
-        margin-right: auto;
+        margin-left: 0;
+        margin-right: 0;
       }
 
       .product-name {
@@ -665,16 +668,17 @@
       }
 
       .sizes {
-        justify-content: center;
-        gap: 9px;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 8px;
       }
 
       .size-btn {
         min-width: 0;
-        flex: 0 1 88px;
-        min-height: 58px;
-        padding: 10px 12px;
-        font-size: 15px;
+        flex: 0 0 auto;
+        min-height: 46px;
+        padding: 8px 15px;
+        font-size: 14px;
       }
 
       .size-chart-btn {
