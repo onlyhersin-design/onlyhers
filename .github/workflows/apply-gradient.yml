@@ -12,55 +12,45 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Apply gradient background overrides
+      - name: Apply gradient theme to shared and page styles
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          p = Path('style.css')
-          css = p.read_text()
-          marker = '/* ONLYHERS DARK RED BLACK GRADIENT THEME */'
-          if marker in css:
-              raise SystemExit(0)
-          css += r'''
 
+          theme = r'''
 /* ONLYHERS DARK RED BLACK GRADIENT THEME */
 html, body {
   min-height: 100%;
 }
-
 body {
-  background:
-    radial-gradient(circle at 50% 50%, #a90012 0%, #79000b 36%, #3b0007 70%, #100002 100%) !important;
+  background: radial-gradient(circle at 50% 50%, #a90012 0%, #79000b 36%, #3b0007 70%, #100002 100%) !important;
   background-attachment: fixed !important;
   color: #fff;
 }
-
-.home-page,
-.auth-page {
-  background: transparent !important;
-}
-
-.hero {
-  background:
-    radial-gradient(circle at 50% 50%, rgba(169,0,18,.82) 0%, rgba(121,0,11,.68) 38%, rgba(59,0,7,.55) 72%, rgba(16,0,2,.9) 100%) !important;
-}
-
-.about-section {
-  background: transparent !important;
-}
-
-footer {
-  background: rgba(55,0,7,.62) !important;
-}
-
-.auth-page {
-  background:
-    radial-gradient(circle at 50% 50%, #a90012 0%, #79000b 36%, #3b0007 70%, #100002 100%) !important;
-  background-attachment: fixed !important;
-}
+.home-page, .auth-page { background: transparent !important; }
+.hero { background: radial-gradient(circle at 50% 50%, rgba(169,0,18,.82) 0%, rgba(121,0,11,.68) 38%, rgba(59,0,7,.55) 72%, rgba(16,0,2,.9) 100%) !important; }
+.about-section { background: transparent !important; }
+footer { background: rgba(55,0,7,.62) !important; }
+.auth-page { background: radial-gradient(circle at 50% 50%, #a90012 0%, #79000b 36%, #3b0007 70%, #100002 100%) !important; background-attachment: fixed !important; }
 '''
-          p.write_text(css)
+
+          for name in ['collection.html', 'product.html']:
+              p = Path(name)
+              if not p.exists():
+                  continue
+              text = p.read_text()
+              marker = '/* ONLYHERS PAGE GRADIENT THEME */'
+              if marker not in text:
+                  insertion = '\n<style>\n' + marker + '\n' + theme.replace('/* ONLYHERS DARK RED BLACK GRADIENT THEME */\n', '') + '\n</style>\n'
+                  text = text.replace('</head>', insertion + '</head>', 1)
+                  p.write_text(text)
+
+          p = Path('style.css')
+          css = p.read_text()
+          if '/* ONLYHERS DARK RED BLACK GRADIENT THEME */' not in css:
+              css += '\n' + theme
+              p.write_text(css)
           PY
       - name: Commit theme
         shell: bash
@@ -71,6 +61,6 @@ footer {
             echo "No theme changes needed."
             exit 0
           fi
-          git add style.css
-          git commit -m "Apply OnlyHers red black gradient background"
+          git add style.css collection.html product.html
+          git commit -m "Apply OnlyHers gradient to collection and product pages"
           git push
