@@ -1,0 +1,49 @@
+name: Install OnlyHers homepage ordering
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add homepage ordering script to storefront and admin
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          tag = '<script src="homepage-order.js?v=20260904"></script>'
+
+          for filename in ('index.html', 'admin.html'):
+              p = Path(filename)
+              if not p.exists():
+                  continue
+              text = p.read_text()
+              if 'homepage-order.js' in text:
+                  continue
+              marker = '</body>'
+              if marker in text:
+                  text = text.replace(marker, f'\n  {tag}\n\n{marker}', 1)
+                  p.write_text(text)
+
+          PY
+
+      - name: Commit installation
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet; then
+            echo "Homepage ordering already installed."
+            exit 0
+          fi
+          git add index.html admin.html
+          git commit -m "Add homepage product ordering controls"
+          git push
