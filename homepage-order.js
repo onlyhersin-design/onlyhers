@@ -1,26 +1,20 @@
-/* OnlyHers homepage product ordering
-   Admin: add persistent Up/Down controls to arrange products.
-   Storefront: keep new additions at the top and respect the arranged order.
-   Uses homepage_order when available; falls back to created_at so it works
-   with the current database without requiring a schema change. */
+/* OnlyHers homepage product ordering */
 (function () {
   const SUPABASE_URL = 'https://zeodtbgxadxfvexvywpm.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr';
-  let client = null;
+  let clientPromise = null;
   let sortField = 'homepage_order';
   let busy = false;
 
-  function getClient() {
-    if (client) return client;
-    if (!window.supabase?.createClient) return null;
-    client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    return client;
+  async function getClient() {
+    if (clientPromise) return clientPromise;
+    clientPromise = import('https://esm.sh/@supabase/supabase-js@2')
+      .then(({ createClient }) => createClient(SUPABASE_URL, SUPABASE_KEY));
+    return clientPromise;
   }
 
   async function getProducts() {
-    const db = getClient();
-    if (!db) return [];
-
+    const db = await getClient();
     let result = await db.from('products')
       .select('id,name,created_at,homepage_order')
       .order('homepage_order', { ascending: false, nullsFirst: false })
@@ -58,7 +52,6 @@
   async function swapProducts(id, direction) {
     if (busy) return;
     busy = true;
-
     try {
       const products = await getProducts();
       const index = products.findIndex(p => String(p.id) === String(id));
@@ -67,16 +60,14 @@
 
       const current = products[index];
       const other = products[otherIndex];
-      const db = getClient();
+      const db = await getClient();
       const field = sortField;
-
       let currentValue;
       let otherValue;
 
       if (field === 'homepage_order') {
         currentValue = current.homepage_order;
         otherValue = other.homepage_order;
-
         if (currentValue == null || otherValue == null) {
           const base = Date.now() * 1000;
           currentValue = base - index * 2;
@@ -95,7 +86,7 @@
       window.location.reload();
     } catch (error) {
       console.error('OnlyHers homepage ordering error:', error);
-      alert('Could not change the homepage order. Please try again.');
+      alert(`Could not change the homepage order. ${error.message || 'Please try again.'}`);
     } finally {
       busy = false;
     }
@@ -127,8 +118,16 @@
         <button type="button" title="Show this product earlier on the homepage" ${index === 0 ? 'disabled' : ''}>↑ Up</button>
         <button type="button" title="Show this product later on the homepage" ${index === rows.length - 1 ? 'disabled' : ''}>↓ Down</button>
       `;
-      controls.children[0].onclick = () => swapProducts(id, 'up');
-      controls.children[1].onclick = () => swapProducts(id, 'down');
+      controls.children[0].addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        swapProducts(id, 'up');
+      });
+      controls.children[1].addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        swapProducts(id, 'down');
+      });
 
       const name = row.querySelector('.product-name');
       if (name) {
@@ -147,11 +146,9 @@
   async function arrangeStorefront() {
     const feed = document.getElementById('homeProductsFeed');
     if (!feed) return;
-
     try {
       const products = await getProducts();
       if (!products.length) return;
-
       const sections = Array.from(feed.querySelectorAll('.home-product-slide'));
       const byId = new Map();
       sections.forEach(section => {
@@ -159,26 +156,25 @@
         const match = link?.href?.match(/[?&]id=([^&]+)/);
         if (match) byId.set(decodeURIComponent(match[1]), section);
       });
-
       products.forEach(product => {
         const section = byId.get(String(product.id));
         if (section) feed.appendChild(section);
       });
     } catch (error) {
-      // The existing homepage order (created_at descending) remains as a safe fallback.
       console.warn('OnlyHers homepage custom order unavailable:', error);
     }
   }
 
   function start() {
-    if (document.getElementById('productList')) {
+    const list = document.getElementById('productList');
+    if (list) {
       const observer = new MutationObserver(() => addAdminControls());
-      observer.observe(document.getElementById('productList'), { childList: true, subtree: true });
+      observer.observe(list, { childList: true, subtree: true });
       setTimeout(addAdminControls, 250);
     }
 
-    if (document.getElementById('homeProductsFeed')) {
-      const feed = document.getElementById('homeProductsFeed');
+    const feed = document.getElementById('homeProductsFeed');
+    if (feed) {
       const observer = new MutationObserver(() => {
         if (feed.querySelector('.home-product-slide')) {
           observer.disconnect();
