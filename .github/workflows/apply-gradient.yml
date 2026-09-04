@@ -12,47 +12,85 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Apply gradient theme to shared and page styles
+      - name: Apply reference gradient to every page
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
 
           theme = r'''
-/* ONLYHERS DARK RED BLACK GRADIENT THEME */
+/* ONLYHERS REFERENCE RED-BLACK GRADIENT */
 html, body {
   min-height: 100%;
+  background: radial-gradient(ellipse at 50% 50%, #a90a18 0%, #78040e 38%, #420108 68%, #170002 100%) !important;
+  background-color: #170002 !important;
+  background-attachment: fixed !important;
 }
 body {
-  background: radial-gradient(circle at 50% 50%, #a90012 0%, #79000b 36%, #3b0007 70%, #100002 100%) !important;
-  background-attachment: fixed !important;
   color: #fff;
 }
-.home-page, .auth-page { background: transparent !important; }
-.hero { background: radial-gradient(circle at 50% 50%, rgba(169,0,18,.82) 0%, rgba(121,0,11,.68) 38%, rgba(59,0,7,.55) 72%, rgba(16,0,2,.9) 100%) !important; }
-.about-section { background: transparent !important; }
-footer { background: rgba(55,0,7,.62) !important; }
-.auth-page { background: radial-gradient(circle at 50% 50%, #a90012 0%, #79000b 36%, #3b0007 70%, #100002 100%) !important; background-attachment: fixed !important; }
+
+/* Let the same reference gradient continue through the full page. */
+.home-page,
+.auth-page,
+.about-section,
+.brand-story,
+.home-product-feed,
+.products-page,
+.collection-page,
+.product-page,
+.account-page,
+main,
+footer {
+  background: transparent !important;
+}
+
+/* Keep the glass header while allowing the gradient to show through. */
+.navbar,
+header {
+  background: rgba(25, 0, 4, .30) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
+  backdrop-filter: blur(18px) saturate(125%);
+}
+
+/* Home hero uses the same red-to-black treatment rather than a separate red block. */
+.hero {
+  background: radial-gradient(ellipse at 50% 50%, rgba(169,10,24,.90) 0%, rgba(120,4,14,.78) 38%, rgba(66,1,8,.70) 68%, rgba(23,0,2,.88) 100%) !important;
+}
+
+/* Product image areas stay untouched; only the surrounding page changes. */
+.main-image-container {
+  background: rgba(255,255,255,.06) !important;
+}
 '''
 
-          for name in ['collection.html', 'product.html']:
-              p = Path(name)
-              if not p.exists():
-                  continue
+          # Shared stylesheet pages get the final override at the end.
+          css_path = Path('style.css')
+          if css_path.exists():
+              css = css_path.read_text()
+              marker = '/* ONLYHERS REFERENCE RED-BLACK GRADIENT */'
+              if marker in css:
+                  css = css[:css.index(marker)]
+              css_path.write_text(css.rstrip() + '\n\n' + theme + '\n')
+
+          # Product and any pages with page-specific inline CSS get the override
+          # inserted immediately before </head>, after their existing styles.
+          marker = '/* ONLYHERS REFERENCE RED-BLACK GRADIENT */'
+          for p in Path('.').glob('*.html'):
               text = p.read_text()
-              marker = '/* ONLYHERS PAGE GRADIENT THEME */'
-              if marker not in text:
-                  insertion = '\n<style>\n' + marker + '\n' + theme.replace('/* ONLYHERS DARK RED BLACK GRADIENT THEME */\n', '') + '\n</style>\n'
+              if marker in text:
+                  before, after = text.split(marker, 1)
+                  # Remove the previously injected style block if present.
+                  end = after.find('</style>')
+                  if end >= 0:
+                      after = after[end + len('</style>'):]
+                  text = before.rstrip() + after
+              insertion = '\n<style>\n' + theme + '\n</style>\n'
+              if '</head>' in text:
                   text = text.replace('</head>', insertion + '</head>', 1)
                   p.write_text(text)
-
-          p = Path('style.css')
-          css = p.read_text()
-          if '/* ONLYHERS DARK RED BLACK GRADIENT THEME */' not in css:
-              css += '\n' + theme
-              p.write_text(css)
           PY
-      - name: Commit theme
+      - name: Commit theme changes
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
@@ -61,6 +99,6 @@ footer { background: rgba(55,0,7,.62) !important; }
             echo "No theme changes needed."
             exit 0
           fi
-          git add style.css collection.html product.html
-          git commit -m "Apply OnlyHers gradient to collection and product pages"
+          git add style.css '*.html'
+          git commit -m "Apply reference red black gradient across site"
           git push
