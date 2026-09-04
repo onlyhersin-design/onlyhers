@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Apply reference gradient to every page
+      - name: Apply OnlyHers theme and favicon
         shell: bash
         run: |
           python3 - <<'PY'
@@ -42,6 +42,11 @@ jobs:
           .main-image-container { background: rgba(255,255,255,.06) !important; }
           '''
 
+          favicon = '''<!-- OnlyHers site icon -->
+          <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+          <link rel="apple-touch-icon" sizes="512x512" href="/favicon.png">
+          <meta name="theme-color" content="#78040e">'''
+
           css_path = Path('style.css')
           if css_path.exists():
               css = css_path.read_text()
@@ -50,14 +55,27 @@ jobs:
                   css = css[:css.index(marker)]
               css_path.write_text(css.rstrip() + '\n\n' + theme + '\n')
 
-          marker = '/* ONLYHERS REFERENCE RED-BLACK GRADIENT */'
           for p in Path('.').glob('*.html'):
               text = p.read_text()
-              # Remove any previous injected reference-theme style block completely.
-              text = re.sub(r'<style>\s*/\* ONLYHERS REFERENCE RED-BLACK GRADIENT \*/.*?</style>\s*', '', text, flags=re.S)
-              insertion = '\n<style>\n' + theme + '\n</style>\n'
+
+              # Normalize all favicon declarations to the same crawlable URL.
+              text = re.sub(r'\s*<!--\s*Website icon\s*-->\s*', '\n', text, flags=re.I)
+              text = re.sub(r'\s*<!--\s*OnlyHers site icon\s*-->\s*', '\n', text, flags=re.I)
+              text = re.sub(r'\s*<link\s+[^>]*rel=["\'](?:shortcut icon|icon|apple-touch-icon)["\'][^>]*>\s*', '\n', text, flags=re.I)
+              text = re.sub(r'\s*<link\s+[^>]*rel=["\'](?:apple-touch-icon|icon|shortcut icon)["\'][^>]*>\s*', '\n', text, flags=re.I)
+
               if '</head>' in text:
-                  text = text.replace('</head>', insertion + '</head>', 1)
+                  text = text.replace('</head>', '\n' + favicon + '\n</head>', 1)
+
+              # Keep the Organization logo canonical and absolute on the homepage.
+              if p.name == 'index.html':
+                  text = text.replace('"logo": "https://onlyhers.in/onlyhers-logo.png"',
+                                      '"logo": "https://onlyhers.in/onlyhers-logo.png"')
+
+              # Remove previous injected theme block completely, then add the current one.
+              text = re.sub(r'<style>\s*/\* ONLYHERS REFERENCE RED-BLACK GRADIENT \*/.*?</style>\s*', '', text, flags=re.S)
+              if '</head>' in text:
+                  text = text.replace('</head>', '\n<style>\n' + theme + '\n</style>\n</head>', 1)
                   p.write_text(text)
           PY
       - name: Commit theme changes
@@ -70,5 +88,5 @@ jobs:
             exit 0
           fi
           git add style.css '*.html'
-          git commit -m "Apply reference red black gradient across site"
+          git commit -m "Standardize OnlyHers favicon and site theme"
           git push
