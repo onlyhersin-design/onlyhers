@@ -1,0 +1,76 @@
+name: Apply OnlyHers gradient theme
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  gradient:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply gradient background overrides
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('style.css')
+          css = p.read_text()
+          marker = '/* ONLYHERS DARK RED BLACK GRADIENT THEME */'
+          if marker in css:
+              raise SystemExit(0)
+          css += r'''
+
+/* ONLYHERS DARK RED BLACK GRADIENT THEME */
+html, body {
+  min-height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(circle at 50% 50%, #a90012 0%, #79000b 36%, #3b0007 70%, #100002 100%) !important;
+  background-attachment: fixed !important;
+  color: #fff;
+}
+
+.home-page,
+.auth-page {
+  background: transparent !important;
+}
+
+.hero {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(169,0,18,.82) 0%, rgba(121,0,11,.68) 38%, rgba(59,0,7,.55) 72%, rgba(16,0,2,.9) 100%) !important;
+}
+
+.about-section {
+  background: transparent !important;
+}
+
+footer {
+  background: rgba(55,0,7,.62) !important;
+}
+
+.auth-page {
+  background:
+    radial-gradient(circle at 50% 50%, #a90012 0%, #79000b 36%, #3b0007 70%, #100002 100%) !important;
+  background-attachment: fixed !important;
+}
+'''
+          p.write_text(css)
+          PY
+      - name: Commit theme
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet; then
+            echo "No theme changes needed."
+            exit 0
+          fi
+          git add style.css
+          git commit -m "Apply OnlyHers red black gradient background"
+          git push
