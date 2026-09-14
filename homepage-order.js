@@ -11,9 +11,10 @@
   function addFestiveBanner() {
     if (!document.body || document.getElementById('onlyhers-festive-banner')) return;
 
-    const today = new Date();
-    const endDate = new Date(2026, 8, 15); // 15 Sep = first day after today
-    if (today >= endDate) return;
+    const indiaDate = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit'
+    }).format(new Date());
+    if (indiaDate !== '2026-09-14') return;
 
     const homePage = document.body.classList.contains('home-page') ||
       !!document.getElementById('homeProductsFeed');
@@ -23,18 +24,22 @@
     style.id = 'onlyhers-festive-banner-style';
     style.textContent = `
       #onlyhers-festive-banner {
-        position: relative;
-        z-index: 1000;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 999999 !important;
         width: 100%;
         box-sizing: border-box;
         padding: 9px 42px 9px 16px;
         text-align: center;
-        background: linear-gradient(90deg, rgba(38,0,5,.96), rgba(125,5,18,.96), rgba(38,0,5,.96));
-        border-bottom: 1px solid rgba(255,215,150,.22);
+        background: linear-gradient(90deg, rgba(38,0,5,.98), rgba(125,5,18,.98), rgba(38,0,5,.98));
+        border-bottom: 1px solid rgba(255,215,150,.25);
         color: #fff7ed;
         font-family: inherit;
         letter-spacing: .02em;
         line-height: 1.35;
+        box-shadow: 0 2px 12px rgba(0,0,0,.35);
       }
       #onlyhers-festive-banner .oh-festive-title {
         font-size: 14px;
@@ -52,16 +57,20 @@
         transform: translateY(-50%);
         border: 0;
         background: transparent;
-        color: rgba(255,255,255,.75);
+        color: rgba(255,255,255,.8);
         font-size: 18px;
         line-height: 1;
         padding: 4px;
         cursor: pointer;
       }
+      body.home-page .navbar {
+        top: 39px !important;
+      }
       @media (max-width: 600px) {
         #onlyhers-festive-banner { padding: 8px 38px 8px 10px; }
         #onlyhers-festive-banner .oh-festive-title { font-size: 13px; }
         #onlyhers-festive-banner .oh-festive-note { display: block; margin: 1px 0 0; font-size: 10px; }
+        body.home-page .navbar { top: 47px !important; }
       }
     `;
     document.head.appendChild(style);
@@ -75,12 +84,10 @@
       <button class="oh-festive-close" type="button" aria-label="Close festive message">×</button>
     `;
 
-    const navbar = document.querySelector('.navbar');
-    if (navbar) navbar.parentNode.insertBefore(banner, navbar);
-    else document.body.insertBefore(banner, document.body.firstChild);
-
+    document.body.prepend(banner);
     banner.querySelector('.oh-festive-close')?.addEventListener('click', () => {
       banner.remove();
+      document.querySelector('.navbar')?.style.removeProperty('top');
     });
   }
 
