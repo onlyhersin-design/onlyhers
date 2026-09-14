@@ -6,10 +6,16 @@
   let sortField = 'homepage_order';
   let busy = false;
 
+  function removeFestiveCloseButton() {
+    document.querySelectorAll('.onlyhers-festival-close, .oh-festive-close').forEach(button => button.remove());
+  }
+
   /* Temporary homepage-only Vinayaka Chaturthi banner. It automatically
      disappears after 14 September 2026 (India/local browser date). */
   function addFestiveBanner() {
-    if (!document.body || document.getElementById('onlyhers-festive-banner')) return;
+    if (!document.body) return;
+    removeFestiveCloseButton();
+    if (document.getElementById('onlyhers-festive-banner')) return;
 
     const indiaDate = new Intl.DateTimeFormat('en-CA', {
       timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit'
@@ -41,18 +47,10 @@
         line-height: 1.35;
         box-shadow: 0 2px 12px rgba(0,0,0,.35);
       }
-      #onlyhers-festive-banner .oh-festive-title {
-        font-size: 14px;
-        font-weight: 700;
-      }
-      #onlyhers-festive-banner .oh-festive-note {
-        margin-left: 6px;
-        font-size: 11px;
-        opacity: .86;
-      }
-      body.home-page .navbar {
-        top: 39px !important;
-      }
+      #onlyhers-festive-banner .oh-festive-title { font-size: 14px; font-weight: 700; }
+      #onlyhers-festive-banner .oh-festive-note { margin-left: 6px; font-size: 11px; opacity: .86; }
+      .onlyhers-festival-close, .oh-festive-close { display: none !important; }
+      body.home-page .navbar { top: 39px !important; }
       @media (max-width: 600px) {
         #onlyhers-festive-banner { padding: 8px 10px; }
         #onlyhers-festive-banner .oh-festive-title { font-size: 13px; }
@@ -86,16 +84,10 @@
       .select('id,name,created_at,homepage_order')
       .order('homepage_order', { ascending: false, nullsFirst: false })
       .order('created_at', { ascending: false });
-
     if (result.error) {
       sortField = 'created_at';
-      result = await db.from('products')
-        .select('id,name,created_at')
-        .order('created_at', { ascending: false });
-    } else {
-      sortField = 'homepage_order';
-    }
-
+      result = await db.from('products').select('id,name,created_at').order('created_at', { ascending: false });
+    } else sortField = 'homepage_order';
     if (result.error) throw result.error;
     return result.data || [];
   }
@@ -124,89 +116,55 @@
       const index = products.findIndex(p => String(p.id) === String(id));
       const otherIndex = direction === 'up' ? index - 1 : index + 1;
       if (index < 0 || otherIndex < 0 || otherIndex >= products.length) return;
-
-      const current = products[index];
-      const other = products[otherIndex];
-      const db = await getClient();
-      const field = sortField;
-      let currentValue;
-      let otherValue;
-
+      const current = products[index], other = products[otherIndex];
+      const db = await getClient(), field = sortField;
+      let currentValue, otherValue;
       if (field === 'homepage_order') {
-        currentValue = current.homepage_order;
-        otherValue = other.homepage_order;
+        currentValue = current.homepage_order; otherValue = other.homepage_order;
         if (currentValue == null || otherValue == null) {
           const base = Date.now() * 1000;
-          currentValue = base - index * 2;
-          otherValue = base - otherIndex * 2;
+          currentValue = base - index * 2; otherValue = base - otherIndex * 2;
         }
-      } else {
-        currentValue = current.created_at;
-        otherValue = other.created_at;
-      }
-
+      } else { currentValue = current.created_at; otherValue = other.created_at; }
       const first = await db.from('products').update({ [field]: otherValue }).eq('id', current.id);
       if (first.error) throw first.error;
       const second = await db.from('products').update({ [field]: currentValue }).eq('id', other.id);
       if (second.error) throw second.error;
-
       window.location.reload();
     } catch (error) {
       console.error('OnlyHers homepage ordering error:', error);
       alert(`Could not change the homepage order. ${error.message || 'Please try again.'}`);
-    } finally {
-      busy = false;
-    }
+    } finally { busy = false; }
   }
 
   function addAdminControls() {
     const list = document.getElementById('productList');
     if (!list) return;
     injectStyles();
-
     if (!document.getElementById('oh-home-order-help')) {
       const help = document.createElement('div');
-      help.id = 'oh-home-order-help';
-      help.className = 'oh-home-order-help';
+      help.id = 'oh-home-order-help'; help.className = 'oh-home-order-help';
       help.textContent = 'Homepage order: new additions appear at the top automatically. Use ↑ / ↓ to choose exactly where each product appears.';
       list.parentElement?.insertBefore(help, list);
     }
-
     const rows = Array.from(list.querySelectorAll('.product'));
     rows.forEach((row, index) => {
       if (row.querySelector('.oh-home-order')) return;
       const edit = row.querySelector('[data-edit]');
       if (!edit) return;
       const id = edit.dataset.edit;
-
       const controls = document.createElement('div');
       controls.className = 'oh-home-order';
-      controls.innerHTML = `
-        <button type="button" title="Show this product earlier on the homepage" ${index === 0 ? 'disabled' : ''}>↑ Up</button>
-        <button type="button" title="Show this product later on the homepage" ${index === rows.length - 1 ? 'disabled' : ''}>↓ Down</button>
-      `;
-      controls.children[0].addEventListener('click', e => {
-        e.preventDefault();
-        e.stopPropagation();
-        swapProducts(id, 'up');
-      });
-      controls.children[1].addEventListener('click', e => {
-        e.preventDefault();
-        e.stopPropagation();
-        swapProducts(id, 'down');
-      });
-
+      controls.innerHTML = `<button type="button" title="Show this product earlier on the homepage" ${index === 0 ? 'disabled' : ''}>↑ Up</button><button type="button" title="Show this product later on the homepage" ${index === rows.length - 1 ? 'disabled' : ''}>↓ Down</button>`;
+      controls.children[0].addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); swapProducts(id, 'up'); });
+      controls.children[1].addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); swapProducts(id, 'down'); });
       const name = row.querySelector('.product-name');
       if (name) {
-        const badge = document.createElement('span');
-        badge.className = 'oh-order-badge';
-        badge.textContent = index === 0 ? 'Top of homepage' : `Homepage #${index + 1}`;
-        name.appendChild(badge);
+        const badge = document.createElement('span'); badge.className = 'oh-order-badge';
+        badge.textContent = index === 0 ? 'Top of homepage' : `Homepage #${index + 1}`; name.appendChild(badge);
       }
-
       const actions = row.querySelector('.product-actions');
-      if (actions) actions.insertBefore(controls, actions.firstChild);
-      else row.appendChild(controls);
+      if (actions) actions.insertBefore(controls, actions.firstChild); else row.appendChild(controls);
     });
   }
 
@@ -214,41 +172,30 @@
     const feed = document.getElementById('homeProductsFeed');
     if (!feed) return;
     try {
-      const products = await getProducts();
-      if (!products.length) return;
-      const sections = Array.from(feed.querySelectorAll('.home-product-slide'));
-      const byId = new Map();
+      const products = await getProducts(); if (!products.length) return;
+      const sections = Array.from(feed.querySelectorAll('.home-product-slide')), byId = new Map();
       sections.forEach(section => {
         const link = section.querySelector('a[href*="product.html?id="]');
         const match = link?.href?.match(/[?&]id=([^&]+)/);
         if (match) byId.set(decodeURIComponent(match[1]), section);
       });
-      products.forEach(product => {
-        const section = byId.get(String(product.id));
-        if (section) feed.appendChild(section);
-      });
-    } catch (error) {
-      console.warn('OnlyHers homepage custom order unavailable:', error);
-    }
+      products.forEach(product => { const section = byId.get(String(product.id)); if (section) feed.appendChild(section); });
+    } catch (error) { console.warn('OnlyHers homepage custom order unavailable:', error); }
   }
 
   function start() {
     addFestiveBanner();
-
+    removeFestiveCloseButton();
     const list = document.getElementById('productList');
     if (list) {
-      const observer = new MutationObserver(() => addAdminControls());
+      const observer = new MutationObserver(() => { removeFestiveCloseButton(); addAdminControls(); });
       observer.observe(list, { childList: true, subtree: true });
       setTimeout(addAdminControls, 250);
     }
-
     const feed = document.getElementById('homeProductsFeed');
     if (feed) {
       const observer = new MutationObserver(() => {
-        if (feed.querySelector('.home-product-slide')) {
-          observer.disconnect();
-          arrangeStorefront();
-        }
+        if (feed.querySelector('.home-product-slide')) { observer.disconnect(); arrangeStorefront(); }
       });
       observer.observe(feed, { childList: true, subtree: true });
       setTimeout(arrangeStorefront, 900);
