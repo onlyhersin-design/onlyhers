@@ -36,8 +36,6 @@
 
 <meta name="theme-color" content="#78040e">
 
-<meta name="theme-color" content="#78040e">
-
 <!-- OnlyHers site icon -->
 <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
 <link rel="apple-touch-icon" sizes="512x512" href="/favicon.png">
@@ -66,6 +64,54 @@ body { color: #fff; }
 }
 .main-image-container { background: rgba(255,255,255,.06) !important; }
 
+/* TEMPORARY VINAYAKA CHATURTHI BANNER — 14 SEP 2026 */
+.onlyhers-festival-banner {
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 42px 10px 16px;
+  text-align: center;
+  background: linear-gradient(90deg, rgba(55,0,5,.94), rgba(137,8,20,.96), rgba(55,0,5,.94));
+  border-bottom: 1px solid rgba(255,215,170,.28);
+  color: #fff4e8;
+  font-size: 13px;
+  line-height: 1.35;
+  letter-spacing: .02em;
+}
+.onlyhers-festival-banner strong {
+  display: block;
+  font-size: 14px;
+  letter-spacing: .04em;
+}
+.onlyhers-festival-banner span {
+  display: block;
+  margin-top: 2px;
+  opacity: .9;
+  font-size: 11px;
+}
+.onlyhers-festival-close {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #fff4e8;
+  font-size: 21px;
+  line-height: 28px;
+  cursor: pointer;
+  opacity: .8;
+}
+.onlyhers-festival-close:hover { opacity: 1; }
+@media (max-width: 600px) {
+  .onlyhers-festival-banner { padding: 9px 38px 9px 12px; }
+  .onlyhers-festival-banner strong { font-size: 13px; }
+  .onlyhers-festival-banner span { font-size: 10px; }
+}
 </style>
 </head>
 
@@ -106,6 +152,13 @@ body { color: #fff; }
 </nav>
 
   </header>
+
+  <!-- TEMPORARY FESTIVAL HEADER -->
+  <div class="onlyhers-festival-banner" id="onlyhersFestivalBanner">
+    <strong>🪷 Happy Vinayaka Chaturthi 🪷</strong>
+    <span>Wishing you happiness, prosperity &amp; new beginnings.</span>
+    <button class="onlyhers-festival-close" type="button" aria-label="Close festive message">×</button>
+  </div>
 
 
   <!-- FULL SCREEN PRODUCT HOME -->
@@ -311,6 +364,25 @@ const navbar = document.querySelector('.navbar');
 window.addEventListener('scroll', () => {
   navbar?.classList.toggle('scrolled', window.scrollY > 20);
 }, { passive: true });
+
+/* Remove the temporary festive header after 14 September 2026 */
+(function setupFestivalBanner() {
+  const banner = document.getElementById('onlyhersFestivalBanner');
+  if (!banner) return;
+
+  banner.querySelector('.onlyhers-festival-close')?.addEventListener('click', () => {
+    banner.remove();
+  });
+
+  const indiaDate = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Kolkata',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).format(new Date());
+
+  if (indiaDate > '2026-09-14') banner.remove();
+})();
   </script>
 
   <script>
