@@ -1,10 +1,88 @@
-/* OnlyHers homepage product ordering */
+/* OnlyHers homepage product ordering + temporary festive banner */
 (function () {
   const SUPABASE_URL = 'https://zeodtbgxadxfvexvywpm.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr';
   let clientPromise = null;
   let sortField = 'homepage_order';
   let busy = false;
+
+  /* Temporary homepage-only Vinayaka Chaturthi banner. It automatically
+     disappears after 14 September 2026 (India/local browser date). */
+  function addFestiveBanner() {
+    if (!document.body || document.getElementById('onlyhers-festive-banner')) return;
+
+    const today = new Date();
+    const endDate = new Date(2026, 8, 15); // 15 Sep = first day after today
+    if (today >= endDate) return;
+
+    const homePage = document.body.classList.contains('home-page') ||
+      !!document.getElementById('homeProductsFeed');
+    if (!homePage) return;
+
+    const style = document.createElement('style');
+    style.id = 'onlyhers-festive-banner-style';
+    style.textContent = `
+      #onlyhers-festive-banner {
+        position: relative;
+        z-index: 1000;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 9px 42px 9px 16px;
+        text-align: center;
+        background: linear-gradient(90deg, rgba(38,0,5,.96), rgba(125,5,18,.96), rgba(38,0,5,.96));
+        border-bottom: 1px solid rgba(255,215,150,.22);
+        color: #fff7ed;
+        font-family: inherit;
+        letter-spacing: .02em;
+        line-height: 1.35;
+      }
+      #onlyhers-festive-banner .oh-festive-title {
+        font-size: 14px;
+        font-weight: 700;
+      }
+      #onlyhers-festive-banner .oh-festive-note {
+        margin-left: 6px;
+        font-size: 11px;
+        opacity: .86;
+      }
+      #onlyhers-festive-banner .oh-festive-close {
+        position: absolute;
+        top: 50%;
+        right: 12px;
+        transform: translateY(-50%);
+        border: 0;
+        background: transparent;
+        color: rgba(255,255,255,.75);
+        font-size: 18px;
+        line-height: 1;
+        padding: 4px;
+        cursor: pointer;
+      }
+      @media (max-width: 600px) {
+        #onlyhers-festive-banner { padding: 8px 38px 8px 10px; }
+        #onlyhers-festive-banner .oh-festive-title { font-size: 13px; }
+        #onlyhers-festive-banner .oh-festive-note { display: block; margin: 1px 0 0; font-size: 10px; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    const banner = document.createElement('div');
+    banner.id = 'onlyhers-festive-banner';
+    banner.setAttribute('role', 'status');
+    banner.innerHTML = `
+      <span class="oh-festive-title">🪷 Happy Vinayaka Chaturthi 🪷</span>
+      <span class="oh-festive-note">Wishing you happiness, prosperity & new beginnings.</span>
+      <button class="oh-festive-close" type="button" aria-label="Close festive message">×</button>
+    `;
+
+    const navbar = document.querySelector('.navbar');
+    if (navbar) navbar.parentNode.insertBefore(banner, navbar);
+    else document.body.insertBefore(banner, document.body.firstChild);
+
+    banner.querySelector('.oh-festive-close')?.addEventListener('click', () => {
+      banner.remove();
+    });
+  }
 
   async function getClient() {
     if (clientPromise) return clientPromise;
@@ -166,6 +244,8 @@
   }
 
   function start() {
+    addFestiveBanner();
+
     const list = document.getElementById('productList');
     if (list) {
       const observer = new MutationObserver(() => addAdminControls());
