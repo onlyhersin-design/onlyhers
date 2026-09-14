@@ -31,7 +31,7 @@
         z-index: 999999 !important;
         width: 100%;
         box-sizing: border-box;
-        padding: 9px 42px 9px 16px;
+        padding: 9px 16px;
         text-align: center;
         background: linear-gradient(90deg, rgba(38,0,5,.98), rgba(125,5,18,.98), rgba(38,0,5,.98));
         border-bottom: 1px solid rgba(255,215,150,.25);
@@ -50,24 +50,11 @@
         font-size: 11px;
         opacity: .86;
       }
-      #onlyhers-festive-banner .oh-festive-close {
-        position: absolute;
-        top: 50%;
-        right: 12px;
-        transform: translateY(-50%);
-        border: 0;
-        background: transparent;
-        color: rgba(255,255,255,.8);
-        font-size: 18px;
-        line-height: 1;
-        padding: 4px;
-        cursor: pointer;
-      }
       body.home-page .navbar {
         top: 39px !important;
       }
       @media (max-width: 600px) {
-        #onlyhers-festive-banner { padding: 8px 38px 8px 10px; }
+        #onlyhers-festive-banner { padding: 8px 10px; }
         #onlyhers-festive-banner .oh-festive-title { font-size: 13px; }
         #onlyhers-festive-banner .oh-festive-note { display: block; margin: 1px 0 0; font-size: 10px; }
         body.home-page .navbar { top: 47px !important; }
@@ -81,14 +68,9 @@
     banner.innerHTML = `
       <span class="oh-festive-title">🪷 Happy Vinayaka Chaturthi 🪷</span>
       <span class="oh-festive-note">Wishing you happiness, prosperity & new beginnings.</span>
-      <button class="oh-festive-close" type="button" aria-label="Close festive message">×</button>
     `;
 
     document.body.prepend(banner);
-    banner.querySelector('.oh-festive-close')?.addEventListener('click', () => {
-      banner.remove();
-      document.querySelector('.navbar')?.style.removeProperty('top');
-    });
   }
 
   async function getClient() {
