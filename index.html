@@ -4,9 +4,7 @@
   <title>Onlyhers | Women's Clothing Brand</title>
 
 <meta name="description" content="Onlyhers is a women's clothing brand founded by Hari Venkatesh in 2026. Discover thoughtfully designed fashion made for her.">
-
 <meta name="keywords" content="Onlyhers, women's clothing, women's fashion, Hari Venkatesh, Indian fashion brand">
-
 <meta name="author" content="Hari Venkatesh">
 
 <!-- Google Structured Data -->
@@ -31,18 +29,8 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link rel="stylesheet" href="style.css?v=20260901-glass-mobile">
-
-<meta name="theme-color" content="#78040e">
-
-<meta name="theme-color" content="#78040e">
-
-<meta name="theme-color" content="#78040e">
-
-<meta name="theme-color" content="#78040e">
-
-<meta name="theme-color" content="#78040e">
+  <meta name="theme-color" content="#78040e">
 
 <!-- OnlyHers site icon -->
 <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
@@ -71,7 +59,6 @@ body { color: #fff; }
   background: radial-gradient(ellipse at 50% 50%, rgba(169,10,24,.90) 0%, rgba(120,4,14,.78) 38%, rgba(66,1,8,.70) 68%, rgba(23,0,2,.88) 100%) !important;
 }
 .main-image-container { background: rgba(255,255,255,.06) !important; }
-
 </style>
 </head>
 
@@ -79,320 +66,108 @@ body { color: #fff; }
 
   <!-- HEADER -->
   <header class="navbar">
-
-    <a href="index.html" class="brand">
-      Onlyhers
-    </a>
-
-<nav class="nav-links">
-
-  <a href="about.html">
-    About
-  </a>
-
-  <a href="collection.html">
-    Collection
-  </a>
-
-  <a
-    href="login.html"
-    id="loginNav"
-  >
-    Login
-  </a>
-
-  <a
-    href="signup.html"
-    class="signup-nav"
-    id="signupNav"
-  >
-    Sign Up
-  </a>
-
-</nav>
-
+    <a href="index.html" class="brand">Onlyhers</a>
+    <nav class="nav-links">
+      <a href="about.html">About</a>
+      <a href="collection.html">Collection</a>
+      <a href="login.html" id="loginNav">Login</a>
+      <a href="signup.html" class="signup-nav" id="signupNav">Sign Up</a>
+    </nav>
   </header>
 
-  <!-- TEMPORARY FESTIVAL HEADER -->
-  <div class="onlyhers-festival-banner" id="onlyhersFestivalBanner">
-    <strong>🪷 Happy Vinayaka Chaturthi 🪷</strong>
-    <span>Wishing you happiness, prosperity &amp; new beginnings.</span>
-    <button class="onlyhers-festival-close" type="button" aria-label="Close festive message">×</button>
-  </div>
-
+  <!-- FESTIVE HEADER IS CREATED BY homepage-order.js; no close button -->
 
   <!-- FULL SCREEN PRODUCT HOME -->
-
-<main class="home-product-feed">
-
-  <div
-    id="homeProductsFeed"
-    class="home-products-feed"
-  >
-
-    <div class="products-loading">
-
-      Loading collection...
-
+  <main class="home-product-feed">
+    <div id="homeProductsFeed" class="home-products-feed">
+      <div class="products-loading">Loading collection...</div>
     </div>
+  </main>
 
-  </div>
-
-</main>
-
- <!-- FOOTER -->
-
-<footer>
-
-  <h2>Onlyhers</h2>
-
-  <p>
-    A little fashion,
-    a little lifestyle,
-    a little her.
-  </p>
-
-  <p class="copyright">
-    © 2026 Onlyhers. Made for her.
-  </p>
-
-</footer>
-
+  <!-- FOOTER -->
+  <footer>
+    <h2>Onlyhers</h2>
+    <p>A little fashion, a little lifestyle, a little her.</p>
+    <p class="copyright">© 2026 Onlyhers. Made for her.</p>
+  </footer>
 
   <!-- SUPABASE CHECK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-
     const SUPABASE_URL = "https://zeodtbgxadxfvexvywpm.supabase.co";
-
-    const SUPABASE_KEY =
-      "sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr";
-
-    const supabaseClient =
-      window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+    const SUPABASE_KEY = "sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     async function checkUser() {
-
-      const {
-        data: { session }
-      } = await supabaseClient.auth.getSession();
-
-
+      const { data: { session } } = await supabaseClient.auth.getSession();
       if (session) {
-
-        document.getElementById("loginNav").textContent =
-          "My Account";
-
-        document.getElementById("loginNav").href =
-          "account.html";
-
-        document.getElementById("signupNav").style.display =
-          "none";
-
+        document.getElementById("loginNav").textContent = "My Account";
+        document.getElementById("loginNav").href = "account.html";
+        document.getElementById("signupNav").style.display = "none";
       }
-
-    }
-async function loadHomeProducts() {
-
-  const feed =
-    document.getElementById(
-      "homeProductsFeed"
-    );
-
-
-  if (!feed) return;
-
-
-  try {
-
-    const {
-      data: products,
-      error
-    } = await supabaseClient
-      .from("products")
-      .select("*")
-      .order("created_at", {
-        ascending: false
-      });
-
-
-    if (error) throw error;
-
-
-    if (!products || products.length === 0) {
-
-      feed.innerHTML = `
-
-        <div class="no-home-products">
-          No products available yet.
-        </div>
-
-      `;
-
-      return;
-
     }
 
+    async function loadHomeProducts() {
+      const feed = document.getElementById("homeProductsFeed");
+      if (!feed) return;
+      try {
+        const { data: products, error } = await supabaseClient
+          .from("products")
+          .select("*")
+          .order("created_at", { ascending: false });
 
-    feed.innerHTML =
-      products.map((product) => {
+        if (error) throw error;
+        if (!products || products.length === 0) {
+          feed.innerHTML = `<div class="no-home-products">No products available yet.</div>`;
+          return;
+        }
 
+        feed.innerHTML = products.map((product) => {
+          const coverImage = product.cover_image || product.image_url || product.image || product.images?.[0] || "";
+          return `
+            <section class="home-product-slide">
+              <a href="product.html?id=${product.id}" class="home-product-link">
+                <img src="${coverImage}" alt="${product.name || "OnlyHers Product"}" class="home-product-cover" loading="lazy">
+              </a>
+            </section>
+          `;
+        }).join("");
+        enableProductZoom();
+      } catch (error) {
+        console.error("Homepage products error:", error);
+        feed.innerHTML = `<div class="no-home-products">Unable to load products.</div>`;
+      }
+    }
 
-        /*
-        ONLY COVER PHOTO ON HOMEPAGE
-        */
+    checkUser();
+    loadHomeProducts();
 
-        const coverImage =
-
-          product.cover_image ||
-
-          product.image_url ||
-
-          product.image ||
-
-          product.images?.[0] ||
-
-          "";
-
-
-        return `
-
-          <section
-            class="home-product-slide"
-          >
-
-            <a
-              href="product.html?id=${product.id}"
-              class="home-product-link"
-            >
-
-              <img
-
-                src="${coverImage}"
-
-                alt="${
-                  product.name ||
-                  "OnlyHers Product"
-                }"
-
-                class="home-product-cover"
-
-                loading="lazy"
-
-              >
-
-            </a>
-
-          </section>
-
-        `;
-
-      }).join("");
-
-    enableProductZoom();
-    
-  } catch (error) {
-
-    console.error(
-      "Homepage products error:",
-      error
-    );
-
-
-    feed.innerHTML = `
-
-      <div class="no-home-products">
-
-        Unable to load products.
-
-      </div>
-
-    `;
-
-  }
-
-}
-   checkUser();
-
-loadHomeProducts();
-
-/* Add a slightly deeper glass effect after scrolling */
-const navbar = document.querySelector('.navbar');
-
-window.addEventListener('scroll', () => {
-  navbar?.classList.toggle('scrolled', window.scrollY > 20);
-}, { passive: true });
-
-/* Remove the temporary festive header after 14 September 2026 */
-(function setupFestivalBanner() {
-  const banner = document.getElementById('onlyhersFestivalBanner');
-  if (!banner) return;
-
-  banner.querySelector('.onlyhers-festival-close')?.addEventListener('click', () => {
-    banner.remove();
-  });
-
-  const indiaDate = new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'Asia/Kolkata',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  }).format(new Date());
-
-  if (indiaDate > '2026-09-14') banner.remove();
-})();
+    /* Add a slightly deeper glass effect after scrolling */
+    const navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+      navbar?.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
   </script>
 
   <script>
-
-function enableProductZoom() {
-
-  const slides =
-    document.querySelectorAll(".home-product-slide");
-
-  if (!slides.length) return;
-
-
-  const observer =
-    new IntersectionObserver(
-
-      (entries) => {
-
+    function enableProductZoom() {
+      const slides = document.querySelectorAll(".home-product-slide");
+      if (!slides.length) return;
+      const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-
           if (entry.isIntersecting) {
-
-            slides.forEach((slide) => {
-              slide.classList.remove("active");
-            });
-
+            slides.forEach((slide) => slide.classList.remove("active"));
             entry.target.classList.add("active");
-
           }
-
         });
+      }, { threshold: 0.7 });
+      slides.forEach((slide) => observer.observe(slide));
+    }
+  </script>
 
-      },
-
-      {
-        threshold: 0.7
-      }
-
-    );
-
-
-  slides.forEach((slide) => {
-    observer.observe(slide);
-  });
-
-}
-
-</script>
-  
-
-  <script src="homepage-order.js?v=20260904"></script>
+  <!-- Cache-busted latest homepage ordering/festive banner script -->
+  <script src="homepage-order.js?v=20260914-no-close"></script>
 
 </body>
 </html>
