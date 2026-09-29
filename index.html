@@ -30,7 +30,7 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css?v=20260930-home-mobile-restore">
+  <link rel="stylesheet" href="style.css?v=20260930-mobile-header-footer">
   <meta name="theme-color" content="#78040e">
 
 <meta name="theme-color" content="#78040e">
@@ -179,6 +179,72 @@ body { color: #fff; }
 .main-image-container { background: rgba(255,255,255,.06) !important; }
 
 </style>
+
+<style>
+/* HOMEPAGE MOBILE — RESTORE ORIGINAL HEADER BUTTON + FOOTER STYLING */
+@media (max-width: 768px) {
+  .home-page .navbar {
+    background: rgba(35, 10, 13, 0.32) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(125%) !important;
+    backdrop-filter: blur(18px) saturate(125%) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.16) !important;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.10) !important;
+  }
+
+  .home-page .nav-links a {
+    color: rgba(255,255,255,.95) !important;
+    text-decoration: none !important;
+    font-size: 11px !important;
+  }
+
+  .home-page .signup-nav {
+    display: inline-block !important;
+    border: 1px solid rgba(255,255,255,.7) !important;
+    background: rgba(255,255,255,.08) !important;
+    padding: 6px 8px !important;
+    color: rgba(255,255,255,.95) !important;
+    backdrop-filter: blur(8px) !important;
+  }
+
+  .home-page .navbar.scrolled {
+    background: rgba(24,19,19,.58) !important;
+    border-bottom-color: rgba(255,255,255,.12) !important;
+    box-shadow: 0 8px 30px rgba(0,0,0,.20) !important;
+  }
+
+  .home-page > footer {
+    width: 100% !important;
+    min-height: calc(100svh - 68px) !important;
+    scroll-snap-align: start !important;
+    scroll-snap-stop: always !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 60px 20px !important;
+    background: #6f0912 !important;
+  }
+
+  .home-page > footer h2 {
+    font-family: "Playfair Display", serif !important;
+    font-size: clamp(50px, 7vw, 85px) !important;
+    margin-bottom: 20px !important;
+    color: #fff !important;
+  }
+
+  .home-page > footer p {
+    max-width: 400px !important;
+    line-height: 1.7 !important;
+    color: #fff !important;
+  }
+
+  .home-page > footer .copyright {
+    margin-top: 55px !important;
+  }
+}
+</style>
+
 </head>
 
 <body class="home-page">
