@@ -30,7 +30,7 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css?v=20260929-desktop-full-frame">
+  <link rel="stylesheet" href="style.css?v=20260930-home-mobile-restore">
   <meta name="theme-color" content="#78040e">
 
 <meta name="theme-color" content="#78040e">
@@ -96,6 +96,86 @@ body { color: #fff; }
 .main-image-container { background: rgba(255,255,255,.06) !important; }
 
 </style>
+
+<style>
+/* HOMEPAGE MOBILE RESTORE — KEEP MOBILE EXACTLY IN THE ORIGINAL LAYOUT */
+@media (max-width: 768px) {
+  :root {
+    --onlyhers-header-height: 65px !important;
+  }
+
+  .home-page .navbar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 68px !important;
+    padding: 0 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    z-index: 1000 !important;
+  }
+
+  .home-page .brand {
+    font-size: 25px !important;
+  }
+
+  .home-page .nav-links {
+    display: flex !important;
+    align-items: center !important;
+    gap: 13px !important;
+  }
+
+  .home-page .nav-links a {
+    font-size: 11px !important;
+  }
+
+  .home-page .signup-nav {
+    padding: 6px 8px !important;
+  }
+
+  .home-page .home-product-feed {
+    margin-top: 68px !important;
+  }
+
+  .home-page .home-product-slide {
+    width: 100% !important;
+    height: calc(100dvh - 68px) !important;
+    min-height: calc(100dvh - 68px) !important;
+    overflow: hidden !important;
+  }
+
+  .home-page .home-product-link {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+  }
+
+  .home-page .home-product-cover {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    transform: none !important;
+  }
+
+  .home-page .home-product-slide.active .home-product-cover {
+    transform: none !important;
+  }
+}
+
+/* Keep the desktop header in its original 75px layout. */
+@media (min-width: 769px) {
+  .home-page .navbar {
+    height: 75px !important;
+    padding: 0 8% !important;
+  }
+}
+</style>
+
 </head>
 
 <body class="home-page">
