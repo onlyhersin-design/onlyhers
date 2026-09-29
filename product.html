@@ -349,6 +349,13 @@
     .stock-status.in-stock { color: #c9f7d2; }
     .stock-status.out-of-stock { color: #ffd0d0; }
 
+    .stock-controls { display:none; gap:10px; margin:-8px 0 28px; }
+    .stock-controls.visible { display:flex; }
+    .stock-option { flex:1; min-height:42px; padding:10px 14px; border:1px solid rgba(255,255,255,.35); background:transparent; color:white; font:600 11px "DM Sans",sans-serif; letter-spacing:1px; text-transform:uppercase; cursor:pointer; transition:.25s ease; }
+    .stock-option:hover { background:rgba(255,255,255,.1); }
+    .stock-option.active { background:white; color:#8f0d1b; border-color:white; }
+    .stock-option:disabled { opacity:.55; cursor:wait; }
+
     .product-line {
       height: 1px;
       background: rgba(255,255,255,.2);
@@ -1222,7 +1229,55 @@ body { color: #fff; }
 
 
       setupSizeSelection(productName, productPrice);
+      setupStockControls(product);
 
+    }
+
+
+    /* =========================
+       STOCK CONTROLS
+    ========================= */
+
+    async function setupStockControls(product) {
+      const controls = document.getElementById("stockControls");
+      if (!controls || !supabaseClient) return;
+
+      try {
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        if (!user || user.email !== "onlyhers.in@gmail.com") return;
+
+        controls.classList.add("visible");
+
+        controls.querySelectorAll(".stock-option").forEach(button => {
+          button.addEventListener("click", async () => {
+            const nextAvailability = button.dataset.stock === "true";
+            controls.querySelectorAll(".stock-option").forEach(btn => btn.disabled = true);
+
+            const { error } = await supabaseClient
+              .from("products")
+              .update({ is_available: nextAvailability })
+              .eq("id", product.id);
+
+            if (error) {
+              console.error("Stock update error:", error);
+              alert("Could not update stock status. " + error.message);
+              controls.querySelectorAll(".stock-option").forEach(btn => btn.disabled = false);
+              return;
+            }
+
+            const status = document.getElementById("stockStatus");
+            status.textContent = nextAvailability ? "In Stock" : "Out of Stock";
+            status.className = "stock-status " + (nextAvailability ? "in-stock" : "out-of-stock");
+
+            controls.querySelectorAll(".stock-option").forEach(btn => {
+              btn.classList.toggle("active", (btn.dataset.stock === "true") === nextAvailability);
+              btn.disabled = false;
+            });
+          });
+        });
+      } catch (error) {
+        console.error("Stock control auth check:", error);
+      }
     }
 
 
