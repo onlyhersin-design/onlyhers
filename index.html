@@ -286,13 +286,31 @@ body { color: #fff; }
     const SUPABASE_KEY = "sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr";
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    function updateAuthNavigation(session) {
+      const loginNav = document.getElementById("loginNav");
+      const signupNav = document.getElementById("signupNav");
+      if (!loginNav || !signupNav) return;
+
+      if (session) {
+        loginNav.textContent = "My Account";
+        loginNav.href = "account.html";
+        signupNav.style.display = "none";
+        signupNav.setAttribute("aria-hidden", "true");
+      } else {
+        loginNav.textContent = "Login";
+        loginNav.href = "login.html";
+        signupNav.style.display = "";
+        signupNav.removeAttribute("aria-hidden");
+      }
+    }
+
     async function checkUser() {
       const { data: { session } } = await supabaseClient.auth.getSession();
-      if (session) {
-        document.getElementById("loginNav").textContent = "My Account";
-        document.getElementById("loginNav").href = "account.html";
-        document.getElementById("signupNav").style.display = "none";
-      }
+      updateAuthNavigation(session);
+
+      supabaseClient.auth.onAuthStateChange((_event, session) => {
+        updateAuthNavigation(session);
+      });
     }
 
     async function loadHomeProducts() {
