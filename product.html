@@ -1159,6 +1159,15 @@ body { color: #fff; }
               ₹${Number(productPrice).toLocaleString("en-IN")}
             </div>
 
+            <div class="stock-status ${product.is_available !== false ? "in-stock" : "out-of-stock"}" id="stockStatus">
+              ${product.is_available !== false ? "In Stock" : "Out of Stock"}
+            </div>
+
+            <div class="stock-controls" id="stockControls">
+              <button type="button" class="stock-option ${product.is_available !== false ? "active" : ""}" data-stock="true">In Stock</button>
+              <button type="button" class="stock-option ${product.is_available === false ? "active" : ""}" data-stock="false">Out of Stock</button>
+            </div>
+
 
             <div class="product-line"></div>
 
