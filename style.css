@@ -1,76 +1,1191 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Onlyhers | Women's Clothing Brand</title>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
 
-<meta name="description" content="Onlyhers is a women's clothing brand founded by Hari Venkatesh in 2026. Discover thoughtfully designed fashion made for her.">
-<meta name="keywords" content="Onlyhers, women's clothing, women's fashion, Hari Venkatesh, Indian fashion brand">
-<meta name="author" content="Hari Venkatesh">
-<meta name="p:domain_verify" content="810df19fae04af4d70280f7ea6c51aaa">
-
-<!-- Google Structured Data -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "OnlyHers",
-  "alternateName": "OnlyHers Women's Clothing",
-  "description": "OnlyHers is a women's clothing brand founded by Hari Venkatesh in 2026, focused on thoughtfully designed fashion made for her.",
-  "foundingDate": "2026",
-  "founder": {
-    "@type": "Person",
-    "name": "Hari Venkatesh"
-  },
-  "url": "https://onlyhers.in",
-  "logo": "https://onlyhers.in/onlyhers-logo.png",
-  "sameAs": [
-    "https://www.instagram.com/onlyhers.in"
-  ]
+.hers-signature {
+  font-family: 'Great Vibes', cursive;
+  font-size: 55px;
+  font-weight: 400;
+  margin-bottom: 20px;
+  color: white;
 }
-</script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css?v=20260901-glass-mobile">
-  <meta name="theme-color" content="#78040e">
 
-<meta name="theme-color" content="#78040e">
+.brand-story {
+  padding: 100px 10%;
+  background: #98131d;
+  color: white;
+  text-align: center;
+}
 
-<meta name="theme-color" content="#78040e">
+.brand-story p {
+  max-width: 700px;
+  margin: auto;
+  font-size: 17px;
+  line-height: 1.8;
+}
 
-<meta name="theme-color" content="#78040e">
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-<meta name="theme-color" content="#78040e">
 
-<meta name="theme-color" content="#78040e">
+html {
+  scroll-behavior: smooth;
+}
 
-<meta name="theme-color" content="#78040e">
 
-<meta name="theme-color" content="#78040e">
+body {
+  font-family: "DM Sans", sans-serif;
+}
 
-<meta name="theme-color" content="#78040e">
 
-<meta name="theme-color" content="#78040e">
+/* =========================
+   HOME PAGE
+========================= */
 
-<meta name="theme-color" content="#78040e">
+.home-page {
+  background: #a71924;
+  color: #ffffff;
+  min-height: 100vh;
+}
 
-<meta name="theme-color" content="#78040e">
 
-<meta name="theme-color" content="#78040e">
+/* =========================
+   NAVBAR
+========================= */
 
-<meta name="theme-color" content="#78040e">
+.navbar {
 
-<meta name="theme-color" content="#78040e">
+  position: fixed;
 
-<meta name="theme-color" content="#78040e">
+  top: 0;
+  left: 0;
 
-<meta name="theme-color" content="#78040e">
+  width: 100%;
 
-<!-- OnlyHers site icon -->
-<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="512x512" href="/favicon.png">
-<meta name="theme-color" content="#78040e">
+  height: 75px;
 
-<style>
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 0 8%;
+
+  /* Glassy OnlyHers header */
+  background: rgba(35, 10, 13, 0.32);
+
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
+  backdrop-filter: blur(18px) saturate(125%);
+
+  z-index: 1000;
+
+  border-bottom:
+    1px solid rgba(255,255,255,0.16);
+
+  box-shadow:
+    0 8px 28px rgba(0,0,0,0.10);
+
+  transition:
+    background .3s ease,
+    backdrop-filter .3s ease,
+    box-shadow .3s ease;
+
+}
+
+
+.brand {
+
+  font-family: "Playfair Display", serif;
+
+  font-size: 30px;
+
+  color: white;
+
+  text-decoration: none;
+
+  font-weight: 600;
+
+}
+
+
+.nav-links {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 28px;
+
+}
+
+
+.nav-links a {
+
+  color: rgba(255,255,255,.95);
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  transition: opacity .3s ease, color .3s ease;
+
+}
+
+
+.nav-links a:hover {
+
+  opacity: 0.65;
+
+}
+
+
+.signup-nav {
+
+  border: 1px solid rgba(255,255,255,.7);
+
+  background: rgba(255,255,255,.08);
+
+  padding: 10px 18px;
+
+  backdrop-filter: blur(8px);
+
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+
+  min-height: 100vh;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  text-align: center;
+
+  padding: 120px 20px 60px;
+
+  position: relative;
+
+  overflow: hidden;
+
+  background:
+
+    radial-gradient(
+      circle at 20% 30%,
+      #cf3540,
+      transparent 30%
+    ),
+
+    radial-gradient(
+      circle at 80% 70%,
+      #7e0d16,
+      transparent 35%
+    ),
+
+    #a71924;
+
+}
+
+
+.hero-content {
+
+  position: relative;
+
+  z-index: 5;
+
+}
+
+
+.small-title {
+
+  letter-spacing: 5px;
+
+  font-size: 11px;
+
+  margin-bottom: 25px;
+
+  opacity: 0.8;
+
+}
+
+
+.hero h1 {
+
+  font-family: "Playfair Display", serif;
+
+  font-size: clamp(65px, 10vw, 150px);
+
+  font-weight: 500;
+
+  line-height: 0.9;
+
+  letter-spacing: -4px;
+
+}
+
+
+.hero h1 span {
+
+  font-style: italic;
+
+}
+
+
+.hero-description {
+
+  margin: 35px auto;
+
+  max-width: 600px;
+
+  line-height: 1.8;
+
+  font-size: 16px;
+
+  opacity: 0.9;
+
+}
+
+
+.shop-button {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 30px;
+
+  padding: 18px 30px;
+
+  background: #151515;
+
+  color: white;
+
+  text-decoration: none;
+
+  font-size: 12px;
+
+  letter-spacing: 2px;
+
+  font-weight: 600;
+
+  transition: 0.3s;
+
+}
+
+
+.shop-button:hover {
+
+  background: white;
+
+  color: #a71924;
+
+  transform: translateY(-5px);
+
+}
+
+
+/* =========================
+   FLOATING ANIMATIONS
+========================= */
+
+.floating-shape {
+
+  position: absolute;
+
+  border-radius: 50%;
+
+  border:
+    1px solid rgba(255,255,255,0.18);
+
+  pointer-events: none;
+
+}
+
+
+.shape1 {
+
+  width: 350px;
+
+  height: 350px;
+
+  top: 10%;
+
+  left: -100px;
+
+  animation: floatOne 10s infinite ease-in-out;
+
+}
+
+
+.shape2 {
+
+  width: 500px;
+
+  height: 500px;
+
+  bottom: -200px;
+
+  right: -150px;
+
+  animation: floatTwo 13s infinite ease-in-out;
+
+}
+
+
+.shape3 {
+
+  width: 180px;
+
+  height: 180px;
+
+  top: 20%;
+
+  right: 15%;
+
+  animation: floatThree 8s infinite ease-in-out;
+
+}
+
+
+@keyframes floatOne {
+
+  0%, 100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(50px);
+  }
+
+}
+
+
+@keyframes floatTwo {
+
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(20deg);
+  }
+
+}
+
+
+@keyframes floatThree {
+
+  0%, 100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.25);
+  }
+
+}
+
+
+/* =========================
+   ABOUT
+========================= */
+
+.about-section {
+
+  padding: 140px 10%;
+
+  background: #8f121d;
+
+}
+
+
+.section-tag {
+
+  font-size: 11px;
+
+  letter-spacing: 4px;
+
+  margin-bottom: 25px;
+
+  opacity: 0.7;
+
+}
+
+
+.about-section h2 {
+
+  font-family: "Playfair Display", serif;
+
+  font-size: clamp(45px, 6vw, 80px);
+
+  font-weight: 500;
+
+  margin-bottom: 35px;
+
+}
+
+
+.about-section > p:not(.section-tag) {
+
+  max-width: 550px;
+
+  font-size: 17px;
+
+  line-height: 1.8;
+
+  opacity: 0.85;
+
+}
+
+
+.text-link {
+
+  display: inline-block;
+
+  margin-top: 35px;
+
+  color: white;
+
+  text-decoration: none;
+
+  border-bottom: 1px solid white;
+
+  padding-bottom: 7px;
+
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+
+  text-align: center;
+
+  padding: 80px 20px;
+
+  background: #6f0912;
+
+}
+
+
+footer h2 {
+
+  font-family: "Playfair Display", serif;
+
+  font-size: 45px;
+
+  margin-bottom: 15px;
+
+}
+
+
+footer p {
+
+  opacity: 0.8;
+
+}
+
+
+.copyright {
+
+  margin-top: 40px;
+
+  font-size: 12px;
+
+}
+
+
+/* =========================
+   LOGIN + SIGNUP PAGE
+========================= */
+
+.auth-page {
+
+  min-height: 100vh;
+
+  background:
+
+    radial-gradient(
+      circle at 10% 10%,
+      #c9323c,
+      transparent 30%
+    ),
+
+    radial-gradient(
+      circle at 90% 90%,
+      #720913,
+      transparent 40%
+    ),
+
+    #98131d;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  padding: 30px;
+
+  color: white;
+
+}
+
+
+.auth-wrapper {
+
+  width: 100%;
+
+  max-width: 480px;
+
+}
+
+
+.back-home {
+
+  color: white;
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  display: inline-block;
+
+  margin-bottom: 30px;
+
+  opacity: 0.8;
+
+}
+
+
+.back-home:hover {
+
+  opacity: 1;
+
+}
+
+
+.auth-box {
+
+  background: rgba(255,255,255,0.1);
+
+  border:
+    1px solid rgba(255,255,255,0.2);
+
+  backdrop-filter: blur(20px);
+
+  padding: 55px 45px;
+
+}
+
+
+.auth-box h1 {
+
+  font-family: "Playfair Display", serif;
+
+  font-size: 55px;
+
+  line-height: 1;
+
+  margin-bottom: 25px;
+
+}
+
+
+.auth-box h1 span {
+
+  font-style: italic;
+
+}
+
+
+.auth-description {
+
+  opacity: 0.8;
+
+  line-height: 1.6;
+
+  margin-bottom: 35px;
+
+}
+
+
+.auth-box label {
+
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-size: 13px;
+
+  letter-spacing: 1px;
+
+}
+
+
+.auth-box input {
+
+  width: 100%;
+
+  padding: 15px;
+
+  margin-bottom: 25px;
+
+  border:
+    1px solid rgba(255,255,255,0.3);
+
+  background:
+    rgba(255,255,255,0.1);
+
+  color: white;
+
+  outline: none;
+
+  font-size: 15px;
+
+}
+
+
+.auth-box input::placeholder {
+
+  color:
+    rgba(255,255,255,0.55);
+
+}
+
+
+.auth-box input:focus {
+
+  border-color: white;
+
+}
+
+
+.auth-button {
+
+  width: 100%;
+
+  padding: 17px;
+
+  border: none;
+
+  background: white;
+
+  color: #9c1721;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+
+}
+
+
+.auth-button:hover {
+
+  background: #151515;
+
+  color: white;
+
+}
+
+
+.switch-auth {
+
+  text-align: center;
+
+  margin-top: 25px;
+
+  font-size: 14px;
+
+}
+
+
+.switch-auth a {
+
+  color: white;
+
+  font-weight: 600;
+
+}
+
+
+.message {
+
+  margin-top: 20px;
+
+  text-align: center;
+
+  font-size: 14px;
+
+}
+
+
+.success {
+
+  color: #baffc9;
+
+}
+
+
+.error {
+
+  color: #ffd0d0;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width: 600px) {
+
+  .navbar {
+
+    padding: 0 25px;
+
+  }
+
+
+  .nav-links {
+
+    gap: 15px;
+
+  }
+
+
+  .nav-links a {
+
+    font-size: 12px;
+
+  }
+
+
+  .signup-nav {
+
+    padding: 7px 10px;
+
+  }
+
+
+  .auth-box {
+
+    padding: 40px 25px;
+
+  }
+
+
+  .auth-box h1 {
+
+    font-size: 45px;
+
+  }
+
+}
+/* =========================================
+   ONLYHERS FULL SCREEN PRODUCT HOME
+   SINGLE SMOOTH PAGE SCROLL
+========================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+html:has(body.home-page) {
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: var(--onlyhers-header-height);
+}
+
+:root {
+  --onlyhers-header-height: 75px;
+}
+
+
+/* =========================================
+   HOME PRODUCT AREA
+========================================= */
+
+.home-product-feed {
+
+  width: 100%;
+
+  margin-top: var(--onlyhers-header-height);
+
+  background: #a71924;
+
+}
+
+
+/* IMPORTANT:
+   No internal scrolling here.
+   The browser handles all scrolling naturally.
+*/
+
+.home-products-feed {
+
+  width: 100%;
+
+  overflow: visible;
+
+}
+
+
+/* =========================================
+   ONE PRODUCT = ONE FULL SCREEN
+========================================= */
+
+.home-product-slide {
+
+  width: 100%;
+
+  height: calc(100dvh - var(--onlyhers-header-height));
+
+  min-height: calc(100dvh - var(--onlyhers-header-height));
+
+  scroll-snap-align: start;
+
+  scroll-snap-stop: always;
+
+  overflow: hidden;
+
+}
+
+
+/* =========================================
+   CLICKABLE PRODUCT
+========================================= */
+
+.home-product-link {
+
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+}
+
+
+/* =========================================
+   PRODUCT COVER IMAGE
+========================================= */
+
+.home-product-cover {
+
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  -webkit-user-drag: none;
+
+  user-select: none;
+
+}
+/* =========================================
+   SMOOTH PRODUCT ZOOM EFFECT
+========================================= */
+
+.home-product-cover {
+
+  transition:
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+
+  will-change: transform;
+
+}
+
+
+/* PRODUCT CURRENTLY IN VIEW */
+
+.home-product-slide.active .home-product-cover {
+
+  transform: scale(1.04);
+
+}
+
+/* =========================================
+   LOADING / EMPTY STATE
+========================================= */
+
+.products-loading,
+.no-home-products {
+
+  width: 100%;
+
+  min-height: calc(100svh - var(--onlyhers-header-height));
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  color: white;
+
+  font-size: 14px;
+
+  letter-spacing: 1px;
+
+}
+
+
+/* =========================================
+   FULL SCREEN FOOTER
+   AFTER THE LAST PRODUCT
+========================================= */
+
+.home-page > footer {
+
+  width: 100%;
+
+  min-height: calc(100svh - var(--onlyhers-header-height));
+
+  scroll-snap-align: start;
+
+  scroll-snap-stop: always;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  text-align: center;
+
+  padding: 60px 20px;
+
+  background: #6f0912;
+
+}
+
+
+.home-page > footer h2 {
+
+  font-family: "Playfair Display", serif;
+
+  font-size: clamp(50px, 7vw, 85px);
+
+  margin-bottom: 20px;
+
+}
+
+
+.home-page > footer p {
+
+  max-width: 400px;
+
+  line-height: 1.7;
+
+}
+
+
+.home-page > footer .copyright {
+
+  margin-top: 55px;
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+  :root {
+    --onlyhers-header-height: 65px;
+  }
+
+
+  .navbar {
+
+    height: var(--onlyhers-header-height);
+
+    padding: 0 16px;
+
+  }
+
+
+  .brand {
+    font-size: 25px;
+  }
+
+
+  .nav-links {
+    gap: 13px;
+  }
+
+
+  .nav-links a {
+    font-size: 11px;
+  }
+
+
+  .signup-nav {
+    padding: 6px 8px;
+  }
+
+
+.home-product-slide {
+
+  min-height: calc(100dvh - var(--onlyhers-header-height));
+
+  height: calc(100dvh - var(--onlyhers-header-height));
+
+}
+
+
+  .home-page > footer {
+
+    min-height: calc(100svh - var(--onlyhers-header-height));
+
+  }
+
+}
+/* =========================================
+   ONLYHERS AUTH HEADER
+   LOGIN + SIGNUP PAGES
+========================================= */
+
+.auth-header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+
+    width: 100% !important;
+    height: 72px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+
+    padding: 0 7% !important;
+    box-sizing: border-box !important;
+
+    background: rgba(35, 10, 13, 0.32) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(125%) !important;
+    backdrop-filter: blur(18px) saturate(125%) !important;
+    border-bottom: 1px solid rgba(255,255,255,.16) !important;
+    box-shadow: 0 8px 28px rgba(0,0,0,.10) !important;
+
+    z-index: 9999 !important;
+}
+
+
+.auth-header .auth-logo {
+    display: block !important;
+
+    font-family: Georgia, "Times New Roman", serif !important;
+
+    font-size: 28px !important;
+    font-weight: 600 !important;
+
+    color: #ffffff !important;
+
+    text-decoration: none !important;
+    letter-spacing: -1px !important;
+}
+
+
+.auth-header .auth-home-btn {
+    display: block !important;
+
+    color: #ffffff !important;
+
+    text-decoration: none !important;
+
+    font-size: 11px !important;
+    font-weight: 600 !important;
+
+    letter-spacing: 2px !important;
+
+    padding: 10px 16px !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+
+    transition: 0.3s ease !important;
+}
+
+
+.auth-header .auth-home-btn:hover {
+    background: white !important;
+    color: #b1121c !important;
+}
+
+
+/* SPACE FOR FIXED HEADER */
+
+.auth-page,
+.signup-page,
+.login-page {
+    padding-top: 72px !important;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+    .auth-header {
+        height: 65px !important;
+        padding: 0 20px !important;
+    }
+
+    .auth-header .auth-logo {
+        font-size: 25px !important;
+    }
+
+    .auth-header .auth-home-btn {
+        font-size: 10px !important;
+        padding: 8px 12px !important;
+    }
+
+    .auth-page,
+    .signup-page,
+    .login-page {
+        padding-top: 65px !important;
+    }
+
+}
+
+
+/* =========================
+   GLASS NAVBAR ON SCROLL
+========================= */
+
+.navbar.scrolled {
+  background: rgba(24, 19, 19, .58);
+  border-bottom-color: rgba(255,255,255,.12);
+  box-shadow: 0 8px 30px rgba(0,0,0,.20);
+}
+
+@media (max-width: 700px) {
+  .navbar {
+    height: 68px;
+    padding: 0 20px;
+  }
+}
 
 /* ONLYHERS REFERENCE RED-BLACK GRADIENT */
 html, body {
@@ -93,4 +1208,41 @@ body { color: #fff; }
   background: radial-gradient(ellipse at 50% 50%, rgba(169,10,24,.90) 0%, rgba(120,4,14,.78) 38%, rgba(66,1,8,.70) 68%, rgba(23,0,2,.88) 100%) !important;
 }
 .main-image-container { background: rgba(255,255,255,.06) !important; }
+
+/* DESKTOP HOMEPAGE — CENTER THE COMPLETE PRODUCT IMAGE */
+@media (min-width: 769px) {
+  .home-page .home-product-slide {
+    width: 100% !important;
+    height: calc(100dvh - var(--onlyhers-header-height)) !important;
+    min-height: calc(100dvh - var(--onlyhers-header-height)) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    background: radial-gradient(ellipse at center, #a90a18 0%, #78040e 38%, #420108 70%, #170002 100%) !important;
+  }
+
+  .home-page .home-product-link {
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .home-page .home-product-cover {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+    object-position: center center !important;
+    transform: none !important;
+  }
+
+  .home-page .home-product-slide.active .home-product-cover {
+    transform: none !important;
+  }
+}
 
