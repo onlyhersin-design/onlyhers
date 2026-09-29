@@ -301,6 +301,12 @@
       margin-top: 5px;
     }
 
+    .stock-admin { display:inline-flex; align-items:center; gap:6px; margin-top:6px; font-size:11px; font-weight:700; }
+    .stock-admin.in-stock { color:#237a3b; }
+    .stock-admin.out-of-stock { color:#a00018; }
+    .stock-toggle { display:flex; align-items:center; gap:10px; margin:12px 0 20px; font-size:13px; font-weight:600; }
+    .stock-toggle input { width:18px; height:18px; accent-color:#98131d; }
+
     .photo-count {
       margin-top: 5px;
       font-size: 12px;
@@ -567,7 +573,9 @@ body { color: #fff; }
 
       </div>
 
-      <label>Size chart image</label>
+      <label class="stock-toggle"><input id="editIsAvailable" type="checkbox" checked><span>Product is in stock / available to customers</span></label>
+
+    <label>Size chart image</label>
       <input id="sizeChart" type="file" accept="image/*">
       <p class="help-text">Optional. Customers can open this image beside the size selection.</p>
 
@@ -1408,6 +1416,8 @@ async function loadProducts() {
             </div>
 
 
+            <div class="stock-admin ${product.is_available !== false ? 'in-stock' : 'out-of-stock'}">${product.is_available !== false ? '● In Stock' : '● Out of Stock'}</div>
+
             <div class="photo-count">
 
               📸 ${images.length} photo${
@@ -1538,6 +1548,9 @@ function openEditModal(product) {
 
   $('editCategory').value =
     product.category || '';
+
+  $('editIsAvailable').checked =
+    product.is_available !== false;
 
   $('editMaterial').value = product.material || '';
   $('editWashCare').value = product.wash_care || '';
@@ -1946,6 +1959,9 @@ $('saveEdit').onclick =
 
             more_details:
               $('editMoreDetails').value.trim() || null,
+
+            is_available:
+              $('editIsAvailable').checked,
 
             /* First image = cover */
 
