@@ -410,6 +410,18 @@
 
 
 
+    /* FILTER + SORT CONTROLS */
+    .collection-controls { padding: 0 8% 10px; display:flex; justify-content:flex-end; align-items:end; gap:14px; flex-wrap:wrap; }
+    .control-group { display:flex; flex-direction:column; gap:7px; min-width:180px; }
+    .control-group label { font-size:10px; text-transform:uppercase; letter-spacing:1.8px; opacity:.7; }
+    .control-group select { min-height:44px; padding:0 38px 0 14px; border:1px solid rgba(255,255,255,.28); background:rgba(20,0,4,.22); color:white; font:500 13px "DM Sans",sans-serif; outline:none; cursor:pointer; }
+    .control-group select:focus { border-color:rgba(255,255,255,.7); }
+    .control-group option { background:#420108; color:white; }
+    .stock-badge { display:inline-flex; align-items:center; gap:6px; margin-top:9px; font-size:10px; letter-spacing:1.4px; text-transform:uppercase; font-weight:700; }
+    .stock-badge::before { content:""; width:7px; height:7px; border-radius:50%; background:currentColor; }
+    .stock-badge.in-stock { color:#c9f7d2; }
+    .stock-badge.out-of-stock { color:#ffd0d0; }
+
     /* ============================
        COLLECTION AREA
     ============================ */
@@ -1151,6 +1163,31 @@ body { color: #fff; }
 
 
 
+
+  <!-- FILTER + SORT -->
+  <section class="collection-controls" aria-label="Collection filters">
+    <div class="control-group">
+      <label for="categoryFilter">Filter by</label>
+      <select id="categoryFilter">
+        <option value="all">All designs</option>
+        <option value="tops">Tops</option>
+        <option value="short-tops">Short Tops</option>
+        <option value="dresses">Dresses</option>
+        <option value="trousers">Trousers</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label for="sortSelect">Sort by</label>
+      <select id="sortSelect">
+        <option value="newest">Newest</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+        <option value="name-az">Name: A to Z</option>
+        <option value="name-za">Name: Z to A</option>
+      </select>
+    </div>
+  </section>
+
   <!-- ============================
        PRODUCTS
   ============================= -->
@@ -1380,229 +1417,81 @@ body { color: #fff; }
        RENDER PRODUCTS
     ----------------------------- */
 
+
     function renderProducts(products) {
-
-      const grid =
-        document.getElementById(
-          "productsGrid"
-        );
-
-
-      const count =
-        document.getElementById(
-          "productCount"
-        );
-
-
-      count.textContent =
-        `${products.length} ${
-          products.length === 1
-            ? "piece"
-            : "pieces"
-        }`;
-
+      const grid = document.getElementById("productsGrid");
+      const count = document.getElementById("productCount");
+      count.textContent = products.length + " " + (products.length === 1 ? "piece" : "pieces");
 
       if (!products.length) {
-
-        grid.innerHTML = `
-
-          <div class="empty-state">
-
-            <h3>
-              Something beautiful is coming.
-            </h3>
-
-            <p>
-              Our collection is being curated.
-              Check back soon.
-            </p>
-
-            <a href="index.html">
-              Back to home →
-            </a>
-
-          </div>
-
-        `;
-
+        grid.innerHTML = '<div class="empty-state"><h3>No pieces found.</h3><p>Try another search or filter.</p><a href="collection.html">View all pieces →</a></div>';
         return;
-
       }
 
+      grid.innerHTML = products.map(function(product, index) {
+        const image = product.image_url || product.image || "";
+        const name = product.name || "Untitled Piece";
+        const category = product.category || "OnlyHers Collection";
+        const price = product.price !== null && product.price !== undefined
+          ? "₹" + Number(product.price).toLocaleString("en-IN")
+          : "Price on request";
+        const inStock = product.is_available !== false;
 
-      grid.innerHTML =
-        products
-          .map(
-            (
-              product,
-              index
-            ) => {
-
-              const image =
-                product.image_url ||
-                product.image ||
-                "";
-
-
-              const name =
-                product.name ||
-                "Untitled Piece";
-
-
-              const category =
-                product.category ||
-                "OnlyHers Collection";
-
-
-              const price =
-                product.price !== null &&
-                product.price !== undefined
-                  ? `₹${Number(
-                      product.price
-                    ).toLocaleString(
-                      "en-IN"
-                    )}`
-                  : "Price on request";
-
-
-              return `
-
-                <article
-                  class="product-card"
-                  style="
-                    animation-delay:
-                    ${index * 0.08}s
-                  "
-                  onclick="
-                    openProduct(
-                      '${product.id}'
-                    )
-                  "
-                >
-
-                  <div
-                    class="
-                      product-image-wrapper
-                    "
-                  >
-
-                    ${
-                      image
-                        ? `
-
-                          <img
-                            src="${escapeHTML(
-                              image
-                            )}"
-                            alt="${escapeHTML(
-                              name
-                            )}"
-                            class="product-image"
-                            loading="lazy"
-                          >
-
-                        `
-                        : `
-
-                          <div style="
-                            height:100%;
-                            display:flex;
-                            align-items:center;
-                            justify-content:center;
-                            opacity:.5;
-                            font-family:
-                            'Playfair Display',
-                            serif;
-                          ">
-                            OnlyHers
-                          </div>
-
-                        `
-                    }
-
-
-                    <div
-                      class="
-                        product-overlay
-                      "
-                    ></div>
-
-
-                    <span
-                      class="
-                        view-product
-                      "
-                    >
-                      VIEW PIECE →
-                    </span>
-
-                  </div>
-
-
-                  <div
-                    class="
-                      product-info
-                    "
-                  >
-
-                    <div
-                      class="
-                        product-category
-                      "
-                    >
-                      ${escapeHTML(
-                        category
-                      )}
-                    </div>
-
-
-                    <h3
-                      class="
-                        product-name
-                      "
-                    >
-                      ${escapeHTML(
-                        name
-                      )}
-                    </h3>
-
-
-                    <div
-                      class="
-                        product-bottom
-                      "
-                    >
-
-                      <span
-                        class="
-                          product-price
-                        "
-                      >
-                        ${price}
-                      </span>
-
-
-                      <span
-                        class="arrow"
-                      >
-                        →
-                      </span>
-
-                    </div>
-
-                  </div>
-
-                </article>
-
-              `;
-
-            }
-          )
-          .join("");
-
+        return '<article class="product-card" style="animation-delay:' + (index * 0.08) + 's" onclick="openProduct(\'' + product.id + '\')">' +
+          '<div class="product-image-wrapper">' +
+            (image ? '<img src="' + escapeHTML(image) + '" alt="' + escapeHTML(name) + '" class="product-image" loading="lazy">' : '<div style="height:100%;display:flex;align-items:center;justify-content:center;opacity:.5;font-family:Playfair Display,serif;">OnlyHers</div>') +
+            '<div class="product-overlay"></div><span class="view-product">VIEW PIECE →</span>' +
+          '</div>' +
+          '<div class="product-info">' +
+            '<div class="product-category">' + escapeHTML(category) + '</div>' +
+            '<h3 class="product-name">' + escapeHTML(name) + '</h3>' +
+            '<div class="product-bottom"><span class="product-price">' + price + '</span><span class="arrow">→</span></div>' +
+            '<div class="stock-badge ' + (inStock ? 'in-stock' : 'out-of-stock') + '">' + (inStock ? 'In Stock' : 'Out of Stock') + '</div>' +
+          '</div>' +
+        '</article>';
+      }).join("");
     }
 
+    function matchesCategory(product, selected) {
+      if (selected === "all") return true;
+      const category = String(product.category || "").toLowerCase().trim();
+      const aliases = {
+        tops: ["top", "tops"],
+        "short-tops": ["short top", "short tops", "cropped top", "crop top", "crop tops"],
+        dresses: ["dress", "dresses", "midi dress", "maxi dress", "mini dress"],
+        trousers: ["trouser", "trousers", "pant", "pants", "bottom", "bottoms"]
+      };
+      return (aliases[selected] || []).some(function(term) {
+        return category === term || category.includes(term);
+      });
+    }
 
+    function applyCollectionControls() {
+      const search = document.getElementById("searchInput").value.toLowerCase().trim();
+      const category = document.getElementById("categoryFilter").value;
+      const sort = document.getElementById("sortSelect").value;
+
+      let filtered = allProducts.filter(function(product) {
+        const name = String(product.name || "").toLowerCase();
+        const productCategory = String(product.category || "").toLowerCase();
+        return (name.includes(search) || productCategory.includes(search)) && matchesCategory(product, category);
+      });
+
+      filtered.sort(function(a, b) {
+        if (sort === "price-low" || sort === "price-high") {
+          const ap = Number(a.price ?? Infinity);
+          const bp = Number(b.price ?? Infinity);
+          return sort === "price-low" ? ap - bp : bp - ap;
+        }
+        if (sort === "name-az" || sort === "name-za") {
+          const result = String(a.name || "").localeCompare(String(b.name || ""));
+          return sort === "name-az" ? result : -result;
+        }
+        return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+      });
+
+      renderProducts(filtered);
+    }
 
     /* ----------------------------
        OPEN PRODUCT
@@ -1621,58 +1510,9 @@ body { color: #fff; }
        SEARCH
     ----------------------------- */
 
-    document
-      .getElementById(
-        "searchInput"
-      )
-      .addEventListener(
-        "input",
-        function(event) {
-
-          const search =
-            event.target
-              .value
-              .toLowerCase()
-              .trim();
-
-
-          const filtered =
-            allProducts.filter(
-              product => {
-
-                const name =
-                  (
-                    product.name ||
-                    ""
-                  )
-                  .toLowerCase();
-
-
-                const category =
-                  (
-                    product.category ||
-                    ""
-                  )
-                  .toLowerCase();
-
-
-                return (
-                  name.includes(search) ||
-                  category.includes(search)
-                );
-
-              }
-            );
-
-
-          renderProducts(
-            filtered
-          );
-
-        }
-      );
-
-
+    document.getElementById("searchInput").addEventListener("input", applyCollectionControls);
+    document.getElementById("categoryFilter").addEventListener("change", applyCollectionControls);
+    document.getElementById("sortSelect").addEventListener("change", applyCollectionControls);
 
     /* ----------------------------
        SECURITY HELPER
