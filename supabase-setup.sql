@@ -31,10 +31,11 @@ drop policy if exists "Authenticated users can insert products" on public.produc
 drop policy if exists "Authenticated users can update products" on public.products;
 drop policy if exists "Authenticated users can delete products" on public.products;
 
--- Public storefront users can only see available products.
-create policy "Public can view available products"
+-- Public storefront users can see all products so out-of-stock designs
+-- can remain visible with an "Out of Stock" label on their product page.
+create policy "Public can view all products"
 on public.products for select
-using (is_available = true);
+using (true);
 
 -- The owner can view and manage every product.
 create policy "Onlyhers owner can view all products"
