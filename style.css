@@ -1209,3 +1209,30 @@ body { color: #fff; }
 }
 .main-image-container { background: rgba(255,255,255,.06) !important; }
 
+
+/* DESKTOP HOMEPAGE PRODUCT VIEW
+   Keep the original product frame visible instead of stretching/cropping it to the wide desktop screen. */
+@media (min-width: 769px) {
+  .home-product-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at 50% 50%, #a90a18 0%, #78040e 45%, #420108 72%, #170002 100%);
+  }
+
+  .home-product-link {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .home-product-cover {
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    transform: none !important;
+  }
+}
