@@ -1209,3 +1209,35 @@ body { color: #fff; }
 }
 .main-image-container { background: rgba(255,255,255,.06) !important; }
 
+
+
+/* DESKTOP HOMEPAGE — SHOW THE COMPLETE ORIGINAL IMAGE */
+@media (min-width: 769px) {
+  .home-page .home-product-slide {
+    width: 100% !important;
+    height: calc(100dvh - var(--onlyhers-header-height)) !important;
+    min-height: calc(100dvh - var(--onlyhers-header-height)) !important;
+    overflow: hidden !important;
+    display: block !important;
+    background:
+      radial-gradient(ellipse at center, #a90a18 0%, #78040e 38%, #420108 70%, #170002 100%) !important;
+  }
+
+  .home-page .home-product-link {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+  }
+
+  .home-page .home-product-cover {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    object-fit: contain !important;
+    object-position: center center !important;
+    transform: none !important;
+    background: transparent !important;
+  }
+}
