@@ -329,6 +329,26 @@
       margin-bottom: 30px;
     }
 
+    .stock-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: -14px 0 28px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+    .stock-status::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .stock-status.in-stock { color: #c9f7d2; }
+    .stock-status.out-of-stock { color: #ffd0d0; }
+
     .product-line {
       height: 1px;
       background: rgba(255,255,255,.2);
