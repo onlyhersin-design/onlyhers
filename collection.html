@@ -1194,6 +1194,7 @@ body { color: #fff; }
         <option value="short-tops">Short Tops</option>
         <option value="dresses">Dresses</option>
         <option value="trousers">Trousers</option>
+        <option value="coord-sets">Coord Sets</option>
       </select>
     </div>
     <div class="control-group">
@@ -1479,7 +1480,8 @@ body { color: #fff; }
         tops: ["top", "tops"],
         "short-tops": ["short top", "short tops", "cropped top", "crop top", "crop tops"],
         dresses: ["dress", "dresses", "midi dress", "maxi dress", "mini dress"],
-        trousers: ["trouser", "trousers", "pant", "pants", "bottom", "bottoms"]
+        trousers: ["trouser", "trousers", "pant", "pants", "bottom", "bottoms"],
+        "coord-sets": ["coord set", "coord sets", "co-ord set", "co-ord sets", "co ord set", "co ord sets", "coordinates"]
       };
       return (aliases[selected] || []).some(function(term) {
         return category === term || category.includes(term);
