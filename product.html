@@ -4,6 +4,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" id="metaDescription" content="Shop OnlyHers women's fashion.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" id="canonicalUrl" href="https://onlyhers.in/product.html">
+  <meta property="og:type" content="product">
+  <meta property="og:site_name" content="OnlyHers">
+  <meta property="og:title" id="ogTitle" content="OnlyHers Product">
+  <meta property="og:description" id="ogDescription" content="Shop OnlyHers women's fashion.">
+  <meta property="og:url" id="ogUrl" content="https://onlyhers.in/product.html">
+  <meta property="og:image" id="ogImage" content="https://onlyhers.in/onlyhers-logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" id="twitterTitle" content="OnlyHers Product">
+  <meta name="twitter:description" id="twitterDescription" content="Shop OnlyHers women's fashion.">
+  <meta name="twitter:image" id="twitterImage" content="https://onlyhers.in/onlyhers-logo.png">
+  <script type="application/ld+json" id="productStructuredData">{}</script>
 
   <title>Product | OnlyHers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -989,11 +1003,73 @@ body { color: #fff; }
         product.category ||
         "OnlyHers Collection";
 
+      const productUrl =
+        window.location.origin + "/product.html?id=" + encodeURIComponent(product.id);
+
+      const primaryImage =
+        productImages.length ? productImages[0] : "";
+
+      document.title = productName + " | OnlyHers";
+
+      const metaDescription = document.getElementById("metaDescription");
+      const canonicalUrl = document.getElementById("canonicalUrl");
+      const ogTitle = document.getElementById("ogTitle");
+      const ogDescription = document.getElementById("ogDescription");
+      const ogUrl = document.getElementById("ogUrl");
+      const ogImage = document.getElementById("ogImage");
+      const twitterTitle = document.getElementById("twitterTitle");
+      const twitterDescription = document.getElementById("twitterDescription");
+      const twitterImage = document.getElementById("twitterImage");
+
+      if (metaDescription) metaDescription.setAttribute("content", productDescription);
+      if (canonicalUrl) canonicalUrl.setAttribute("href", productUrl);
+      if (ogTitle) ogTitle.setAttribute("content", productName);
+      if (ogDescription) ogDescription.setAttribute("content", productDescription);
+      if (ogUrl) ogUrl.setAttribute("content", productUrl);
+      if (ogImage && primaryImage) ogImage.setAttribute("content", primaryImage);
+      if (twitterTitle) twitterTitle.setAttribute("content", productName);
+      if (twitterDescription) twitterDescription.setAttribute("content", productDescription);
+      if (twitterImage && primaryImage) twitterImage.setAttribute("content", primaryImage);
+
       const productCode = product.product_code || "";
       const productMaterial = product.material || "";
       const productWashCare = product.wash_care || "";
       const productMoreDetails = product.more_details || "";
       const sizeChartUrl = product.size_chart_url || "";
+
+      const productStructuredData = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": productName,
+        "description": productDescription,
+        "image": productImages.length ? productImages : [product.image_url].filter(Boolean),
+        "sku": productCode || String(product.id),
+        "brand": {
+          "@type": "Brand",
+          "name": "OnlyHers"
+        },
+        "category": productCategory,
+        "offers": {
+          "@type": "Offer",
+          "url": productUrl,
+          "priceCurrency": "INR",
+          "price": Number(productPrice).toFixed(2),
+          "availability": product.is_available !== false
+            ? "https://schema.org/InStock"
+            : "https://schema.org/OutOfStock",
+          "itemCondition": "https://schema.org/NewCondition",
+          "seller": {
+            "@type": "Organization",
+            "name": "OnlyHers",
+            "url": "https://onlyhers.in/"
+          }
+        }
+      };
+
+      const structuredDataElement = document.getElementById("productStructuredData");
+      if (structuredDataElement) {
+        structuredDataElement.textContent = JSON.stringify(productStructuredData);
+      }
 
 
       /* =========================
