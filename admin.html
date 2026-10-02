@@ -94,9 +94,12 @@
       margin-top: 0;
     }
 
-    .hidden {
-      display: none !important;
-    }
+    .hidden { display:none !important; }
+
+    .admin-switcher{display:flex;gap:0;margin:0 0 25px;background:#f1ebe5;border:1px solid #ddd;overflow:hidden}
+    .admin-switch{flex:1;border:0;background:transparent;color:#5d5150;padding:15px 18px;font:600 12px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+    .admin-switch.active{background:var(--red);color:#fff}
+
 
     label {
       display: block;
@@ -740,14 +743,57 @@ body { color: #fff; }
         Loading...
       </div>
 
-    </section>
 
+    </section>
+    </div>
+
+    <div id="fabricsManager" class="hidden">
+      <section class="panel">
+        <h1>Add a new fabric</h1>
+        <div class="row">
+          <div>
+            <label>Fabric name</label>
+            <input id="fabricName" placeholder="Example: Crepe Lycra">
+          </div>
+          <div>
+            <label>Price per metre (₹)</label>
+            <input id="fabricPrice" type="number" min="0" placeholder="650">
+          </div>
+          <div>
+            <label>Fabric code</label>
+            <input id="fabricCode" placeholder="Example: FAB-001">
+          </div>
+          <div>
+            <label>Material / composition</label>
+            <input id="fabricMaterial" placeholder="Example: Crepe Lycra, 4-way stretch">
+          </div>
+          <div>
+            <label>Width</label>
+            <input id="fabricWidth" placeholder="Example: 44 inches">
+          </div>
+        </div>
+
+        <label>Description</label>
+        <textarea id="fabricDescription" placeholder="Tell customers about the fabric, feel, stretch, drape, and suitable uses..."></textarea>
+
+        <label>Fabric photo</label>
+        <input id="fabricImages" type="file" accept="image/*" multiple>
+        <p class="help-text">The first photo becomes the main fabric image. You can add multiple photos.</p>
+        <div id="fabricImagePreviews" class="image-preview-grid"></div>
+
+        <button id="uploadFabric" class="btn">Upload fabric</button>
+        <div id="fabricUploadStatus" class="status"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Your fabrics</h2>
+        <div id="fabricList" class="products">Loading...</div>
+      </section>
+    </div>
 
   </div>
 
 </div>
-
-
 
 <!-- EDIT MODAL -->
 
@@ -2201,6 +2247,112 @@ async function deleteProduct(id) {
 
 }
 
+
+
+
+/* =========================
+   CATALOG SWITCHER + FABRICS
+========================= */
+
+let selectedFabricFiles = [];
+
+function renderFabricPreviews() {
+  const container = $('fabricImagePreviews');
+  if (!container) return;
+  container.innerHTML = '';
+  selectedFabricFiles.forEach((file,index) => {
+    const item=document.createElement('div');
+    item.className='preview-item' + (index===0?' cover':'');
+    item.innerHTML='<img src="'+URL.createObjectURL(file)+'"><div class="preview-actions"><button type="button" class="photo-action remove">Remove</button></div>'+(index===0?'<div class="cover-label">COVER PHOTO</div>':'');
+    item.querySelector('.remove').onclick=()=>{selectedFabricFiles.splice(index,1);renderFabricPreviews();};
+    container.appendChild(item);
+  });
+}
+
+$('fabricImages')?.addEventListener('change', event => {
+  selectedFabricFiles.push(...Array.from(event.target.files));
+  event.target.value='';
+  renderFabricPreviews();
+});
+
+async function uploadFabricFiles(files) {
+  const urls=[];
+  for (const file of files) {
+    const extension=file.name.split('.').pop();
+    const path=`fabrics/${Date.now()}-${crypto.randomUUID()}.${extension}`;
+    const {error}=await supabase.storage.from('product-images').upload(path,file,{contentType:file.type});
+    if(error) throw error;
+    const {data}=supabase.storage.from('product-images').getPublicUrl(path);
+    urls.push(data.publicUrl);
+  }
+  return urls;
+}
+
+async function loadFabricsAdmin() {
+  const list=$('fabricList');
+  if(!list) return;
+  list.textContent='Loading fabrics...';
+  const {data,error}=await supabase.from('fabrics').select('*').order('created_at',{ascending:false});
+  if(error){list.textContent=error.message;return;}
+  if(!data?.length){list.innerHTML='<p>No fabrics yet.</p>';return;}
+  list.innerHTML=data.map(f=>{
+    const image=f.image_url||'';
+    return `<div class="product">
+      <img src="${escapeHTML(image)}" alt="">
+      <div>
+        <div class="product-name">${escapeHTML(f.name||'')}</div>
+        <div class="product-meta">${f.fabric_code?'Code: '+escapeHTML(f.fabric_code)+' · ':''}${f.price!=null?'₹'+Number(f.price).toLocaleString('en-IN')+' / metre':'Price on request'}${f.material?' · '+escapeHTML(f.material):''}</div>
+        <div class="stock-admin ${f.is_available!==false?'in-stock':'out-of-stock'}">${f.is_available!==false?'● In Stock':'● Out of Stock'}</div>
+      </div>
+      <div class="product-actions"><button type="button" class="small-btn delete" data-fabric-delete="${f.id}">Delete</button></div>
+    </div>`;
+  }).join('');
+  list.onclick=async event=>{
+    const btn=event.target.closest('[data-fabric-delete]');
+    if(!btn) return;
+    if(!confirm('Are you sure you want to delete this fabric?')) return;
+    const {error}=await supabase.from('fabrics').delete().eq('id',btn.dataset.fabricDelete);
+    if(error){alert(error.message);return;}
+    loadFabricsAdmin();
+  };
+}
+
+document.querySelectorAll('[data-admin-view]').forEach(button=>{
+  button.addEventListener('click',()=>{
+    const view=button.dataset.adminView;
+    document.querySelectorAll('[data-admin-view]').forEach(b=>b.classList.toggle('active',b===button));
+    $('designsManager').classList.toggle('hidden',view!=='designs');
+    $('fabricsManager').classList.toggle('hidden',view!=='fabrics');
+    if(view==='fabrics') loadFabricsAdmin();
+  });
+});
+
+$('uploadFabric')?.addEventListener('click',async()=>{
+  const name=$('fabricName').value.trim();
+  if(!name){setStatus('fabricUploadStatus','Please enter a fabric name.','err');return;}
+  if(!selectedFabricFiles.length){setStatus('fabricUploadStatus','Please select at least one fabric photo.','err');return;}
+  try{
+    setStatus('fabricUploadStatus','Uploading fabric photos...');
+    const imageUrls=await uploadFabricFiles(selectedFabricFiles);
+    const price=$('fabricPrice').value?Number($('fabricPrice').value):null;
+    const {error}=await supabase.from('fabrics').insert({
+      name,
+      price,
+      fabric_code:$('fabricCode').value.trim()||null,
+      material:$('fabricMaterial').value.trim()||null,
+      width:$('fabricWidth').value.trim()||null,
+      description:$('fabricDescription').value.trim()||null,
+      image_url:imageUrls[0],
+      image_urls:imageUrls,
+      is_available:true
+    });
+    if(error) throw error;
+    setStatus('fabricUploadStatus','Fabric uploaded successfully! 🎉','ok');
+    ['fabricName','fabricPrice','fabricCode','fabricMaterial','fabricWidth','fabricDescription'].forEach(id=>$(id).value='');
+    selectedFabricFiles=[];$('fabricImagePreviews').innerHTML='';$('fabricImages').value='';
+    loadFabricsAdmin();
+  }catch(error){console.error(error);setStatus('fabricUploadStatus',error.message,'err');}
+});
 
 
 /* =========================
