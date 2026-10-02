@@ -5,8 +5,7 @@
 <meta name="description" content="Shop OnlyHers fabrics — selected fabrics used in our clothing and available for your own creations.">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://onlyhers.in/fabrics.html">
-<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="512x512" href="/favicon.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="app.js"></script>
@@ -29,7 +28,37 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}html,body{min-height:100%;font-family:"DM Sans",sans-serif;color:#fff;background:radial-gradient(ellipse at 50% 50%,#a90a18 0%,#78040e 38%,#420108 68%,#170002 100%);background-attachment:fixed}body{padding-top:75px}.navbar{height:75px;position:fixed;top:0;left:0;width:100%;display:flex;align-items:center;justify-content:space-between;padding:0 8%;z-index:10;background:rgba(25,0,4,.30);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.16)}.brand{font-family:"Playfair Display",serif;font-size:30px;font-weight:600;color:#fff;text-decoration:none}.nav-links{display:flex;gap:24px}.nav-links a{color:#fff;text-decoration:none;font-size:13px}.hero{padding:90px 8% 50px}.eyebrow{font-size:10px;letter-spacing:4px;opacity:.7;margin-bottom:18px}.hero h1{font-family:"Playfair Display",serif;font-size:clamp(55px,8vw,110px);font-weight:500;line-height:.9}.hero p{max-width:560px;margin-top:24px;line-height:1.8;opacity:.78}.fabric-area{padding:20px 8% 100px}.fabric-back{display:inline-block;color:#fff;text-decoration:none;font-size:11px;letter-spacing:2px;margin-bottom:35px;opacity:.8}
 @media(max-width:700px){body{padding-top:68px}.navbar{height:68px;padding:0 20px}.brand{font-size:25px}.nav-links{gap:14px}.nav-links a{font-size:11px}.hero{padding:70px 6% 40px}.fabric-area{padding:10px 6% 70px}}
-</style></head>
+</style>
+<!-- OnlyHers site icon -->
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="512x512" href="/favicon.png">
+<meta name="theme-color" content="#78040e">
+
+<style>
+/* ONLYHERS REFERENCE RED-BLACK GRADIENT */
+html, body {
+  min-height: 100%;
+  background: radial-gradient(ellipse at 50% 50%, #a90a18 0%, #78040e 38%, #420108 68%, #170002 100%) !important;
+  background-color: #170002 !important;
+  background-attachment: fixed !important;
+}
+body { color: #fff; }
+.home-page, .auth-page, .about-section, .brand-story, .home-product-feed,
+.products-page, .collection-page, .product-page, .account-page, main, footer {
+  background: transparent !important;
+}
+.navbar, header {
+  background: rgba(25, 0, 4, .30) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
+  backdrop-filter: blur(18px) saturate(125%);
+}
+.hero {
+  background: radial-gradient(ellipse at 50% 50%, rgba(169,10,24,.90) 0%, rgba(120,4,14,.78) 38%, rgba(66,1,8,.70) 68%, rgba(23,0,2,.88) 100%) !important;
+}
+.main-image-container { background: rgba(255,255,255,.06) !important; }
+
+</style>
+</head>
 <body class="fabrics-page">
 <header class="navbar"><a href="index.html" class="brand">Onlyhers</a><nav class="nav-links"><a href="collection.html">Collection</a></nav></header>
 <section class="hero"><div class="eyebrow">ONLYHERS FABRICS</div><h1>Fabrics.</h1><p>Explore the fabrics behind our designs — available to shop for your own creations.</p></section>
