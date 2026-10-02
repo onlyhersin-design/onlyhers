@@ -69,3 +69,40 @@ with check (bucket_id = 'product-images');
 create policy "Authenticated users can delete product images"
 on storage.objects for delete to authenticated
 using (bucket_id = 'product-images');
+
+
+-- Fabrics catalog
+create table if not exists public.fabrics (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  description text,
+  price numeric,
+  fabric_code text,
+  material text,
+  width text,
+  image_url text not null,
+  image_urls jsonb default '[]'::jsonb,
+  is_available boolean default true,
+  created_at timestamptz default now()
+);
+
+alter table public.fabrics
+  add column if not exists description text,
+  add column if not exists price numeric,
+  add column if not exists fabric_code text,
+  add column if not exists material text,
+  add column if not exists width text,
+  add column if not exists image_url text,
+  add column if not exists image_urls jsonb default '[]'::jsonb,
+  add column if not exists is_available boolean default true,
+  add column if not exists created_at timestamptz default now();
+
+alter table public.fabrics enable row level security;
+drop policy if exists "Public can view all fabrics" on public.fabrics;
+create policy "Public can view all fabrics" on public.fabrics for select using (true);
+drop policy if exists "Onlyhers owner can insert fabrics" on public.fabrics;
+create policy "Onlyhers owner can insert fabrics" on public.fabrics for insert to authenticated with check ((auth.jwt() ->> 'email') = 'onlyhers.in@gmail.com');
+drop policy if exists "Onlyhers owner can update fabrics" on public.fabrics;
+create policy "Onlyhers owner can update fabrics" on public.fabrics for update to authenticated using ((auth.jwt() ->> 'email') = 'onlyhers.in@gmail.com') with check ((auth.jwt() ->> 'email') = 'onlyhers.in@gmail.com');
+drop policy if exists "Onlyhers owner can delete fabrics" on public.fabrics;
+create policy "Onlyhers owner can delete fabrics" on public.fabrics for delete to authenticated using ((auth.jwt() ->> 'email') = 'onlyhers.in@gmail.com');
