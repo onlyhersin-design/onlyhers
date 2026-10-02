@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Fabrics | OnlyHers</title>
+<meta name="description" content="Shop OnlyHers fabrics — selected fabrics used in our clothing and available for your own creations.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://onlyhers.in/fabrics.html">
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="512x512" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="app.js"></script>
+<style>
+.fabrics-page .fabric-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:28px}
+.fabrics-page .fabric-card{cursor:pointer}
+.fabrics-page .fabric-image{aspect-ratio:3/4;overflow:hidden;background:rgba(255,255,255,.08)}
+.fabrics-page .fabric-image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.fabrics-page .fabric-card:hover img{transform:scale(1.05)}
+.fabrics-page .fabric-info{padding:16px 2px}
+.fabrics-page .fabric-code{font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:.6;margin-bottom:7px}
+.fabrics-page .fabric-name{font-family:"Playfair Display",serif;font-size:21px;margin-bottom:8px}
+.fabrics-page .fabric-price{font-size:14px;font-weight:600}
+.fabrics-page .fabric-stock{font-size:10px;letter-spacing:1.3px;text-transform:uppercase;margin-top:8px}
+.fabrics-page .in-stock{color:#c9f7d2}.fabrics-page .out-stock{color:#ffd0d0}
+.fabric-loading{text-align:center;padding:90px 20px;opacity:.7}
+@media(max-width:700px){.fabrics-page .fabric-grid{grid-template-columns:repeat(2,1fr);gap:15px}.fabrics-page .fabric-name{font-size:17px}}
+@media(max-width:400px){.fabrics-page .fabric-grid{grid-template-columns:1fr}}
+</style>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}html,body{min-height:100%;font-family:"DM Sans",sans-serif;color:#fff;background:radial-gradient(ellipse at 50% 50%,#a90a18 0%,#78040e 38%,#420108 68%,#170002 100%);background-attachment:fixed}body{padding-top:75px}.navbar{height:75px;position:fixed;top:0;left:0;width:100%;display:flex;align-items:center;justify-content:space-between;padding:0 8%;z-index:10;background:rgba(25,0,4,.30);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.16)}.brand{font-family:"Playfair Display",serif;font-size:30px;font-weight:600;color:#fff;text-decoration:none}.nav-links{display:flex;gap:24px}.nav-links a{color:#fff;text-decoration:none;font-size:13px}.hero{padding:90px 8% 50px}.eyebrow{font-size:10px;letter-spacing:4px;opacity:.7;margin-bottom:18px}.hero h1{font-family:"Playfair Display",serif;font-size:clamp(55px,8vw,110px);font-weight:500;line-height:.9}.hero p{max-width:560px;margin-top:24px;line-height:1.8;opacity:.78}.fabric-area{padding:20px 8% 100px}.fabric-back{display:inline-block;color:#fff;text-decoration:none;font-size:11px;letter-spacing:2px;margin-bottom:35px;opacity:.8}
+@media(max-width:700px){body{padding-top:68px}.navbar{height:68px;padding:0 20px}.brand{font-size:25px}.nav-links{gap:14px}.nav-links a{font-size:11px}.hero{padding:70px 6% 40px}.fabric-area{padding:10px 6% 70px}}
+</style></head>
+<body class="fabrics-page">
+<header class="navbar"><a href="index.html" class="brand">Onlyhers</a><nav class="nav-links"><a href="collection.html">Collection</a></nav></header>
+<section class="hero"><div class="eyebrow">ONLYHERS FABRICS</div><h1>Fabrics.</h1><p>Explore the fabrics behind our designs — available to shop for your own creations.</p></section>
+<main class="fabric-area"><a href="collection.html" class="fabric-back">← COLLECTION</a><div id="fabricGrid" class="fabric-grid"><div class="fabric-loading">Loading fabrics...</div></div></main>
+<footer style="background:#6f0912;text-align:center;padding:60px 20px">OnlyHers · Fabrics for your ideas.</footer>
+<script>
+async function loadFabrics(){
+ const grid=document.getElementById("fabricGrid");
+ const {data,error}=await supabaseClient.from("fabrics").select("*").order("created_at",{ascending:false});
+ if(error){grid.innerHTML='<div class="fabric-loading">Couldn\'t load fabrics right now.</div>';console.error(error);return;}
+ if(!data?.length){grid.innerHTML='<div class="fabric-loading">Our fabric collection is coming soon.</div>';return;}
+ grid.innerHTML=data.map(f=>{
+   const img=f.image_url||"";
+   const price=f.price!=null?"₹"+Number(f.price).toLocaleString("en-IN")+" / metre":"Price on request";
+   return '<article class="fabric-card" onclick="openFabric(\''+f.id+'\')"><div class="fabric-image">'+(img?'<img src="'+escapeHTML(img)+'" alt="'+escapeHTML(f.name||"OnlyHers Fabric")+'" loading="lazy">':'')+'</div><div class="fabric-info"><div class="fabric-code">'+escapeHTML(f.fabric_code||"ONLYHERS FABRIC")+'</div><h2 class="fabric-name">'+escapeHTML(f.name||"Untitled Fabric")+'</h2><div class="fabric-price">'+price+'</div><div class="fabric-stock '+(f.is_available!==false?"in-stock":"out-stock")+'">'+(f.is_available!==false?"In Stock":"Out of Stock")+'</div></div></article>';
+ }).join("");
+}
+function openFabric(id){window.location.href="fabric.html?id="+encodeURIComponent(id)}
+function escapeHTML(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
+loadFabrics();
+</script></body></html>
