@@ -90,6 +90,7 @@ alter table public.fabrics
   add column if not exists description text,
   add column if not exists price numeric,
   add column if not exists fabric_code text,
+  add column if not exists pattern text,
   add column if not exists material text,
   add column if not exists width text,
   add column if not exists image_url text,
