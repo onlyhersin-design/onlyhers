@@ -793,6 +793,10 @@ body { color: #fff; }
             <input id="fabricPrice" type="number" min="0" placeholder="650">
           </div>
           <div>
+            <label>Available meters</label>
+            <input id="fabricAvailableMeters" type="number" min="0" step="1" placeholder="10">
+          </div>
+          <div>
             <label>Fabric code</label>
             <input id="fabricCode" placeholder="Example: FAB-001"></div>
           <div>
@@ -2354,6 +2358,7 @@ async function loadFabricsAdmin() {
         <div class="product-name">${escapeHTML(f.name||'')}</div>
         <div class="product-meta">${f.fabric_code?'Code: '+escapeHTML(f.fabric_code)+' · ':''}${f.pattern?'Pattern: '+escapeHTML(f.pattern)+' · ':''}${f.price!=null?'₹'+Number(f.price).toLocaleString('en-IN')+' / metre':'Price on request'}${f.material?' · '+escapeHTML(f.material):''}</div>
         <div class="stock-admin ${f.is_available!==false?'in-stock':'out-of-stock'}">${f.is_available!==false?'● In Stock':'● Out of Stock'}</div>
+        <div class="product-meta">${Number.isFinite(Number(f.available_meters)) ? 'Available: '+Number(f.available_meters)+' metre'+(Number(f.available_meters)===1?'':'s') : 'Available meters not set'}</div>
       </div>
       <div class="product-actions"><button type="button" class="small-btn delete" data-fabric-delete="${f.id}">Delete</button></div>
     </div>`;
@@ -2389,6 +2394,7 @@ $('uploadFabric')?.addEventListener('click',async()=>{
     const {error}=await supabase.from('fabrics').insert({
       name,
       price,
+      available_meters:Math.max(0, Math.floor(Number($('fabricAvailableMeters').value)||0)),
       fabric_code:$('fabricCode').value.trim()||null,
       pattern:$('fabricPattern').value||null,
       material:$('fabricMaterial').value.trim()||null,
@@ -2400,7 +2406,7 @@ $('uploadFabric')?.addEventListener('click',async()=>{
     });
     if(error) throw error;
     setStatus('fabricUploadStatus','Fabric uploaded successfully! 🎉','ok');
-    ['fabricName','fabricPrice','fabricCode','fabricPattern','fabricMaterial','fabricWidth','fabricDescription'].forEach(id=>$(id).value='');
+    ['fabricName','fabricPrice','fabricAvailableMeters','fabricCode','fabricPattern','fabricMaterial','fabricWidth','fabricDescription'].forEach(id=>$(id).value='');
     selectedFabricFiles=[];$('fabricImagePreviews').innerHTML='';$('fabricImages').value='';
     loadFabricsAdmin();
   }catch(error){console.error(error);setStatus('fabricUploadStatus',error.message,'err');}
