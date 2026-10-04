@@ -790,7 +790,25 @@ body { color: #fff; }
           </div>
           <div>
             <label>Fabric code</label>
-            <input id="fabricCode" placeholder="Example: FAB-001">
+            <input id="fabricCode" placeholder="Example: FAB-001"></div>
+          <div>
+            <label>Pattern</label>
+            <select id="fabricPattern">
+              <option value="">Select pattern</option>
+              <option value="Plain">Plain</option>
+              <option value="Floral">Floral</option>
+              <option value="Printed">Printed</option>
+              <option value="Striped">Striped</option>
+              <option value="Checked">Checked</option>
+              <option value="Polka Dot">Polka Dot</option>
+              <option value="Geometric">Geometric</option>
+              <option value="Abstract">Abstract</option>
+              <option value="Embroidered">Embroidered</option>
+              <option value="Textured">Textured</option>
+              <option value="Tie-Dye">Tie-Dye</option>
+              <option value="Animal Print">Animal Print</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
           <div>
             <label>Material / composition</label>
@@ -2330,7 +2348,7 @@ async function loadFabricsAdmin() {
       <img src="${escapeHTML(image)}" alt="">
       <div>
         <div class="product-name">${escapeHTML(f.name||'')}</div>
-        <div class="product-meta">${f.fabric_code?'Code: '+escapeHTML(f.fabric_code)+' · ':''}${f.price!=null?'₹'+Number(f.price).toLocaleString('en-IN')+' / metre':'Price on request'}${f.material?' · '+escapeHTML(f.material):''}</div>
+        <div class="product-meta">${f.fabric_code?'Code: '+escapeHTML(f.fabric_code)+' · ':''}${f.pattern?'Pattern: '+escapeHTML(f.pattern)+' · ':''}${f.price!=null?'₹'+Number(f.price).toLocaleString('en-IN')+' / metre':'Price on request'}${f.material?' · '+escapeHTML(f.material):''}</div>
         <div class="stock-admin ${f.is_available!==false?'in-stock':'out-of-stock'}">${f.is_available!==false?'● In Stock':'● Out of Stock'}</div>
       </div>
       <div class="product-actions"><button type="button" class="small-btn delete" data-fabric-delete="${f.id}">Delete</button></div>
@@ -2368,6 +2386,7 @@ $('uploadFabric')?.addEventListener('click',async()=>{
       name,
       price,
       fabric_code:$('fabricCode').value.trim()||null,
+      pattern:$('fabricPattern').value||null,
       material:$('fabricMaterial').value.trim()||null,
       width:$('fabricWidth').value.trim()||null,
       description:$('fabricDescription').value.trim()||null,
@@ -2377,7 +2396,7 @@ $('uploadFabric')?.addEventListener('click',async()=>{
     });
     if(error) throw error;
     setStatus('fabricUploadStatus','Fabric uploaded successfully! 🎉','ok');
-    ['fabricName','fabricPrice','fabricCode','fabricMaterial','fabricWidth','fabricDescription'].forEach(id=>$(id).value='');
+    ['fabricName','fabricPrice','fabricCode','fabricPattern','fabricMaterial','fabricWidth','fabricDescription'].forEach(id=>$(id).value='');
     selectedFabricFiles=[];$('fabricImagePreviews').innerHTML='';$('fabricImages').value='';
     loadFabricsAdmin();
   }catch(error){console.error(error);setStatus('fabricUploadStatus',error.message,'err');}
