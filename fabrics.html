@@ -10,6 +10,9 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="app.js"></script>
 <style>
+.fabrics-page .fabric-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);backdrop-filter:blur(10px)}
+.fabrics-page .fabric-controls label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;opacity:.7;margin-left:8px}
+.fabrics-page .fabric-controls select{background:rgba(20,0,3,.75);color:#fff;border:1px solid rgba(255,255,255,.2);padding:10px 34px 10px 12px;font:inherit;font-size:12px;min-width:150px}
 .fabrics-page .fabric-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:28px}
 .fabrics-page .fabric-card{cursor:pointer}
 .fabrics-page .fabric-image{aspect-ratio:3/4;overflow:hidden;background:rgba(255,255,255,.08)}
@@ -71,20 +74,55 @@ body { color: #fff; }
 <body class="fabrics-page">
 <header class="navbar"><a href="index.html" class="brand">Onlyhers</a><nav class="nav-links"><a href="collection.html">Collection</a></nav></header>
 <section class="hero"><div class="eyebrow">ONLYHERS FABRICS</div><h1>Fabrics.</h1><p>Explore the fabrics behind our designs — available to shop for your own creations.</p></section>
-<main class="fabric-area"><a href="collection.html" class="fabric-back">← COLLECTION</a><div id="fabricGrid" class="fabric-grid"><div class="fabric-loading">Loading fabrics...</div></div></main>
+<main class="fabric-area"><a href="collection.html" class="fabric-back">← COLLECTION</a>
+<div class="fabric-controls">
+  <label for="patternFilter">Pattern</label>
+  <select id="patternFilter">
+    <option value="">All patterns</option>
+  </select>
+  <label for="fabricSort">Sort</label>
+  <select id="fabricSort">
+    <option value="newest">Newest</option>
+    <option value="price-low">Price: Low to High</option>
+    <option value="price-high">Price: High to Low</option>
+    <option value="name">Name: A to Z</option>
+  </select>
+</div>
+<div id="fabricGrid" class="fabric-grid"><div class="fabric-loading">Loading fabrics...</div></div></main>
 <footer style="background:#6f0912;text-align:center;padding:60px 20px">OnlyHers · Fabrics for your ideas.</footer>
 <script>
+let allFabrics=[];
 async function loadFabrics(){
  const grid=document.getElementById("fabricGrid");
  const {data,error}=await supabaseClient.from("fabrics").select("*").order("created_at",{ascending:false});
- if(error){grid.innerHTML='<div class="fabric-loading">Couldn\'t load fabrics right now.</div>';console.error(error);return;}
- if(!data?.length){grid.innerHTML='<div class="fabric-loading">Our fabric collection is coming soon.</div>';return;}
- grid.innerHTML=data.map(f=>{
+ if(error){grid.innerHTML='<div class="fabric-loading">Couldn\\'t load fabrics right now.</div>';console.error(error);return;}
+ allFabrics=data||[];
+ buildPatternOptions();
+ renderFabrics();
+}
+function buildPatternOptions(){
+ const select=document.getElementById("patternFilter");
+ const patterns=[...new Set(allFabrics.map(f=>(f.pattern||"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+ select.innerHTML='<option value="">All patterns</option>'+patterns.map(p=>'<option value="'+escapeHTML(p)+'">'+escapeHTML(p)+'</option>').join("");
+}
+function renderFabrics(){
+ const grid=document.getElementById("fabricGrid");
+ let items=[...allFabrics];
+ const pattern=document.getElementById("patternFilter").value;
+ const sort=document.getElementById("fabricSort").value;
+ if(pattern) items=items.filter(f=>(f.pattern||"")===pattern);
+ if(sort==="price-low") items.sort((a,b)=>(Number(a.price)||0)-(Number(b.price)||0));
+ if(sort==="price-high") items.sort((a,b)=>(Number(b.price)||0)-(Number(a.price)||0));
+ if(sort==="name") items.sort((a,b)=>(a.name||"").localeCompare(b.name||""));
+ if(!items.length){grid.innerHTML='<div class="fabric-loading">No fabrics found for this pattern.</div>';return;}
+ grid.innerHTML=items.map(f=>{
    const img=f.image_url||"";
    const price=f.price!=null?"₹"+Number(f.price).toLocaleString("en-IN")+" / metre":"Price on request";
-   return '<article class="fabric-card" onclick="openFabric(\''+f.id+'\')"><div class="fabric-image">'+(img?'<img src="'+escapeHTML(img)+'" alt="'+escapeHTML(f.name||"OnlyHers Fabric")+'" loading="lazy">':'')+'</div><div class="fabric-info"><div class="fabric-code">'+escapeHTML(f.fabric_code||"ONLYHERS FABRIC")+'</div><h2 class="fabric-name">'+escapeHTML(f.name||"Untitled Fabric")+'</h2><div class="fabric-price">'+price+'</div><div class="fabric-stock '+(f.is_available!==false?"in-stock":"out-stock")+'">'+(f.is_available!==false?"In Stock":"Out of Stock")+'</div></div></article>';
+   return '<article class="fabric-card" onclick="openFabric(\\''+f.id+'\\')"><div class="fabric-image">'+(img?'<img src="'+escapeHTML(img)+'" alt="'+escapeHTML(f.name||"OnlyHers Fabric")+'" loading="lazy">':'')+'</div><div class="fabric-info"><div class="fabric-code">'+escapeHTML(f.fabric_code||"ONLYHERS FABRIC")+'</div><h2 class="fabric-name">'+escapeHTML(f.name||"Untitled Fabric")+'</h2>'+(f.pattern?'<div class="fabric-code">'+escapeHTML(f.pattern)+'</div>':'')+'<div class="fabric-price">'+price+'</div><div class="fabric-stock '+(f.is_available!==false?"in-stock":"out-stock")+'">'+(f.is_available!==false?"In Stock":"Out of Stock")+'</div></div></article>';
  }).join("");
 }
+document.getElementById("patternFilter").addEventListener("change",renderFabrics);
+document.getElementById("fabricSort").addEventListener("change",renderFabrics);
 function openFabric(id){window.location.href="fabric.html?id="+encodeURIComponent(id)}
 function escapeHTML(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
 loadFabrics();
