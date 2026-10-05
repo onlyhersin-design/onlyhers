@@ -101,7 +101,7 @@ alter table public.fabrics
 
 alter table public.fabrics enable row level security;
 drop policy if exists "Public can view all fabrics" on public.fabrics;
-create policy "Public can view all fabrics" on public.fabrics for select using (true);
+grant select on table public.fabrics to anon, authenticated;\ngrant insert, update, delete on table public.fabrics to authenticated;\n\ncreate policy "Public can view all fabrics" on public.fabrics for select using (true);
 
 drop policy if exists "Onlyhers owner can insert fabrics" on public.fabrics;
 drop policy if exists "Onlyhers admin can insert fabrics" on public.fabrics;
