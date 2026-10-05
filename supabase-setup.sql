@@ -102,9 +102,22 @@ alter table public.fabrics
 alter table public.fabrics enable row level security;
 drop policy if exists "Public can view all fabrics" on public.fabrics;
 create policy "Public can view all fabrics" on public.fabrics for select using (true);
+
 drop policy if exists "Onlyhers owner can insert fabrics" on public.fabrics;
-create policy "Onlyhers owner can insert fabrics" on public.fabrics for insert to authenticated with check ((auth.jwt() ->> 'email') = 'onlyhers.in@gmail.com');
+drop policy if exists "Onlyhers admin can insert fabrics" on public.fabrics;
+create policy "Onlyhers admin can insert fabrics"
+on public.fabrics for insert to authenticated
+with check (auth.uid() = '3f16edba-d736-40dd-a6b1-8831a81a1c63'::uuid);
+
 drop policy if exists "Onlyhers owner can update fabrics" on public.fabrics;
-create policy "Onlyhers owner can update fabrics" on public.fabrics for update to authenticated using ((auth.jwt() ->> 'email') = 'onlyhers.in@gmail.com') with check ((auth.jwt() ->> 'email') = 'onlyhers.in@gmail.com');
+drop policy if exists "Onlyhers admin can update fabrics" on public.fabrics;
+create policy "Onlyhers admin can update fabrics"
+on public.fabrics for update to authenticated
+using (auth.uid() = '3f16edba-d736-40dd-a6b1-8831a81a1c63'::uuid)
+with check (auth.uid() = '3f16edba-d736-40dd-a6b1-8831a81a1c63'::uuid);
+
 drop policy if exists "Onlyhers owner can delete fabrics" on public.fabrics;
-create policy "Onlyhers owner can delete fabrics" on public.fabrics for delete to authenticated using ((auth.jwt() ->> 'email') = 'onlyhers.in@gmail.com');
+drop policy if exists "Onlyhers admin can delete fabrics" on public.fabrics;
+create policy "Onlyhers admin can delete fabrics"
+on public.fabrics for delete to authenticated
+using (auth.uid() = '3f16edba-d736-40dd-a6b1-8831a81a1c63'::uuid);
