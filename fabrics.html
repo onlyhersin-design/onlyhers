@@ -5,81 +5,26 @@
 <meta name="description" content="Shop OnlyHers fabrics — selected fabrics used in our clothing and available for your own creations.">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://onlyhers.in/fabrics.html">
-
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-.fabrics-page .fabric-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);backdrop-filter:blur(10px)}
-.fabrics-page .fabric-controls label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;opacity:.7;margin-left:8px}
-.fabrics-page .fabric-controls select{background:rgba(20,0,3,.75);color:#fff;border:1px solid rgba(255,255,255,.2);padding:10px 34px 10px 12px;font:inherit;font-size:12px;min-width:150px}
-.fabrics-page .fabric-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:28px}
-.fabrics-page .fabric-card{cursor:pointer}
-.fabrics-page .fabric-image{aspect-ratio:3/4;overflow:hidden;background:rgba(255,255,255,.08)}
-.fabrics-page .fabric-image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
-.fabrics-page .fabric-card:hover img{transform:scale(1.05)}
-.fabrics-page .fabric-info{padding:16px 2px}
-.fabrics-page .fabric-code{font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:.6;margin-bottom:7px}
-.fabrics-page .fabric-name{font-family:"Playfair Display",serif;font-size:21px;margin-bottom:8px}
-.fabrics-page .fabric-price{font-size:14px;font-weight:600}
-.fabrics-page .fabric-meters{font-size:11px;letter-spacing:.8px;margin-top:7px;opacity:.72}
-.fabrics-page .fabric-stock{font-size:10px;letter-spacing:1.3px;text-transform:uppercase;margin-top:8px}
-.fabrics-page .in-stock{color:#c9f7d2}.fabrics-page .out-stock{color:#ffd0d0}
-.fabric-loading{text-align:center;padding:90px 20px;opacity:.7}
-@media(max-width:700px){.fabrics-page .fabric-grid{grid-template-columns:repeat(2,1fr);gap:15px}.fabrics-page .fabric-name{font-size:17px}}
-@media(max-width:400px){.fabrics-page .fabric-grid{grid-template-columns:1fr}}
-</style>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}html,body{min-height:100%;font-family:"DM Sans",sans-serif;color:#fff;background:radial-gradient(ellipse at 50% 50%,#a90a18 0%,#78040e 38%,#420108 68%,#170002 100%);background-attachment:fixed}body{padding-top:75px}.navbar{height:75px;position:fixed;top:0;left:0;width:100%;display:flex;align-items:center;justify-content:space-between;padding:0 8%;z-index:10;background:rgba(25,0,4,.30);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.16)}.brand{font-family:"Playfair Display",serif;font-size:30px;font-weight:600;color:#fff;text-decoration:none}.nav-links{display:flex;gap:24px}.nav-links a{color:#fff;text-decoration:none;font-size:13px}.hero{padding:90px 8% 50px}.eyebrow{font-size:10px;letter-spacing:4px;opacity:.7;margin-bottom:18px}.hero h1{font-family:"Playfair Display",serif;font-size:clamp(55px,8vw,110px);font-weight:500;line-height:.9}.hero p{max-width:560px;margin-top:24px;line-height:1.8;opacity:.78}.fabric-area{padding:20px 8% 100px}.fabric-back{display:inline-block;color:#fff;text-decoration:none;font-size:11px;letter-spacing:2px;margin-bottom:35px;opacity:.8}
-@media(max-width:700px){body{padding-top:68px}.navbar{height:68px;padding:0 20px}.brand{font-size:25px}.nav-links{gap:14px}.nav-links a{font-size:11px}.hero{padding:70px 6% 40px}.fabric-area{padding:10px 6% 70px}}
-</style>
-
-<meta name="theme-color" content="#78040e">
-
-<meta name="theme-color" content="#78040e">
-
-<meta name="theme-color" content="#78040e">
-
-<meta name="theme-color" content="#78040e">
-
-<meta name="theme-color" content="#78040e">
-
-<meta name="theme-color" content="#78040e">
-
-<meta name="theme-color" content="#78040e">
-
-<meta name="theme-color" content="#78040e">
-
-<meta name="theme-color" content="#78040e">
-
-<!-- OnlyHers site icon -->
-<link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
-<link rel="apple-touch-icon" sizes="512x512" href="/favicon.png">
-<meta name="theme-color" content="#78040e">
-
-<style>
-/* ONLYHERS REFERENCE RED-BLACK GRADIENT */
-html, body {
-  min-height: 100%;
-  background: radial-gradient(ellipse at 50% 50%, #a90a18 0%, #78040e 38%, #420108 68%, #170002 100%) !important;
-  background-color: #170002 !important;
-  background-attachment: fixed !important;
-}
-body { color: #fff; }
-.home-page, .auth-page, .about-section, .brand-story, .home-product-feed,
-.products-page, .collection-page, .product-page, .account-page, main, footer {
-  background: transparent !important;
-}
-.navbar, header {
-  background: rgba(25, 0, 4, .30) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(125%);
-  backdrop-filter: blur(18px) saturate(125%);
-}
-.hero {
-  background: radial-gradient(ellipse at 50% 50%, rgba(169,10,24,.90) 0%, rgba(120,4,14,.78) 38%, rgba(66,1,8,.70) 68%, rgba(23,0,2,.88) 100%) !important;
-}
-.main-image-container { background: rgba(255,255,255,.06) !important; }
-
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:"DM Sans",sans-serif;color:#fff;background:radial-gradient(ellipse at 50% 50%,#a90a18 0%,#78040e 38%,#420108 68%,#170002 100%);background-attachment:fixed}
+body{padding-top:75px}
+.navbar{height:75px;position:fixed;top:0;left:0;width:100%;display:flex;align-items:center;justify-content:space-between;padding:0 8%;z-index:10;background:rgba(25,0,4,.30);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.16)}
+.brand{font-family:"Playfair Display",serif;font-size:30px;font-weight:600;color:#fff;text-decoration:none}
+.nav-links{display:flex;gap:24px}.nav-links a{color:#fff;text-decoration:none;font-size:13px}
+.hero{padding:90px 8% 50px}.eyebrow{font-size:10px;letter-spacing:4px;opacity:.7;margin-bottom:18px}.hero h1{font-family:"Playfair Display",serif;font-size:clamp(55px,8vw,110px);font-weight:500;line-height:.9}.hero p{max-width:560px;margin-top:24px;line-height:1.8;opacity:.78}
+.fabric-area{padding:20px 8% 100px}.fabric-back{display:inline-block;color:#fff;text-decoration:none;font-size:11px;letter-spacing:2px;margin-bottom:35px;opacity:.8}
+.fabric-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);backdrop-filter:blur(10px)}
+.fabric-controls label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;opacity:.7;margin-left:8px}
+.fabric-controls select{background:rgba(20,0,3,.75);color:#fff;border:1px solid rgba(255,255,255,.2);padding:10px 34px 10px 12px;font:inherit;font-size:12px;min-width:150px}
+.fabric-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:28px}
+.fabric-card{cursor:pointer}.fabric-image{aspect-ratio:3/4;overflow:hidden;background:rgba(255,255,255,.08)}.fabric-image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.8,.2,1)}.fabric-card:hover img{transform:scale(1.05)}
+.fabric-info{padding:16px 2px}.fabric-code{font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:.6;margin-bottom:7px}.fabric-name{font-family:"Playfair Display",serif;font-size:21px;margin-bottom:8px}.fabric-price{font-size:14px;font-weight:600}.fabric-meters{font-size:11px;letter-spacing:.8px;margin-top:7px;opacity:.72}.fabric-stock{font-size:10px;letter-spacing:1.3px;text-transform:uppercase;margin-top:8px}.in-stock{color:#c9f7d2}.out-stock{color:#ffd0d0}.fabric-loading{text-align:center;padding:90px 20px;opacity:.7}
+@media(max-width:700px){body{padding-top:68px}.navbar{height:68px;padding:0 20px}.brand{font-size:25px}.nav-links{gap:14px}.nav-links a{font-size:11px}.hero{padding:70px 6% 40px}.fabric-area{padding:10px 6% 70px}.fabric-grid{grid-template-columns:repeat(2,1fr);gap:15px}.fabric-name{font-size:17px}}
+@media(max-width:400px){.fabric-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body class="fabrics-page">
@@ -87,29 +32,31 @@ body { color: #fff; }
 <section class="hero"><div class="eyebrow">ONLYHERS FABRICS</div><h1>Fabrics.</h1><p>Explore the fabrics behind our designs — available to shop for your own creations.</p></section>
 <main class="fabric-area"><a href="collection.html" class="fabric-back">← COLLECTION</a>
 <div class="fabric-controls">
-  <label for="patternFilter">Pattern</label>
-  <select id="patternFilter">
-    <option value="">All patterns</option>
-  </select>
-  <label for="fabricSort">Sort</label>
-  <select id="fabricSort">
-    <option value="newest">Newest</option>
-    <option value="price-low">Price: Low to High</option>
-    <option value="price-high">Price: High to Low</option>
-    <option value="name">Name: A to Z</option>
-  </select>
+<label for="patternFilter">Pattern</label><select id="patternFilter"><option value="">All patterns</option></select>
+<label for="fabricSort">Sort</label><select id="fabricSort"><option value="newest">Newest</option><option value="price-low">Price: Low to High</option><option value="price-high">Price: High to Low</option><option value="name">Name: A to Z</option></select>
 </div>
 <div id="fabricGrid" class="fabric-grid"><div class="fabric-loading">Loading fabrics...</div></div></main>
 <footer style="background:#6f0912;text-align:center;padding:60px 20px">OnlyHers · Fabrics for your ideas.</footer>
 <script>
+const SUPABASE_URL="https://zeodtbgxadxfvexvywpm.supabase.co";
+const SUPABASE_KEY="sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 let allFabrics=[];
+
+function escapeHTML(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");}
+
 async function loadFabrics(){
  const grid=document.getElementById("fabricGrid");
- const {data,error}=await supabaseClient.from("fabrics").select("*").order("created_at",{ascending:false});
- if(error){grid.innerHTML='<div class="fabric-loading">Couldn\\'t load fabrics right now.</div>';console.error(error);return;}
- allFabrics=data||[];
- buildPatternOptions();
- renderFabrics();
+ try{
+   const {data,error}=await supabaseClient.from("fabrics").select("*").order("created_at",{ascending:false});
+   if(error) throw error;
+   allFabrics=data||[];
+   buildPatternOptions();
+   renderFabrics();
+ }catch(error){
+   console.error("Fabrics load error:",error);
+   grid.innerHTML='<div class="fabric-loading">Couldn\'t load fabrics right now.</div>';
+ }
 }
 function buildPatternOptions(){
  const select=document.getElementById("patternFilter");
@@ -126,15 +73,16 @@ function renderFabrics(){
  if(sort==="price-high") items.sort((a,b)=>(Number(b.price)||0)-(Number(a.price)||0));
  if(sort==="name") items.sort((a,b)=>(a.name||"").localeCompare(b.name||""));
  if(!items.length){grid.innerHTML='<div class="fabric-loading">No fabrics found for this pattern.</div>';return;}
- grid.innerHTML=items.map(f=>{
+ grid.innerHTML=items.map((f,index)=>{
    const img=f.image_url||"";
    const price=f.price!=null?"₹"+Number(f.price).toLocaleString("en-IN")+" / metre":"Price on request";
-   return '<article class="fabric-card" onclick="openFabric(\\''+f.id+'\\')"><div class="fabric-image">'+(img?'<img src="'+escapeHTML(img)+'" alt="'+escapeHTML(f.name||"OnlyHers Fabric")+'" loading="lazy">':'')+'</div><div class="fabric-info"><div class="fabric-code">'+escapeHTML(f.fabric_code||"ONLYHERS FABRIC")+'</div><h2 class="fabric-name">'+escapeHTML(f.name||"Untitled Fabric")+'</h2>'+(f.pattern?'<div class="fabric-code">'+escapeHTML(f.pattern)+'</div>':'')+'<div class="fabric-price">'+price+'</div><div class="fabric-meters">'+(Number.isFinite(Number(f.available_meters))?'Available: '+Number(f.available_meters)+' metre'+(Number(f.available_meters)===1?'':'s'):'')+'</div><div class="fabric-stock '+(f.is_available!==false?"in-stock":"out-stock")+'">'+(f.is_available!==false?"In Stock":"Out of Stock")+'</div></div></article>';
+   return '<article class="fabric-card" data-fabric-index="'+index+'"><div class="fabric-image">'+(img?'<img src="'+escapeHTML(img)+'" alt="'+escapeHTML(f.name||"OnlyHers Fabric")+'" loading="lazy">':'')+'</div><div class="fabric-info"><div class="fabric-code">'+escapeHTML(f.fabric_code||"ONLYHERS FABRIC")+'</div><h2 class="fabric-name">'+escapeHTML(f.name||"Untitled Fabric")+'</h2>'+(f.pattern?'<div class="fabric-code">'+escapeHTML(f.pattern)+'</div>':'')+'<div class="fabric-price">'+price+'</div><div class="fabric-meters">'+(Number.isFinite(Number(f.available_meters))?'Available: '+Number(f.available_meters)+' metre'+(Number(f.available_meters)===1?'':'s'):'')+'</div><div class="fabric-stock '+(f.is_available!==false?"in-stock":"out-stock")+'">'+(f.is_available!==false?"In Stock":"Out of Stock")+'</div></div></article>';
  }).join("");
+ grid.querySelectorAll("[data-fabric-index]").forEach(card=>{
+   card.addEventListener("click",()=>{const item=items[Number(card.dataset.fabricIndex)];window.location.href="fabric.html?id="+encodeURIComponent(item.id);});
+ });
 }
 document.getElementById("patternFilter").addEventListener("change",renderFabrics);
 document.getElementById("fabricSort").addEventListener("change",renderFabrics);
-function openFabric(id){window.location.href="fabric.html?id="+encodeURIComponent(id)}
-function escapeHTML(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
 loadFabrics();
 </script></body></html>
