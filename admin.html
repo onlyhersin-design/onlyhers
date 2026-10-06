@@ -872,6 +872,13 @@ body { color: #fff; }
         <input id="fabricImages" type="file" accept="image/*" multiple>
         <p class="help-text">The first photo becomes the main fabric image. You can add multiple photos.</p>
         <div id="fabricImagePreviews" class="image-preview-grid"></div>
+        <h3 style="margin-top:24px;font-family:'Playfair Display',serif;font-weight:500">Social panels</h3>
+        <div class="row social-fields">
+          <div><label>Instagram photo</label><input id="fabricInstagramPhoto" type="file" accept="image/*"><p class="help-text">Optional panel image.</p></div>
+          <div><label>Instagram link</label><input id="fabricInstagramLink" type="url" placeholder="https://instagram.com/..."></div>
+          <div><label>YouTube photo</label><input id="fabricYoutubePhoto" type="file" accept="image/*"><p class="help-text">Optional panel image.</p></div>
+          <div><label>YouTube link</label><input id="fabricYoutubeLink" type="url" placeholder="https://youtube.com/..."></div>
+        </div>
 
         <button id="uploadFabric" class="btn">Upload fabric</button>
         <div id="fabricUploadStatus" class="status"></div>
