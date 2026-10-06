@@ -288,7 +288,7 @@ body { color: #fff; }
 </style>
 </head>
 
-<body class="home-page">
+<body class="home-page home-loading">
 
   <!-- HEADER -->
   <header class="navbar">
@@ -306,7 +306,7 @@ body { color: #fff; }
   <!-- FULL SCREEN PRODUCT HOME -->
   <main class="home-product-feed">
     <div id="homeProductsFeed" class="home-products-feed">
-      <div class="products-loading">Loading collection...</div>
+      <div class="products-loading"><span>Our designs for you</span><span>are loading...</span></div>
     </div>
   </main>
 
@@ -363,7 +363,7 @@ body { color: #fff; }
 
         if (error) throw error;
         if (!products || products.length === 0) {
-          feed.innerHTML = `<div class="no-home-products">No products available yet.</div>`;
+          feed.innerHTML = `<div class="no-home-products"><span>Our designs for you</span><span>are loading...</span></div>`;
           return;
         }
 
@@ -378,9 +378,10 @@ body { color: #fff; }
           `;
         }).join("");
         enableProductZoom();
+        document.body.classList.remove("home-loading");
       } catch (error) {
         console.error("Homepage products error:", error);
-        feed.innerHTML = `<div class="no-home-products">Unable to load products.</div>`;
+        feed.innerHTML = `<div class="no-home-products"><span>Our designs for you</span><span>are taking a little longer...</span></div>`;
       }
     }
 
