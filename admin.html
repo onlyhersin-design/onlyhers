@@ -334,6 +334,10 @@
       color: var(--red);
     }
 
+    .fabric-edit-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+    .fabric-edit-box{width:min(760px,100%);max-height:90vh;overflow:auto;background:#fff;color:var(--black);padding:28px;border-radius:4px;box-shadow:0 25px 70px rgba(0,0,0,.3)}
+    .fabric-edit-box h2{margin:0 0 22px;font-family:"Playfair Display",serif;font-weight:500}.fabric-edit-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.fabric-edit-grid .full{grid-column:1/-1}
+    .fabric-edit-box label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:1.3px;font-weight:700;margin-bottom:7px}.fabric-edit-box input,.fabric-edit-box select,.fabric-edit-box textarea{width:100%;padding:11px 12px;border:1px solid #d5d0cc;background:#fff;color:#181313;font:inherit}.fabric-edit-box textarea{min-height:100px;resize:vertical}.fabric-edit-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}.fabric-edit-actions button{border:0;padding:11px 18px;font:600 12px "DM Sans",sans-serif;cursor:pointer}.fabric-edit-cancel{background:#eee;color:#181313}.fabric-edit-save{background:#a8242e;color:#fff}.fabric-edit-note{font-size:11px;opacity:.65;margin-top:6px}@media(max-width:600px){.fabric-edit-grid{grid-template-columns:1fr}.fabric-edit-grid .full{grid-column:auto}}
     .small-btn.delete {
       border-color: #a00018;
       color: #a00018;
@@ -2418,16 +2422,61 @@ async function loadFabricsAdmin() {
         <div class="stock-admin ${f.is_available!==false?'in-stock':'out-of-stock'}">${f.is_available!==false?'● In Stock':'● Out of Stock'}</div>
         <div class="product-meta">${Number.isFinite(Number(f.available_meters)) ? 'Available: '+Number(f.available_meters)+' metre'+(Number(f.available_meters)===1?'':'s') : 'Available meters not set'}</div>
       </div>
-      <div class="product-actions"><button type="button" class="small-btn delete" data-fabric-delete="${f.id}">Delete</button></div>
+      <div class="product-actions"><button type="button" class="small-btn" data-fabric-edit="${f.id}">Edit</button><button type="button" class="small-btn delete" data-fabric-delete="${f.id}">Delete</button></div>
     </div>`;
   }).join('');
   list.onclick=async event=>{
+    const editBtn=event.target.closest('[data-fabric-edit]');
+    if(editBtn){const fabric=data.find(item=>String(item.id)===String(editBtn.dataset.fabricEdit));if(fabric) openFabricEdit(fabric);return;}
     const btn=event.target.closest('[data-fabric-delete]');
     if(!btn) return;
     if(!confirm('Are you sure you want to delete this fabric?')) return;
     const {error}=await supabase.from('fabrics').delete().eq('id',btn.dataset.fabricDelete);
     if(error){alert(error.message);return;}
     loadFabricsAdmin();
+  };
+}
+
+
+function openFabricEdit(fabric){
+  const modal=document.createElement('div');
+  modal.className='fabric-edit-modal';
+  modal.innerHTML='<div class="fabric-edit-box"><h2>Edit Fabric</h2><div class="fabric-edit-grid">'+
+    '<div><label>Fabric name</label><input id="editFabricName"></div>'+
+    '<div><label>Price per metre (₹)</label><input id="editFabricPrice" type="number" min="0"></div>'+
+    '<div><label>Available meters</label><input id="editFabricMeters" type="number" min="0" step="1"></div>'+
+    '<div><label>Fabric code</label><input id="editFabricCode"></div>'+
+    '<div><label>Pattern</label><select id="editFabricPattern"><option value="">Select pattern</option><option>Plain</option><option>Floral</option><option>Printed</option><option>Striped</option><option>Checked</option><option>Polka Dot</option><option>Geometric</option><option>Abstract</option><option>Embroidered</option><option>Textured</option><option>Tie-Dye</option><option>Animal Print</option><option>Other</option></select></div>'+
+    '<div><label>Material / composition</label><input id="editFabricMaterial"></div>'+
+    '<div><label>Width</label><input id="editFabricWidth"></div>'+
+    '<div><label>Stock status</label><select id="editFabricAvailable"><option value="true">In Stock</option><option value="false">Out of Stock</option></select></div>'+
+    '<div class="full"><label>Description</label><textarea id="editFabricDescription"></textarea></div>'+
+    '<div class="full"><label>Replace fabric photos (optional)</label><input id="editFabricImages" type="file" accept="image/*" multiple><div class="fabric-edit-note">Leave empty to keep current photos.</div></div>'+
+    '<div><label>Instagram photo (optional)</label><input id="editFabricInstagramPhoto" type="file" accept="image/*"></div>'+
+    '<div><label>Instagram link</label><input id="editFabricInstagramLink" type="url"></div>'+
+    '<div><label>YouTube photo (optional)</label><input id="editFabricYoutubePhoto" type="file" accept="image/*"></div>'+
+    '<div><label>YouTube link</label><input id="editFabricYoutubeLink" type="url"></div></div>'+
+    '<div class="fabric-edit-actions"><button type="button" class="fabric-edit-cancel">Cancel</button><button type="button" class="fabric-edit-save">Save changes</button></div><div id="fabricEditStatus" class="status"></div></div>';
+  document.body.appendChild(modal);
+  const q=id=>modal.querySelector('#'+id);
+  q('editFabricName').value=fabric.name||'';q('editFabricPrice').value=fabric.price??'';q('editFabricMeters').value=fabric.available_meters??0;q('editFabricCode').value=fabric.fabric_code||'';q('editFabricPattern').value=fabric.pattern||'';q('editFabricMaterial').value=fabric.material||'';q('editFabricWidth').value=fabric.width||'';q('editFabricDescription').value=fabric.description||'';q('editFabricAvailable').value=fabric.is_available===false?'false':'true';q('editFabricInstagramLink').value=fabric.instagram_link||'';q('editFabricYoutubeLink').value=fabric.youtube_link||'';
+  q('editFabricImages').value='';q('editFabricInstagramPhoto').value='';q('editFabricYoutubePhoto').value='';
+  q('editFabricAvailable').focus();
+  modal.querySelector('.fabric-edit-cancel').onclick=()=>modal.remove();
+  modal.addEventListener('click',e=>{if(e.target===modal)modal.remove();});
+  modal.querySelector('.fabric-edit-save').onclick=async()=>{
+    const save=q('editFabricStatus');const button=modal.querySelector('.fabric-edit-save');button.disabled=true;button.textContent='Saving...';
+    try{
+      let imageUrls=Array.isArray(fabric.image_urls)?fabric.image_urls.filter(Boolean):[];if(!imageUrls.length&&fabric.image_url)imageUrls=[fabric.image_url];
+      const files=Array.from(q('editFabricImages').files||[]);if(files.length)imageUrls=await uploadFabricFiles(files);
+      let instagramPhotoUrl=fabric.instagram_photo_url||null,youtubePhotoUrl=fabric.youtube_photo_url||null;
+      if(q('editFabricInstagramPhoto').files[0]) [instagramPhotoUrl]=await uploadFabricFiles([q('editFabricInstagramPhoto').files[0]]);
+      if(q('editFabricYoutubePhoto').files[0]) [youtubePhotoUrl]=await uploadFabricFiles([q('editFabricYoutubePhoto').files[0]]);
+      const payload={name:q('editFabricName').value.trim(),price:q('editFabricPrice').value?Number(q('editFabricPrice').value):null,available_meters:Math.max(0,Math.floor(Number(q('editFabricMeters').value)||0)),fabric_code:q('editFabricCode').value.trim()||null,pattern:q('editFabricPattern').value||null,material:q('editFabricMaterial').value.trim()||null,width:q('editFabricWidth').value.trim()||null,description:q('editFabricDescription').value.trim()||null,is_available:q('editFabricAvailable').value==='true',instagram_photo_url:instagramPhotoUrl,instagram_link:q('editFabricInstagramLink').value.trim()||null,youtube_photo_url:youtubePhotoUrl,youtube_link:q('editFabricYoutubeLink').value.trim()||null};
+      if(imageUrls.length){payload.image_url=imageUrls[0];payload.image_urls=imageUrls;}
+      const {error}=await supabase.from('fabrics').update(payload).eq('id',fabric.id);if(error)throw error;
+      save.textContent='Saved successfully!';save.className='status ok';setTimeout(()=>{modal.remove();loadFabricsAdmin();},350);
+    }catch(error){save.textContent=error.message||'Could not save changes.';save.className='status err';button.disabled=false;button.textContent='Save changes';}
   };
 }
 
