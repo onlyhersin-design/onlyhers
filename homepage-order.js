@@ -190,128 +190,95 @@
 
     const slides = Array.from(feed.querySelectorAll('.home-product-slide'));
     const footer = document.querySelector('.home-page > footer');
-    const sections = footer ? [...slides, footer] : slides;
-    if (!sections.length) return;
+    if (!slides.length) return;
 
-    /* Keep the "thrown into empty space" look, but do NOT animate the
-       product inside its own section. The entire page moves between
-       product sections instead. */
+    /* Editorial placement only. Do not animate the image itself while scrolling. */
     slides.forEach((slide, index) => {
       const img = slide.querySelector('.home-product-cover');
       if (!img) return;
-
       const seed = (index + 1) * 9301 + 49297;
       const rand = (seed % 233280) / 233280;
       const rand2 = ((seed * 17) % 233280) / 233280;
-
-      const rotation = (rand - 0.5) * 6;
-      const x = (rand2 - 0.5) * 110;
-
-      slide.style.setProperty('--oh-rotation', rotation.toFixed(2) + 'deg');
-      slide.style.setProperty('--oh-x', x.toFixed(0) + 'px');
-      slide.style.setProperty('--oh-y-active', '0px');
-      img.addEventListener('load', () => img.classList.add('oh-ready'), { once: true });
+      slide.style.setProperty('--oh-rotation', ((rand - 0.5) * 5).toFixed(2) + 'deg');
+      slide.style.setProperty('--oh-x', ((rand2 - 0.5) * 70).toFixed(0) + 'px');
     });
 
-    /* Continuous cinematic page movement.
-       The PRODUCTS themselves stay still. The whole homepage gently travels
-       through the product sections and footer. User scroll/swipe direction
-       immediately controls the travel direction. */
-    let direction = 1; // down by default
-    let autoRunning = true;
-    let lastTouchY = null;
-    let lastWheelTime = 0;
-    let raf = null;
-    let lastFrame = performance.now();
-    const AUTO_SPEED = 38; // px/sec — deliberately slow and continuous
+    /* Native scrolling stays in charge. We only add a very light,
+       direction-aware snap after the user's swipe has finished.
+       No requestAnimationFrame scroll loop, no forced scrollTo(), and
+       no transform on the viewport = no shaking/blur. */
+    const sections = footer ? [...slides, footer] : slides;
+    let scrollEndTimer = null;
+    let touchStartY = null;
+    let wheelDirection = 0;
+    let isSnapping = false;
 
-    function clampScroll() {
-      const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-      if (window.scrollY <= 0) {
-        window.scrollTo(0, 0);
-        return false;
-      }
-      if (window.scrollY >= maxScroll) {
-        window.scrollTo(0, maxScroll);
-        return false;
-      }
-      return true;
-    }
+    function nearestSection() {
+      const center = window.innerHeight * 0.5;
+      let best = 0;
+      let distance = Infinity;
 
-    function animateContinuous(now) {
-      const dt = Math.min(40, now - lastFrame);
-      lastFrame = now;
-
-      if (autoRunning) {
-        const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-        const next = window.scrollY + direction * AUTO_SPEED * (dt / 1000);
-
-        if (next <= 0) {
-          window.scrollTo(0, 0);
-          autoRunning = false;
-        } else if (next >= maxScroll) {
-          window.scrollTo(0, maxScroll);
-          autoRunning = false;
-        } else {
-          window.scrollTo(0, next);
+      sections.forEach((section, index) => {
+        const rect = section.getBoundingClientRect();
+        const d = Math.abs((rect.top + rect.height * 0.5) - center);
+        if (d < distance) {
+          distance = d;
+          best = index;
         }
+      });
+      return best;
+    }
+
+    function sectionTop(section) {
+      const rect = section.getBoundingClientRect();
+      const header = document.querySelector('.home-page .navbar');
+      const headerHeight = header ? header.getBoundingClientRect().height : 0;
+      return Math.max(0, window.scrollY + rect.top - headerHeight);
+    }
+
+    function gentleSnap() {
+      if (isSnapping || !sections.length) return;
+
+      const index = nearestSection();
+      const target = sectionTop(sections[index]);
+      const distance = target - window.scrollY;
+
+      /* Only correct small gaps. This prevents the browser from fighting
+         the user's swipe and keeps the transition natural. */
+      if (Math.abs(distance) < window.innerHeight * 0.28) {
+        isSnapping = true;
+        window.scrollTo({ top: target, behavior: 'smooth' });
+        setTimeout(() => { isSnapping = false; }, 700);
       }
-
-      raf = requestAnimationFrame(animateContinuous);
     }
 
-    function setDirection(nextDirection) {
-      if (nextDirection === 0) return;
-      direction = nextDirection > 0 ? 1 : -1;
-      autoRunning = true;
-      lastFrame = performance.now();
+    function scheduleSnap() {
+      clearTimeout(scrollEndTimer);
+      scrollEndTimer = setTimeout(gentleSnap, 140);
     }
 
-    /* Mouse wheel: immediately follow the user's direction, then continue
-       in that direction with the same slow cinematic movement. */
+    window.addEventListener('scroll', scheduleSnap, { passive: true });
+
     window.addEventListener('wheel', (event) => {
-      if (Math.abs(event.deltaY) < 1) return;
-      setDirection(event.deltaY > 0 ? 1 : -1);
-      lastWheelTime = performance.now();
+      wheelDirection = event.deltaY > 0 ? 1 : -1;
+      clearTimeout(scrollEndTimer);
+      scrollEndTimer = setTimeout(gentleSnap, 180);
     }, { passive: true });
 
-    /* Touch: detect the actual finger movement so an upward swipe reverses
-       the cinematic travel and a downward swipe moves toward the next slide. */
     window.addEventListener('touchstart', (event) => {
-      lastTouchY = event.touches[0]?.clientY ?? null;
-      autoRunning = false;
-    }, { passive: true });
-
-    window.addEventListener('touchmove', (event) => {
-      const y = event.touches[0]?.clientY;
-      if (y == null || lastTouchY == null) return;
-
-      const delta = lastTouchY - y;
-      if (Math.abs(delta) > 1) {
-        direction = delta > 0 ? 1 : -1;
-        autoRunning = false; // let the user's finger/swipe control the page normally
-      }
-      lastTouchY = y;
+      touchStartY = event.touches[0]?.clientY ?? null;
+      clearTimeout(scrollEndTimer);
+      isSnapping = false;
     }, { passive: true });
 
     window.addEventListener('touchend', () => {
-      lastTouchY = null;
-      autoRunning = true;
-      lastFrame = performance.now();
+      touchStartY = null;
+      clearTimeout(scrollEndTimer);
+      scrollEndTimer = setTimeout(gentleSnap, 180);
     }, { passive: true });
 
-    /* Keyboard navigation also changes the cinematic direction. */
-    window.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowDown' || event.key === 'PageDown' || event.key === ' ') {
-        setDirection(1);
-      } else if (event.key === 'ArrowUp' || event.key === 'PageUp') {
-        setDirection(-1);
-      }
-    });
-
-    /* Begin immediately — no 5 second/1.8 second waiting period. */
-    lastFrame = performance.now();
-    raf = requestAnimationFrame(animateContinuous);
+    /* CSS scroll-snap handles the actual touch/trackpad motion smoothly.
+       This JS only gently settles the page after the gesture. */
   }
 
   function start() {
