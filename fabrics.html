@@ -17,13 +17,13 @@ body{padding-top:75px}
 .nav-links{display:flex;gap:24px}.nav-links a{color:#fff;text-decoration:none;font-size:13px}
 .hero{padding:90px 8% 50px}.eyebrow{font-size:10px;letter-spacing:4px;opacity:.7;margin-bottom:18px}.hero h1{font-family:"Playfair Display",serif;font-size:clamp(55px,8vw,110px);font-weight:500;line-height:.9}.hero p{max-width:560px;margin-top:24px;line-height:1.8;opacity:.78}
 .fabric-area{padding:20px 8% 100px}.fabric-back{display:inline-block;color:#fff;text-decoration:none;font-size:11px;letter-spacing:2px;margin-bottom:35px;opacity:.8}
-.fabric-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);backdrop-filter:blur(10px)}
+.fabric-controls{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;margin:0 0 30px;padding:14px 16px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);backdrop-filter:blur(10px)}
 .fabric-controls label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;opacity:.7;margin-left:8px}
-.fabric-controls select{background:rgba(20,0,3,.75);color:#fff;border:1px solid rgba(255,255,255,.2);padding:10px 34px 10px 12px;font:inherit;font-size:12px;min-width:150px}
+.fabric-controls select{background:rgba(20,0,3,.75);color:#fff;border:1px solid rgba(255,255,255,.2);padding:10px 30px 10px 12px;font:inherit;font-size:12px;min-width:0;flex:1}
 .fabric-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:28px}
 .fabric-card{cursor:pointer}.fabric-image{aspect-ratio:3/4;overflow:hidden;background:rgba(255,255,255,.08)}.fabric-image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.8,.2,1)}.fabric-card:hover img{transform:scale(1.05)}
 .fabric-info{padding:16px 2px}.fabric-code{font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:.6;margin-bottom:7px}.fabric-name{font-family:"Playfair Display",serif;font-size:21px;margin-bottom:8px}.fabric-price{font-size:14px;font-weight:600}.fabric-meters{font-size:11px;letter-spacing:.8px;margin-top:7px;opacity:.72}.fabric-stock{font-size:10px;letter-spacing:1.3px;text-transform:uppercase;margin-top:8px}.in-stock{color:#c9f7d2}.out-stock{color:#ffd0d0}.fabric-loading{text-align:center;padding:90px 20px;opacity:.7}
-@media(max-width:700px){body{padding-top:68px}.navbar{height:68px;padding:0 20px}.brand{font-size:25px}.nav-links{gap:14px}.nav-links a{font-size:11px}.hero{padding:70px 6% 40px}.fabric-area{padding:10px 6% 70px}.fabric-grid{grid-template-columns:repeat(2,1fr);gap:15px}.fabric-name{font-size:17px}}
+@media(max-width:700px){.fabric-controls{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 10px;align-items:center}.fabric-controls label{margin-left:0}.fabric-controls select{width:100%;min-width:0}body{padding-top:68px}.navbar{height:68px;padding:0 20px}.brand{font-size:25px}.nav-links{gap:14px}.nav-links a{font-size:11px}.hero{padding:70px 6% 40px}.fabric-area{padding:10px 6% 70px}.fabric-grid{grid-template-columns:repeat(2,1fr);gap:15px}.fabric-name{font-size:17px}}
 @media(max-width:400px){.fabric-grid{grid-template-columns:1fr}}
 </style>
 
