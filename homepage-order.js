@@ -223,7 +223,7 @@
     let lastWheelTime = 0;
     let raf = null;
     let lastFrame = performance.now();
-    const AUTO_SPEED = 22; // px/sec — deliberately slow and continuous
+    const AUTO_SPEED = 38; // px/sec — deliberately slow and continuous
 
     function clampScroll() {
       const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
@@ -288,7 +288,8 @@
 
       const delta = lastTouchY - y;
       if (Math.abs(delta) > 1) {
-        setDirection(delta > 0 ? 1 : -1);
+        direction = delta > 0 ? 1 : -1;
+        autoRunning = false; // let the user's finger/swipe control the page normally
       }
       lastTouchY = y;
     }, { passive: true });
@@ -311,10 +312,6 @@
     /* Begin immediately — no 5 second/1.8 second waiting period. */
     lastFrame = performance.now();
     raf = requestAnimationFrame(animateContinuous);
-
-    /* Start immediately when the homepage loads. */
-    lastFrame = performance.now();
-    if (!raf) raf = requestAnimationFrame(animateContinuous);
   }
 
   function start() {
