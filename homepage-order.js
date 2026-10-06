@@ -185,8 +185,6 @@
   }
 
   function setupPremiumDesktopMotion() {
-    if (window.matchMedia('(max-width: 768px)').matches) return;
-
     const feed = document.getElementById('homeProductsFeed');
     if (!feed) return;
 
