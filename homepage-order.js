@@ -223,21 +223,29 @@
       const rawVelocity = (currentY - lastScrollY) / dt;
       smoothedVelocity += (rawVelocity - smoothedVelocity) * 0.18;
       velocity += (smoothedVelocity - velocity) * 0.12;
+      const time = now * 0.001;
 
-      slides.forEach((slide) => {
+      slides.forEach((slide, index) => {
         const img = slide.querySelector('.home-product-cover');
         if (!img) return;
         const rect = slide.getBoundingClientRect();
         const viewport = window.innerHeight;
         const progress = (rect.top + rect.height / 2 - viewport / 2) / Math.max(rect.height, 1);
 
-        // During a swipe/scroll, the product follows the user's movement gently.
-        // Away from the active slide, the movement settles into a slow cinematic drift.
-        const travel = Math.max(-42, Math.min(42, -progress * 26 + velocity * 170));
         const baseY = parseFloat(slide.style.getPropertyValue('--oh-y')) || 0;
-        slide.style.setProperty('--oh-y-active', (baseY + travel).toFixed(1) + 'px');
 
-        if (Math.abs(smoothedVelocity) < 0.012 && Math.abs(progress) > 0.55) {
+        // Continuous, very slow "floating in space" movement.
+        // Each product gets a different phase so they never move identically.
+        const phase = index * 1.37;
+        const idleDrift = Math.sin(time * 0.32 + phase) * 22;
+
+        // While the user swipes/scrolls, add directional travel on top of the idle drift.
+        const swipeTravel = Math.max(-55, Math.min(55, -progress * 30 + velocity * 210));
+        const targetY = baseY + idleDrift + swipeTravel;
+
+        slide.style.setProperty('--oh-y-active', targetY.toFixed(1) + 'px');
+
+        if (Math.abs(smoothedVelocity) < 0.012) {
           slide.classList.add('oh-slow-drift');
         } else {
           slide.classList.remove('oh-slow-drift');
