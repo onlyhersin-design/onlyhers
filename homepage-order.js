@@ -189,90 +189,156 @@
     if (!feed) return;
 
     const slides = Array.from(feed.querySelectorAll('.home-product-slide'));
+    const footer = document.querySelector('.home-page > footer');
+    const sections = footer ? [...slides, footer] : slides;
+    if (!sections.length) return;
+
+    /* Keep the "thrown into empty space" look, but do NOT animate the
+       product inside its own section. The entire page moves between
+       product sections instead. */
     slides.forEach((slide, index) => {
       const img = slide.querySelector('.home-product-cover');
       if (!img) return;
 
-      // Deterministic "thrown onto the table" placement so it stays stable on refresh.
       const seed = (index + 1) * 9301 + 49297;
       const rand = (seed % 233280) / 233280;
       const rand2 = ((seed * 17) % 233280) / 233280;
-      const rand3 = ((seed * 43) % 233280) / 233280;
 
-      const rotation = (rand - 0.5) * 6;       // -3deg to +3deg
-      const x = (rand2 - 0.5) * 110;           // subtle horizontal offset
-      const y = (rand3 - 0.5) * 70;             // subtle vertical offset
+      const rotation = (rand - 0.5) * 6;
+      const x = (rand2 - 0.5) * 110;
+
       slide.style.setProperty('--oh-rotation', rotation.toFixed(2) + 'deg');
       slide.style.setProperty('--oh-x', x.toFixed(0) + 'px');
-      slide.style.setProperty('--oh-y', y.toFixed(0) + 'px');
-      slide.style.setProperty('--oh-y-active', y.toFixed(0) + 'px');
-
-      // Let the browser know when an image is fully available.
+      slide.style.setProperty('--oh-y-active', '0px');
       img.addEventListener('load', () => img.classList.add('oh-ready'), { once: true });
     });
 
-    let lastScrollY = window.scrollY;
-    let lastTime = performance.now();
-    let velocity = 0;
-    let smoothedVelocity = 0;
-    let raf = 0;
+    /* Automatic cinematic movement:
+       Product 1 -> Product 2 -> Product 3 -> ... -> Footer.
+       The browser is allowed to handle normal touch/wheel scrolling.
+       Autoplay pauses immediately when the user interacts and resumes
+       after a short idle period. */
+    let currentIndex = 0;
+    let autoplayTimer = null;
+    let animationFrame = null;
+    let userPauseTimer = null;
+    let isAnimating = false;
+    const AUTO_DELAY = 5200;
+    const TRANSITION_MS = 1800;
+    const RESUME_AFTER_USER_MS = 5000;
 
-    function tick(now) {
-      const dt = Math.max(16, now - lastTime);
-      const currentY = window.scrollY;
-      const rawVelocity = (currentY - lastScrollY) / dt;
-      smoothedVelocity += (rawVelocity - smoothedVelocity) * 0.18;
-      velocity += (smoothedVelocity - velocity) * 0.12;
-      const time = now * 0.001;
+    function headerOffset() {
+      const header = document.querySelector('.home-page .navbar');
+      return header ? header.getBoundingClientRect().height : 0;
+    }
 
-      slides.forEach((slide, index) => {
-        const img = slide.querySelector('.home-product-cover');
-        if (!img) return;
-        const rect = slide.getBoundingClientRect();
-        const viewport = window.innerHeight;
-        const progress = (rect.top + rect.height / 2 - viewport / 2) / Math.max(rect.height, 1);
+    function sectionTop(section) {
+      const rect = section.getBoundingClientRect();
+      return Math.max(0, window.scrollY + rect.top - headerOffset());
+    }
 
-        const baseY = parseFloat(slide.style.getPropertyValue('--oh-y')) || 0;
+    function easeInOutCubic(t) {
+      return t < 0.5
+        ? 4 * t * t * t
+        : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
 
-        // Continuous, very slow "floating in space" movement.
-        // Each product gets a different phase so they never move identically.
-        const phase = index * 1.37;
-        const idleDrift = Math.sin(time * 0.32 + phase) * 22;
+    function cancelAutoAnimation() {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = null;
+      }
+      isAnimating = false;
+    }
 
-        // The product physically follows the page as it moves from one
-        // full-screen section to the next. A product below the viewport
-        // starts lower and naturally rises into place; the previous product
-        // leaves upward. Fast swipes add momentum on top of that movement.
-        const sectionTravel = Math.max(-150, Math.min(150, progress * 135));
-        const swipeMomentum = Math.max(-65, Math.min(65, velocity * 170));
-        const targetY = baseY + idleDrift + sectionTravel + swipeMomentum;
+    function smoothMoveTo(index) {
+      if (!sections[index] || isAnimating) return;
 
-        slide.style.setProperty('--oh-y-active', targetY.toFixed(1) + 'px');
+      const target = sectionTop(sections[index]);
+      const startY = window.scrollY;
+      const distance = target - startY;
 
-        if (Math.abs(smoothedVelocity) < 0.012) {
-          slide.classList.add('oh-slow-drift');
+      if (Math.abs(distance) < 3) {
+        currentIndex = index;
+        return;
+      }
+
+      cancelAutoAnimation();
+      isAnimating = true;
+      const started = performance.now();
+
+      function frame(now) {
+        const progress = Math.min(1, (now - started) / TRANSITION_MS);
+        const eased = easeInOutCubic(progress);
+        window.scrollTo(0, startY + distance * eased);
+
+        if (progress < 1 && isAnimating) {
+          animationFrame = requestAnimationFrame(frame);
         } else {
-          slide.classList.remove('oh-slow-drift');
+          window.scrollTo(0, target);
+          animationFrame = null;
+          isAnimating = false;
+          currentIndex = index;
+        }
+      }
+
+      animationFrame = requestAnimationFrame(frame);
+    }
+
+    function detectCurrentSection() {
+      const viewportCenter = window.innerHeight * 0.52;
+      let closest = 0;
+      let best = Infinity;
+
+      sections.forEach((section, index) => {
+        const rect = section.getBoundingClientRect();
+        const distance = Math.abs((rect.top + rect.height / 2) - viewportCenter);
+        if (distance < best) {
+          best = distance;
+          closest = index;
         }
       });
 
-      // Treat the footer as the final full-screen slide so it enters/exits
-      // with the same natural vertical movement.
-      const footer = document.querySelector('.home-page > footer');
-      if (footer) {
-        const footerRect = footer.getBoundingClientRect();
-        const footerTravel = Math.max(-55, Math.min(85, footerRect.top * 0.12));
-        const footerOpacity = Math.max(0.55, Math.min(1, 1 - Math.max(0, footerRect.top) / Math.max(viewport, 1) * 0.45));
-        footer.style.setProperty('--oh-footer-y', footerTravel.toFixed(1) + 'px');
-        footer.style.setProperty('--oh-footer-opacity', footerOpacity.toFixed(3));
-      }
-
-      lastScrollY = currentY;
-      lastTime = now;
-      raf = requestAnimationFrame(tick);
+      currentIndex = closest;
     }
 
-    if (!raf) raf = requestAnimationFrame(tick);
+    function scheduleAutoplay(delay = AUTO_DELAY) {
+      clearTimeout(autoplayTimer);
+      autoplayTimer = setTimeout(() => {
+        detectCurrentSection();
+        const nextIndex = (currentIndex + 1) % sections.length;
+        smoothMoveTo(nextIndex);
+        scheduleAutoplay(AUTO_DELAY + TRANSITION_MS);
+      }, delay);
+    }
+
+    function userInteracted() {
+      cancelAutoAnimation();
+      detectCurrentSection();
+
+      clearTimeout(userPauseTimer);
+      clearTimeout(autoplayTimer);
+
+      /* Let the user's wheel/touch/swipe happen at completely normal
+         browser speed. Only restart the cinematic autoplay after idle. */
+      userPauseTimer = setTimeout(() => {
+        detectCurrentSection();
+        scheduleAutoplay(AUTO_DELAY);
+      }, RESUME_AFTER_USER_MS);
+    }
+
+    ['wheel', 'touchstart', 'pointerdown', 'keydown'].forEach(eventName => {
+      window.addEventListener(eventName, userInteracted, { passive: true });
+    });
+
+    window.addEventListener('scroll', () => {
+      if (!isAnimating) detectCurrentSection();
+    }, { passive: true });
+
+    /* Start automatically from the first product after the visitor has
+       had a moment to see it. */
+    detectCurrentSection();
+    scheduleAutoplay(AUTO_DELAY);
   }
 
   function start() {
