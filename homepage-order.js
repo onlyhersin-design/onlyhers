@@ -201,6 +201,7 @@
       const rand2 = ((seed * 17) % 233280) / 233280;
       slide.style.setProperty('--oh-rotation', ((rand - 0.5) * 5).toFixed(2) + 'deg');
       slide.style.setProperty('--oh-x', ((rand2 - 0.5) * 70).toFixed(0) + 'px');
+      slide.style.setProperty('--oh-delay', ((index * 1.7) % 7).toFixed(2));
     });
 
     /* Native scrolling stays in charge. We only add a very light,
