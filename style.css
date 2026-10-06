@@ -1226,6 +1226,13 @@ body { color: #fff; }
   display: block !important;
 }
 
+.home-page .home-product-link {
+  animation: onlyhersQuietFloat 10s ease-in-out infinite;
+  animation-delay: calc(var(--oh-delay, 0) * -1s);
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
 .home-page .home-product-cover {
   position: absolute !important;
   left: 50% !important;
@@ -1246,16 +1253,15 @@ body { color: #fff; }
   box-shadow:
     0 22px 45px rgba(0,0,0,.20),
     0 0 0 8px rgba(255,255,255,.025);
-  animation: onlyhersQuietFloat 11s ease-in-out infinite;
-  animation-delay: calc(var(--oh-delay, 0) * -1s);
+
 }
 
 @keyframes onlyhersQuietFloat {
   0%, 100% {
-    margin-top: 0;
+    transform: translate3d(0, 0, 0);
   }
   50% {
-    margin-top: -7px;
+    transform: translate3d(0, -12px, 0);
   }
 }
 
@@ -1265,7 +1271,7 @@ body { color: #fff; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-page .home-product-cover {
+  .home-page .home-product-link {
     animation: none !important;
   }
 }
