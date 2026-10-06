@@ -183,6 +183,76 @@
     } catch (error) { console.warn('OnlyHers homepage custom order unavailable:', error); }
   }
 
+  function setupPremiumDesktopMotion() {
+    if (window.matchMedia('(max-width: 768px)').matches) return;
+
+    const feed = document.getElementById('homeProductsFeed');
+    if (!feed) return;
+
+    const slides = Array.from(feed.querySelectorAll('.home-product-slide'));
+    slides.forEach((slide, index) => {
+      const img = slide.querySelector('.home-product-cover');
+      if (!img) return;
+
+      // Deterministic "thrown onto the table" placement so it stays stable on refresh.
+      const seed = (index + 1) * 9301 + 49297;
+      const rand = (seed % 233280) / 233280;
+      const rand2 = ((seed * 17) % 233280) / 233280;
+      const rand3 = ((seed * 43) % 233280) / 233280;
+
+      const rotation = (rand - 0.5) * 6;       // -3deg to +3deg
+      const x = (rand2 - 0.5) * 110;           // subtle horizontal offset
+      const y = (rand3 - 0.5) * 70;             // subtle vertical offset
+      slide.style.setProperty('--oh-rotation', rotation.toFixed(2) + 'deg');
+      slide.style.setProperty('--oh-x', x.toFixed(0) + 'px');
+      slide.style.setProperty('--oh-y', y.toFixed(0) + 'px');
+      slide.style.setProperty('--oh-y-active', y.toFixed(0) + 'px');
+
+      // Let the browser know when an image is fully available.
+      img.addEventListener('load', () => img.classList.add('oh-ready'), { once: true });
+    });
+
+    let lastScrollY = window.scrollY;
+    let lastTime = performance.now();
+    let velocity = 0;
+    let smoothedVelocity = 0;
+    let raf = 0;
+
+    function tick(now) {
+      const dt = Math.max(16, now - lastTime);
+      const currentY = window.scrollY;
+      const rawVelocity = (currentY - lastScrollY) / dt;
+      smoothedVelocity += (rawVelocity - smoothedVelocity) * 0.18;
+      velocity += (smoothedVelocity - velocity) * 0.12;
+
+      slides.forEach((slide) => {
+        const img = slide.querySelector('.home-product-cover');
+        if (!img) return;
+        const rect = slide.getBoundingClientRect();
+        const viewport = window.innerHeight;
+        const progress = (rect.top + rect.height / 2 - viewport / 2) / Math.max(rect.height, 1);
+
+        // During a swipe/scroll, the product follows the user's movement gently.
+        // Away from the active slide, the movement settles into a slow cinematic drift.
+        const travel = Math.max(-42, Math.min(42, -progress * 26 + velocity * 170));
+        const baseY = parseFloat(slide.style.getPropertyValue('--oh-y')) || 0;
+        slide.style.setProperty('--oh-y-active', (baseY + travel).toFixed(1) + 'px');
+
+        if (Math.abs(smoothedVelocity) < 0.012 && Math.abs(progress) > 0.55) {
+          slide.classList.add('oh-slow-drift');
+        } else {
+          slide.classList.remove('oh-slow-drift');
+        }
+      });
+
+      lastScrollY = currentY;
+      lastTime = now;
+      raf = requestAnimationFrame(tick);
+    }
+
+    if (!raf) raf = requestAnimationFrame(tick);
+  }
+
   function start() {
     addFestiveBanner();
     removeFestiveCloseButton();
