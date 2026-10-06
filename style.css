@@ -1209,36 +1209,3 @@ body { color: #fff; }
 }
 .main-image-container { background: rgba(255,255,255,.06) !important; }
 
-
-
-/* DESKTOP HOMEPAGE — INTRINSIC IMAGE SIZE, NO FULL-WIDTH FILL */
-@media (min-width: 769px) {
-  .home-page .home-product-slide {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    overflow: hidden !important;
-  }
-
-  .home-page .home-product-link {
-    width: 100% !important;
-    height: 100% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-
-  .home-page .home-product-cover {
-    width: auto !important;
-    height: auto !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-    object-fit: contain !important;
-    object-position: center center !important;
-    transform: none !important;
-  }
-
-  .home-page .home-product-slide.active .home-product-cover {
-    transform: none !important;
-  }
-}
