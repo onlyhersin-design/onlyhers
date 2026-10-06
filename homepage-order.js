@@ -181,9 +181,61 @@
       });
       products.forEach(product => { const section = byId.get(String(product.id)); if (section) feed.appendChild(section); });
       setupPremiumDesktopMotion();
+      setupGyroscopeMotion();
     } catch (error) { console.warn('OnlyHers homepage custom order unavailable:', error); }
   }
 
+  function setupGyroscopeMotion() {
+    if (!document.body.classList.contains('home-page')) return;
+    if (!window.matchMedia('(max-width: 768px)').matches) return;
+    if (!window.DeviceOrientationEvent) return;
+    const slides = Array.from(document.querySelectorAll('.home-product-slide'));
+    if (!slides.length) return;
+    let targetX = 0, targetY = 0, currentX = 0, currentY = 0, raf = null, enabled = false;
+    function applyMotion() {
+      currentX += (targetX - currentX) * 0.075;
+      currentY += (targetY - currentY) * 0.075;
+      slides.forEach((slide) => {
+        const image = slide.querySelector('.home-product-cover');
+        if (!image) return;
+        const strength = slide.classList.contains('active') ? 1 : 0.55;
+        const x = currentX * strength, y = currentY * strength, r = x * 0.035;
+        image.style.transform = 'translate3d(calc(-50% + ' + x.toFixed(2) + 'px), calc(-50% + ' + y.toFixed(2) + 'px), 0) rotate(var(--oh-rotation, 0deg)) rotate(' + r.toFixed(2) + 'deg) translate3d(var(--oh-x, 0px), 0, 0)';
+      });
+      raf = requestAnimationFrame(applyMotion);
+    }
+    function handleOrientation(event) {
+      if (!enabled) return;
+      const gamma = Number.isFinite(event.gamma) ? event.gamma : 0;
+      const beta = Number.isFinite(event.beta) ? event.beta : 0;
+      targetX = Math.max(-18, Math.min(18, gamma * 0.65));
+      targetY = Math.max(-12, Math.min(12, (beta - 45) * 0.20));
+    }
+    function enable() {
+      if (enabled) return;
+      enabled = true;
+      window.addEventListener('deviceorientation', handleOrientation, { passive: true });
+      if (!raf) raf = requestAnimationFrame(applyMotion);
+    }
+    async function requestMotionPermission() {
+      try {
+        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+          const permission = await DeviceOrientationEvent.requestPermission();
+          if (permission === 'granted') enable();
+        } else enable();
+      } catch (error) { console.warn('OnlyHers motion permission was not granted:', error); }
+    }
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = 'Enable motion';
+      button.setAttribute('aria-label', 'Enable product motion');
+      button.style.cssText = 'position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:9998;padding:9px 15px;border:1px solid rgba(255,255,255,.42);border-radius:999px;background:rgba(20,0,4,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#fff;font:600 10px/1 inherit;letter-spacing:.14em;text-transform:uppercase;opacity:.82;';
+      document.body.appendChild(button);
+      button.addEventListener('click', async () => { await requestMotionPermission(); button.remove(); }, { once: true });
+      setTimeout(() => { if (document.body.contains(button)) button.remove(); }, 9000);
+    } else enable();
+  }
   function setupPremiumDesktopMotion() {
     const feed = document.getElementById('homeProductsFeed');
     if (!feed) return;
