@@ -777,6 +777,13 @@ body { color: #fff; }
         Select multiple photos. The first photo becomes the cover image.
         You can remove photos before uploading.
       </p>
+      <h3 style="margin-top:24px;font-family:'Playfair Display',serif;font-weight:500">Social panels</h3>
+      <div class="row social-fields">
+  <div><label>Instagram photo</label><input id="instagramPhoto" type="file" accept="image/*"><p class="help-text">Optional panel image.</p></div>
+  <div><label>Instagram link</label><input id="instagramLink" type="url" placeholder="https://instagram.com/..."></div>
+  <div><label>YouTube photo</label><input id="youtubePhoto" type="file" accept="image/*"><p class="help-text">Optional panel image.</p></div>
+  <div><label>YouTube link</label><input id="youtubeLink" type="url" placeholder="https://youtube.com/..."></div>
+</div>
 
 
       <div
@@ -1457,6 +1464,11 @@ $('upload').onclick =
       }
 
 
+      let instagramPhotoUrl = null;
+      let youtubePhotoUrl = null;
+      if ($('instagramPhoto')?.files?.[0]) [instagramPhotoUrl] = await uploadFiles([$('instagramPhoto').files[0]]);
+      if ($('youtubePhoto')?.files?.[0]) [youtubePhotoUrl] = await uploadFiles([$('youtubePhoto').files[0]]);
+
       const { error } =
         await supabase
           .from('products')
@@ -1499,6 +1511,11 @@ $('upload').onclick =
             image_urls:
               imageUrls,
 
+            instagram_photo_url: instagramPhotoUrl,
+            instagram_link: $('instagramLink').value.trim() || null,
+            youtube_photo_url: youtubePhotoUrl,
+            youtube_link: $('youtubeLink').value.trim() || null,
+
             is_available:
               true
 
@@ -1533,6 +1550,10 @@ $('upload').onclick =
 
       $('images').value = '';
       $('sizeChart').value = '';
+      if ($('instagramPhoto')) $('instagramPhoto').value = '';
+      if ($('youtubePhoto')) $('youtubePhoto').value = '';
+      if ($('instagramLink')) $('instagramLink').value = '';
+      if ($('youtubeLink')) $('youtubeLink').value = '';
 
       selectedFiles = [];
 
@@ -2421,6 +2442,10 @@ $('uploadFabric')?.addEventListener('click',async()=>{
     setStatus('fabricUploadStatus','Uploading fabric photos...');
     const imageUrls=await uploadFabricFiles(selectedFabricFiles);
     const price=$('fabricPrice').value?Number($('fabricPrice').value):null;
+    let fabricInstagramPhotoUrl=null;
+    let fabricYoutubePhotoUrl=null;
+    if($('fabricInstagramPhoto')?.files?.[0]) [fabricInstagramPhotoUrl]=await uploadFabricFiles([$(`fabricInstagramPhoto`).files[0]]);
+    if($('fabricYoutubePhoto')?.files?.[0]) [fabricYoutubePhotoUrl]=await uploadFabricFiles([$(`fabricYoutubePhoto`).files[0]]);
     const {error}=await supabase.from('fabrics').insert({
       name,
       price,
@@ -2432,12 +2457,20 @@ $('uploadFabric')?.addEventListener('click',async()=>{
       description:$('fabricDescription').value.trim()||null,
       image_url:imageUrls[0],
       image_urls:imageUrls,
+      instagram_photo_url:fabricInstagramPhotoUrl,
+      instagram_link:$('fabricInstagramLink').value.trim()||null,
+      youtube_photo_url:fabricYoutubePhotoUrl,
+      youtube_link:$('fabricYoutubeLink').value.trim()||null,
       is_available:true
     });
     if(error) throw error;
     setStatus('fabricUploadStatus','Fabric uploaded successfully! 🎉','ok');
     ['fabricName','fabricPrice','fabricAvailableMeters','fabricCode','fabricPattern','fabricMaterial','fabricWidth','fabricDescription'].forEach(id=>$(id).value='');
     selectedFabricFiles=[];$('fabricImagePreviews').innerHTML='';$('fabricImages').value='';
+    if($('fabricInstagramPhoto')) $('fabricInstagramPhoto').value='';
+    if($('fabricYoutubePhoto')) $('fabricYoutubePhoto').value='';
+    if($('fabricInstagramLink')) $('fabricInstagramLink').value='';
+    if($('fabricYoutubeLink')) $('fabricYoutubeLink').value='';
     loadFabricsAdmin();
   }catch(error){console.error(error);setStatus('fabricUploadStatus',error.message,'err');}
 });
