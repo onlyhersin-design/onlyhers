@@ -1582,7 +1582,8 @@ body { color: #fff; }
       let filtered = allProducts.filter(function(product) {
         const name = String(product.name || "").toLowerCase();
         const productCategory = String(product.category || "").toLowerCase();
-        return (name.includes(search) || productCategory.includes(search)) && matchesCategory(product, category);
+        const productCode = String(product.product_code || "").toLowerCase();
+        return (name.includes(search) || productCategory.includes(search) || productCode.includes(search)) && matchesCategory(product, category);
       });
 
       filtered.sort(function(a, b) {
