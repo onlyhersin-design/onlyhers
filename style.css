@@ -1241,6 +1241,33 @@ body { color: #fff; }
   will-change: auto !important;
   backface-visibility: hidden;
   filter: drop-shadow(0 18px 34px rgba(0,0,0,.16));
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 3px;
+  box-shadow:
+    0 22px 45px rgba(0,0,0,.20),
+    0 0 0 8px rgba(255,255,255,.025);
+  animation: onlyhersQuietFloat 11s ease-in-out infinite;
+  animation-delay: calc(var(--oh-delay, 0) * -1s);
+}
+
+@keyframes onlyhersQuietFloat {
+  0%, 100% {
+    margin-top: 0;
+  }
+  50% {
+    margin-top: -7px;
+  }
+}
+
+/* Keep the product itself calm while the page scrolls naturally. */
+.home-page .home-product-cover {
+  scroll-behavior: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-page .home-product-cover {
+    animation: none !important;
+  }
 }
 
 .home-page > footer {
