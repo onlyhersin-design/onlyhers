@@ -239,9 +239,13 @@
         const phase = index * 1.37;
         const idleDrift = Math.sin(time * 0.32 + phase) * 22;
 
-        // While the user swipes/scrolls, add directional travel on top of the idle drift.
-        const swipeTravel = Math.max(-55, Math.min(55, -progress * 30 + velocity * 210));
-        const targetY = baseY + idleDrift + swipeTravel;
+        // The product physically follows the page as it moves from one
+        // full-screen section to the next. A product below the viewport
+        // starts lower and naturally rises into place; the previous product
+        // leaves upward. Fast swipes add momentum on top of that movement.
+        const sectionTravel = Math.max(-150, Math.min(150, progress * 135));
+        const swipeMomentum = Math.max(-65, Math.min(65, velocity * 170));
+        const targetY = baseY + idleDrift + sectionTravel + swipeMomentum;
 
         slide.style.setProperty('--oh-y-active', targetY.toFixed(1) + 'px');
 
@@ -251,6 +255,17 @@
           slide.classList.remove('oh-slow-drift');
         }
       });
+
+      // Treat the footer as the final full-screen slide so it enters/exits
+      // with the same natural vertical movement.
+      const footer = document.querySelector('.home-page > footer');
+      if (footer) {
+        const footerRect = footer.getBoundingClientRect();
+        const footerTravel = Math.max(-55, Math.min(85, footerRect.top * 0.12));
+        const footerOpacity = Math.max(0.55, Math.min(1, 1 - Math.max(0, footerRect.top) / Math.max(viewport, 1) * 0.45));
+        footer.style.setProperty('--oh-footer-y', footerTravel.toFixed(1) + 'px');
+        footer.style.setProperty('--oh-footer-opacity', footerOpacity.toFixed(3));
+      }
 
       lastScrollY = currentY;
       lastTime = now;
