@@ -89,7 +89,7 @@ let currentFabricImages=[]; let currentFabricImage=0; let currentFabricSocialLin
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 
-function setFabricImage(index){if(!currentFabricImages[index])return;currentFabricImage=index;const img=document.getElementById("fabricMainImage");if(img){img.src=currentFabricImages[index];img.style.cursor=currentFabricSocialLinks[index]?"pointer":"default";}document.querySelectorAll(".fabric-thumb").forEach(function(el,i){el.classList.toggle("active",i===index)});const counter=document.getElementById("fabricGalleryCounter");if(counter)counter.textContent=(index+1)+" / "+currentFabricImages.length;}
+function handleFabricImageError(img){if(!img)return;img.style.display="none";const thumb=img.closest(".fabric-thumb");if(thumb)thumb.style.display="none";}\nfunction setFabricImage(index){if(!currentFabricImages[index])return;currentFabricImage=index;const img=document.getElementById("fabricMainImage");if(img){img.src=currentFabricImages[index];img.style.cursor=currentFabricSocialLinks[index]?"pointer":"default";}document.querySelectorAll(".fabric-thumb").forEach(function(el,i){el.classList.toggle("active",i===index)});const counter=document.getElementById("fabricGalleryCounter");if(counter)counter.textContent=(index+1)+" / "+currentFabricImages.length;}
 function changeFabricImage(direction){if(!currentFabricImages.length)return;setFabricImage((currentFabricImage+direction+currentFabricImages.length)%currentFabricImages.length);}
 function handleFabricImageClick(){const social=currentFabricSocialLinks[currentFabricImage];if(social&&social.link)window.open(social.link,"_blank","noopener,noreferrer");}
 async function loadFabric(){
@@ -106,7 +106,7 @@ async function loadFabric(){
  const meterOptions=Array.from({length:available},(_,i)=>'<option value="'+(i+1)+'">'+(i+1)+' metre'+(i===0?'':'s')+'</option>').join("");
  const msg=encodeURIComponent("Hi OnlyHers! 👋\n\nI'm interested in this fabric:\n"+name+"\nQuantity: "+(document.getElementById("meterQuantity")?.value||1)+" metre(s)\n"+price+"\n\nCould you please share more details?");
  currentFabricImages=[img];
- if(Array.isArray(f.image_urls)) f.image_urls.forEach(function(url){if(url && !currentFabricImages.includes(url)) currentFabricImages.push(url);});
+ if(Array.isArray(f.image_urls)) f.image_urls.forEach(function(url){if(typeof url==="string" && url.trim() && !currentFabricImages.includes(url.trim())) currentFabricImages.push(url.trim());});
  currentFabricSocialLinks={};
  if(f.instagram_photo_url && f.instagram_link){currentFabricSocialLinks[currentFabricImages.length]={platform:"Instagram",link:f.instagram_link};currentFabricImages.push(f.instagram_photo_url);}
  if(f.youtube_photo_url && f.youtube_link){currentFabricSocialLinks[currentFabricImages.length]={platform:"YouTube",link:f.youtube_link};currentFabricImages.push(f.youtube_photo_url);}
