@@ -1348,6 +1348,9 @@ body { color: #fff; }
   background: rgba(255,255,255,.55);
   animation: onlyhersLoadingLine 1.8s ease-in-out infinite;
 }
+.home-page.home-loading .home-product-feed { position: relative; }
+.home-page.home-loading .products-loading, .home-page.home-loading .no-home-products { opacity: 1 !important; visibility: visible !important; }
+
 @keyframes onlyhersLoadingPulse {
   0%, 100% { opacity: .42; transform: translateY(2px); }
   50% { opacity: 1; transform: translateY(-2px); }
