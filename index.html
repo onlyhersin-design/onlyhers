@@ -355,11 +355,13 @@ body { color: #fff; }
 
     async function loadHomeProducts() {
       const feed = document.getElementById("homeProductsFeed");
+      const loadStartedAt = performance.now();
       if (!feed) return;
       try {
         const { data: products, error } = await supabaseClient
           .from("products")
           .select("*")
+          .order("homepage_order", { ascending: false, nullsFirst: false })
           .order("created_at", { ascending: false });
 
         if (error) throw error;
@@ -379,6 +381,9 @@ body { color: #fff; }
           `;
         }).join("");
         enableProductZoom();
+        const elapsed = performance.now() - loadStartedAt;
+        const remaining = Math.max(0, 4000 - elapsed);
+        if (remaining) await new Promise(resolve => setTimeout(resolve, remaining));
         document.body.classList.remove("home-loading");
         document.getElementById("homepage-critical-loading")?.remove();
       } catch (error) {
@@ -414,7 +419,7 @@ body { color: #fff; }
   </script>
 
   <!-- Cache-busted latest homepage ordering/festive banner script -->
-  <script src="homepage-order.js?v=20261006-premium-smooth-native-v5"></script>
+  <script src="homepage-order.js?v=20261006-premium-gyro-v6"></script>
 
 </body>
 </html>
