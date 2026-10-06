@@ -30,7 +30,7 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css?v=20261006-premium-smooth-native-v5">
+  <link rel="stylesheet" href="style.css?v=20261006-premium-loading-v7">
   <meta name="theme-color" content="#78040e">
 
 <meta name="theme-color" content="#78040e">
@@ -289,6 +289,7 @@ body { color: #fff; }
 </head>
 
 <body class="home-page home-loading">
+  <style id="homepage-critical-loading">.home-page.home-loading{overflow:hidden}.home-page.home-loading>.navbar{z-index:10000}.home-page.home-loading>.home-product-feed{min-height:100vh}.home-page.home-loading>.home-product-feed #homeProductsFeed{min-height:100vh;display:flex;align-items:center;justify-content:center}</style>
 
   <!-- HEADER -->
   <header class="navbar">
@@ -367,18 +368,19 @@ body { color: #fff; }
           return;
         }
 
-        feed.innerHTML = products.map((product) => {
+        feed.innerHTML = products.map((product, productIndex) => {
           const coverImage = product.cover_image || product.image_url || product.image || product.images?.[0] || "";
           return `
             <section class="home-product-slide">
               <a href="product.html?id=${product.id}" class="home-product-link">
-                <img src="${coverImage}" alt="${product.name || "OnlyHers Product"}" class="home-product-cover" loading="lazy">
+                <img src="${coverImage}" alt="${product.name || "OnlyHers Product"}" class="home-product-cover" loading="${productIndex < 3 ? "eager" : "lazy"}" fetchpriority="${productIndex < 3 ? "high" : "auto"}">
               </a>
             </section>
           `;
         }).join("");
         enableProductZoom();
         document.body.classList.remove("home-loading");
+        document.getElementById("homepage-critical-loading")?.remove();
       } catch (error) {
         console.error("Homepage products error:", error);
         feed.innerHTML = `<div class="no-home-products"><span>Our designs for you</span><span>are taking a little longer...</span></div>`;
