@@ -213,132 +213,108 @@
       img.addEventListener('load', () => img.classList.add('oh-ready'), { once: true });
     });
 
-    /* Automatic cinematic movement:
-       Product 1 -> Product 2 -> Product 3 -> ... -> Footer.
-       The browser is allowed to handle normal touch/wheel scrolling.
-       Autoplay pauses immediately when the user interacts and resumes
-       after a short idle period. */
-    let currentIndex = 0;
-    let autoplayTimer = null;
-    let animationFrame = null;
-    let userPauseTimer = null;
-    let isAnimating = false;
-    const AUTO_DELAY = 5200;
-    const TRANSITION_MS = 1800;
-    const RESUME_AFTER_USER_MS = 5000;
+    /* Continuous cinematic page movement.
+       The PRODUCTS themselves stay still. The whole homepage gently travels
+       through the product sections and footer. User scroll/swipe direction
+       immediately controls the travel direction. */
+    let direction = 1; // down by default
+    let autoRunning = true;
+    let lastTouchY = null;
+    let lastWheelTime = 0;
+    let raf = null;
+    let lastFrame = performance.now();
+    const AUTO_SPEED = 22; // px/sec — deliberately slow and continuous
 
-    function headerOffset() {
-      const header = document.querySelector('.home-page .navbar');
-      return header ? header.getBoundingClientRect().height : 0;
-    }
-
-    function sectionTop(section) {
-      const rect = section.getBoundingClientRect();
-      return Math.max(0, window.scrollY + rect.top - headerOffset());
-    }
-
-    function easeInOutCubic(t) {
-      return t < 0.5
-        ? 4 * t * t * t
-        : 1 - Math.pow(-2 * t + 2, 3) / 2;
-    }
-
-    function cancelAutoAnimation() {
-      if (animationFrame) {
-        cancelAnimationFrame(animationFrame);
-        animationFrame = null;
+    function clampScroll() {
+      const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      if (window.scrollY <= 0) {
+        window.scrollTo(0, 0);
+        return false;
       }
-      isAnimating = false;
+      if (window.scrollY >= maxScroll) {
+        window.scrollTo(0, maxScroll);
+        return false;
+      }
+      return true;
     }
 
-    function smoothMoveTo(index) {
-      if (!sections[index] || isAnimating) return;
+    function animateContinuous(now) {
+      const dt = Math.min(40, now - lastFrame);
+      lastFrame = now;
 
-      const target = sectionTop(sections[index]);
-      const startY = window.scrollY;
-      const distance = target - startY;
+      if (autoRunning) {
+        const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+        const next = window.scrollY + direction * AUTO_SPEED * (dt / 1000);
 
-      if (Math.abs(distance) < 3) {
-        currentIndex = index;
-        return;
-      }
-
-      cancelAutoAnimation();
-      isAnimating = true;
-      const started = performance.now();
-
-      function frame(now) {
-        const progress = Math.min(1, (now - started) / TRANSITION_MS);
-        const eased = easeInOutCubic(progress);
-        window.scrollTo(0, startY + distance * eased);
-
-        if (progress < 1 && isAnimating) {
-          animationFrame = requestAnimationFrame(frame);
+        if (next <= 0) {
+          window.scrollTo(0, 0);
+          autoRunning = false;
+        } else if (next >= maxScroll) {
+          window.scrollTo(0, maxScroll);
+          autoRunning = false;
         } else {
-          window.scrollTo(0, target);
-          animationFrame = null;
-          isAnimating = false;
-          currentIndex = index;
+          window.scrollTo(0, next);
         }
       }
 
-      animationFrame = requestAnimationFrame(frame);
+      raf = requestAnimationFrame(animateContinuous);
     }
 
-    function detectCurrentSection() {
-      const viewportCenter = window.innerHeight * 0.52;
-      let closest = 0;
-      let best = Infinity;
-
-      sections.forEach((section, index) => {
-        const rect = section.getBoundingClientRect();
-        const distance = Math.abs((rect.top + rect.height / 2) - viewportCenter);
-        if (distance < best) {
-          best = distance;
-          closest = index;
-        }
-      });
-
-      currentIndex = closest;
+    function setDirection(nextDirection) {
+      if (nextDirection === 0) return;
+      direction = nextDirection > 0 ? 1 : -1;
+      autoRunning = true;
+      lastFrame = performance.now();
     }
 
-    function scheduleAutoplay(delay = AUTO_DELAY) {
-      clearTimeout(autoplayTimer);
-      autoplayTimer = setTimeout(() => {
-        detectCurrentSection();
-        const nextIndex = (currentIndex + 1) % sections.length;
-        smoothMoveTo(nextIndex);
-        scheduleAutoplay(AUTO_DELAY + TRANSITION_MS);
-      }, delay);
-    }
-
-    function userInteracted() {
-      cancelAutoAnimation();
-      detectCurrentSection();
-
-      clearTimeout(userPauseTimer);
-      clearTimeout(autoplayTimer);
-
-      /* Let the user's wheel/touch/swipe happen at completely normal
-         browser speed. Only restart the cinematic autoplay after idle. */
-      userPauseTimer = setTimeout(() => {
-        detectCurrentSection();
-        scheduleAutoplay(AUTO_DELAY);
-      }, RESUME_AFTER_USER_MS);
-    }
-
-    ['wheel', 'touchstart', 'pointerdown', 'keydown'].forEach(eventName => {
-      window.addEventListener(eventName, userInteracted, { passive: true });
-    });
-
-    window.addEventListener('scroll', () => {
-      if (!isAnimating) detectCurrentSection();
+    /* Mouse wheel: immediately follow the user's direction, then continue
+       in that direction with the same slow cinematic movement. */
+    window.addEventListener('wheel', (event) => {
+      if (Math.abs(event.deltaY) < 1) return;
+      setDirection(event.deltaY > 0 ? 1 : -1);
+      lastWheelTime = performance.now();
     }, { passive: true });
 
-    /* Start automatically from the first product after the visitor has
-       had a moment to see it. */
-    detectCurrentSection();
-    scheduleAutoplay(AUTO_DELAY);
+    /* Touch: detect the actual finger movement so an upward swipe reverses
+       the cinematic travel and a downward swipe moves toward the next slide. */
+    window.addEventListener('touchstart', (event) => {
+      lastTouchY = event.touches[0]?.clientY ?? null;
+      autoRunning = false;
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (event) => {
+      const y = event.touches[0]?.clientY;
+      if (y == null || lastTouchY == null) return;
+
+      const delta = lastTouchY - y;
+      if (Math.abs(delta) > 1) {
+        setDirection(delta > 0 ? 1 : -1);
+      }
+      lastTouchY = y;
+    }, { passive: true });
+
+    window.addEventListener('touchend', () => {
+      lastTouchY = null;
+      autoRunning = true;
+      lastFrame = performance.now();
+    }, { passive: true });
+
+    /* Keyboard navigation also changes the cinematic direction. */
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowDown' || event.key === 'PageDown' || event.key === ' ') {
+        setDirection(1);
+      } else if (event.key === 'ArrowUp' || event.key === 'PageUp') {
+        setDirection(-1);
+      }
+    });
+
+    /* Begin immediately — no 5 second/1.8 second waiting period. */
+    lastFrame = performance.now();
+    raf = requestAnimationFrame(animateContinuous);
+
+    /* Start immediately when the homepage loads. */
+    lastFrame = performance.now();
+    if (!raf) raf = requestAnimationFrame(animateContinuous);
   }
 
   function start() {
