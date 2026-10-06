@@ -89,7 +89,8 @@ let currentFabricImages=[]; let currentFabricImage=0; let currentFabricSocialLin
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 
-function handleFabricImageError(img){if(!img)return;img.style.display="none";const thumb=img.closest(".fabric-thumb");if(thumb)thumb.style.display="none";}\nfunction setFabricImage(index){if(!currentFabricImages[index])return;currentFabricImage=index;const img=document.getElementById("fabricMainImage");if(img){img.src=currentFabricImages[index];img.style.cursor=currentFabricSocialLinks[index]?"pointer":"default";}document.querySelectorAll(".fabric-thumb").forEach(function(el,i){el.classList.toggle("active",i===index)});const counter=document.getElementById("fabricGalleryCounter");if(counter)counter.textContent=(index+1)+" / "+currentFabricImages.length;}
+function handleFabricImageError(img){if(!img)return;img.style.display="none";const thumb=img.closest(".fabric-thumb");if(thumb)thumb.style.display="none";}
+function setFabricImage(index){if(!currentFabricImages[index])return;currentFabricImage=index;const img=document.getElementById("fabricMainImage");if(img){img.src=currentFabricImages[index];img.style.cursor=currentFabricSocialLinks[index]?"pointer":"default";}document.querySelectorAll(".fabric-thumb").forEach(function(el,i){el.classList.toggle("active",i===index)});const counter=document.getElementById("fabricGalleryCounter");if(counter)counter.textContent=(index+1)+" / "+currentFabricImages.length;}
 function changeFabricImage(direction){if(!currentFabricImages.length)return;setFabricImage((currentFabricImage+direction+currentFabricImages.length)%currentFabricImages.length);}
 function handleFabricImageClick(){const social=currentFabricSocialLinks[currentFabricImage];if(social&&social.link)window.open(social.link,"_blank","noopener,noreferrer");}
 async function loadFabric(){
