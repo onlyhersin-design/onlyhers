@@ -289,7 +289,17 @@ body { color: #fff; }
 </head>
 
 <body class="home-page home-loading">
-  <style id="homepage-critical-loading">.home-page.home-loading{overflow:hidden}.home-page.home-loading>.navbar{z-index:10000}.home-page.home-loading>.home-product-feed{min-height:100vh}.home-page.home-loading>.home-product-feed #homeProductsFeed{min-height:100vh;display:flex;align-items:center;justify-content:center}</style>
+  <style id="homepage-critical-loading">
+    .home-page.home-loading{overflow:hidden!important}
+    .home-page.home-loading>.navbar{z-index:10000}
+    .home-page.home-loading>.home-product-feed{min-height:100vh}
+    .home-page.home-loading>.home-product-feed #homeProductsFeed{min-height:100vh;display:flex;align-items:center;justify-content:center}
+    #onlyhers-home-loader{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;background:radial-gradient(ellipse at 50% 45%,#a90a18 0%,#78040e 38%,#420108 68%,#170002 100%);color:rgba(255,255,255,.94);font-family:"Playfair Display",Georgia,serif;font-size:clamp(20px,3vw,30px);font-style:italic;letter-spacing:.02em;text-align:center;text-shadow:0 8px 30px rgba(0,0,0,.28);opacity:1;visibility:visible;transition:opacity .45s ease,visibility .45s ease}
+    #onlyhers-home-loader::after{content:"";width:34px;height:1px;margin-top:18px;background:rgba(255,255,255,.55);animation:onlyhersLoaderLine 1.8s ease-in-out infinite}
+    #onlyhers-home-loader.onlyhers-loader-hide{opacity:0;visibility:hidden;pointer-events:none}
+    @keyframes onlyhersLoaderLine{0%,100%{opacity:.18;transform:scaleX(.45)}50%{opacity:.85;transform:scaleX(1)}}
+  </style>
+  <div id="onlyhers-home-loader" role="status" aria-live="polite"><span>Our designs for you</span><span>are loading...</span></div>
 
   <!-- HEADER -->
   <header class="navbar">
@@ -353,9 +363,22 @@ body { color: #fff; }
       });
     }
 
+    const homepageLoadStartedAt = performance.now();
+    let homepageLoaderHidden = false;
+    function hideHomepageLoader() {
+      if (homepageLoaderHidden) return;
+      homepageLoaderHidden = true;
+      document.body.classList.remove("home-loading");
+      document.getElementById("homepage-critical-loading")?.remove();
+      document.getElementById("onlyhers-home-loader")?.classList.add("onlyhers-loader-hide");
+    }
+    function hideHomepageLoaderAfterFourSeconds() {
+      const remaining = Math.max(0, 4000 - (performance.now() - homepageLoadStartedAt));
+      setTimeout(hideHomepageLoader, remaining);
+    }
+
     async function loadHomeProducts() {
       const feed = document.getElementById("homeProductsFeed");
-      const loadStartedAt = performance.now();
       if (!feed) return;
       try {
         const { data: products, error } = await supabaseClient
@@ -381,11 +404,7 @@ body { color: #fff; }
           `;
         }).join("");
         enableProductZoom();
-        const elapsed = performance.now() - loadStartedAt;
-        const remaining = Math.max(0, 4000 - elapsed);
-        if (remaining) await new Promise(resolve => setTimeout(resolve, remaining));
-        document.body.classList.remove("home-loading");
-        document.getElementById("homepage-critical-loading")?.remove();
+        hideHomepageLoaderAfterFourSeconds();
       } catch (error) {
         console.error("Homepage products error:", error);
         feed.innerHTML = `<div class="no-home-products"><span>Our designs for you</span><span>are taking a little longer...</span></div>`;
@@ -394,6 +413,18 @@ body { color: #fff; }
 
     checkUser();
     loadHomeProducts();
+    // Also re-show the loader when the browser restores this page from bfcache.
+    window.addEventListener("pageshow", (event) => {
+      if (event.persisted) {
+        document.body.classList.add("home-loading");
+        document.getElementById("onlyhers-home-loader")?.classList.remove("onlyhers-loader-hide");
+        homepageLoaderHidden = false;
+        const restartedAt = performance.now();
+        setTimeout(() => {
+          if (performance.now() - restartedAt >= 4000) hideHomepageLoader();
+        }, 4000);
+      }
+    });
 
     /* Add a slightly deeper glass effect after scrolling */
     const navbar = document.querySelector('.navbar');
