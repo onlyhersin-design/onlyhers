@@ -293,6 +293,8 @@
       opacity: 1;
       border: 2px solid white;
     }
+    .social-thumb-label { position:absolute;left:4px;right:4px;bottom:4px;padding:4px 3px;background:rgba(0,0,0,.65);color:#fff;font-size:8px;letter-spacing:1px;text-transform:uppercase;text-align:center; }
+    .thumbnail { position:relative; }
 
     /* PRODUCT DETAILS */
 
@@ -988,7 +990,7 @@ body { color: #fff; }
     const productId = params.get("id");
 
     let productImages = [];
-
+    let productSocialLinks = {};
     let currentImageIndex = 0;
 
 
@@ -1084,6 +1086,7 @@ body { color: #fff; }
       const productWashCare = product.wash_care || "";
       const productMoreDetails = product.more_details || "";
       const sizeChartUrl = product.size_chart_url || "";
+      productSocialLinks = {};
 
       const productStructuredData = {
         "@context": "https://schema.org",
@@ -1165,6 +1168,15 @@ body { color: #fff; }
 
       }
 
+      if (product.instagram_photo_url && product.instagram_link) {
+        productSocialLinks[productImages.length] = { platform: "Instagram", link: product.instagram_link };
+        productImages.push(product.instagram_photo_url);
+      }
+      if (product.youtube_photo_url && product.youtube_link) {
+        productSocialLinks[productImages.length] = { platform: "YouTube", link: product.youtube_link };
+        productImages.push(product.youtube_photo_url);
+      }
+
 
       /* =========================
          SIZES
@@ -1234,7 +1246,7 @@ body { color: #fff; }
                 class="main-image"
                 src="${escapeHTML(productImages[0] || "")}"
                 alt="${escapeHTML(productName)}"
-                onclick="openImageModal()"
+                onclick="handleMainImageClick()"
               >
 
               ${productImages.length > 1 ? `
@@ -1284,7 +1296,7 @@ body { color: #fff; }
                   <img
                     src="${escapeHTML(image)}"
                     alt="${escapeHTML(productName)} view ${index + 1}"
-                  >
+                  >${productSocialLinks[index] ? `<span class="social-thumb-label">${escapeHTML(productSocialLinks[index].platform)}</span>` : ""}
 
                 </button>
 
@@ -1470,6 +1482,8 @@ body { color: #fff; }
         mainImage.src =
           productImages[index];
 
+        const social = productSocialLinks[index];
+        mainImage.style.cursor = social ? "pointer" : "zoom-in";
         mainImage.style.opacity = "1";
 
       }, 150);
@@ -1547,6 +1561,15 @@ body { color: #fff; }
     /* =========================
        IMAGE MODAL
     ========================= */
+
+    function handleMainImageClick() {
+      const social = productSocialLinks[currentImageIndex];
+      if (social && social.link) {
+        window.open(social.link, "_blank", "noopener,noreferrer");
+        return;
+      }
+      openImageModal();
+    }
 
     function openImageModal() {
 
