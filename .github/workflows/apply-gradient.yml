@@ -1,92 +1,17 @@
 name: Apply OnlyHers gradient theme
 
+# The OnlyHers theme is now maintained directly in the repository.
+# This workflow is kept manual so it cannot overwrite homepage layout changes
+# or race with normal website commits.
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   gradient:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Apply OnlyHers theme and favicon
-        shell: bash
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-
-          theme = r'''/* ONLYHERS REFERENCE RED-BLACK GRADIENT */
-          html, body {
-            min-height: 100%;
-            background: radial-gradient(ellipse at 50% 50%, #a90a18 0%, #78040e 38%, #420108 68%, #170002 100%) !important;
-            background-color: #170002 !important;
-            background-attachment: fixed !important;
-          }
-          body { color: #fff; }
-          .home-page, .auth-page, .about-section, .brand-story, .home-product-feed,
-          .products-page, .collection-page, .product-page, .account-page, main, footer {
-            background: transparent !important;
-          }
-          .navbar, header {
-            background: rgba(25, 0, 4, .30) !important;
-            -webkit-backdrop-filter: blur(18px) saturate(125%);
-            backdrop-filter: blur(18px) saturate(125%);
-          }
-          .hero {
-            background: radial-gradient(ellipse at 50% 50%, rgba(169,10,24,.90) 0%, rgba(120,4,14,.78) 38%, rgba(66,1,8,.70) 68%, rgba(23,0,2,.88) 100%) !important;
-          }
-          .main-image-container { background: rgba(255,255,255,.06) !important; }
-          '''
-
-          favicon = '''<!-- OnlyHers site icon -->
-          <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
-          <link rel="apple-touch-icon" sizes="512x512" href="/favicon.png">
-          <meta name="theme-color" content="#78040e">'''
-
-          css_path = Path('style.css')
-          if css_path.exists():
-              css = css_path.read_text()
-              marker = '/* ONLYHERS REFERENCE RED-BLACK GRADIENT */'
-              if marker in css:
-                  css = css[:css.index(marker)]
-              css_path.write_text(css.rstrip() + '\n\n' + theme + '\n')
-
-          for p in Path('.').glob('*.html'):
-              text = p.read_text()
-
-              # Normalize all favicon declarations to the same crawlable URL.
-              text = re.sub(r'\s*<!--\s*Website icon\s*-->\s*', '\n', text, flags=re.I)
-              text = re.sub(r'\s*<!--\s*OnlyHers site icon\s*-->\s*', '\n', text, flags=re.I)
-              text = re.sub(r'\s*<link\s+[^>]*rel=["\'](?:shortcut icon|icon|apple-touch-icon)["\'][^>]*>\s*', '\n', text, flags=re.I)
-              text = re.sub(r'\s*<link\s+[^>]*rel=["\'](?:apple-touch-icon|icon|shortcut icon)["\'][^>]*>\s*', '\n', text, flags=re.I)
-
-              if '</head>' in text:
-                  text = text.replace('</head>', '\n' + favicon + '\n</head>', 1)
-
-              # Keep the Organization logo canonical and absolute on the homepage.
-              if p.name == 'index.html':
-                  text = text.replace('"logo": "https://onlyhers.in/onlyhers-logo.png"',
-                                      '"logo": "https://onlyhers.in/onlyhers-logo.png"')
-
-              # Remove previous injected theme block completely, then add the current one.
-              text = re.sub(r'<style>\s*/\* ONLYHERS REFERENCE RED-BLACK GRADIENT \*/.*?</style>\s*', '', text, flags=re.S)
-              if '</head>' in text:
-                  text = text.replace('</head>', '\n<style>\n' + theme + '\n</style>\n</head>', 1)
-                  p.write_text(text)
-          PY
-      - name: Commit theme changes
-        shell: bash
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet; then
-            echo "No theme changes needed."
-            exit 0
-          fi
-          git add style.css '*.html'
-          git commit -m "Standardize OnlyHers favicon and site theme"
-          git push
+      - name: Theme is maintained in the repository
+        run: echo "OnlyHers theme is maintained directly in style.css and page files."
