@@ -180,6 +180,7 @@
         if (match) byId.set(decodeURIComponent(match[1]), section);
       });
       products.forEach(product => { const section = byId.get(String(product.id)); if (section) feed.appendChild(section); });
+      setupPremiumDesktopMotion();
     } catch (error) { console.warn('OnlyHers homepage custom order unavailable:', error); }
   }
 
@@ -268,7 +269,7 @@
         if (feed.querySelector('.home-product-slide')) { observer.disconnect(); arrangeStorefront(); }
       });
       observer.observe(feed, { childList: true, subtree: true });
-      setTimeout(arrangeStorefront, 900);
+      setTimeout(() => { arrangeStorefront(); setTimeout(setupPremiumDesktopMotion, 120); }, 900);
     }
   }
 
