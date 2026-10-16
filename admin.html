@@ -834,6 +834,10 @@ body { color: #fff; }
             <input id="fabricPrice" type="number" min="0" placeholder="650">
           </div>
           <div>
+            <label>Wholesale price per metre (₹, for 10m+)</label>
+            <input id="fabricWholesalePrice" type="number" min="0" placeholder="Wholesale rate">
+          </div>
+          <div>
             <label>Available meters</label>
             <input id="fabricAvailableMeters" type="number" min="0" step="1" placeholder="10">
           </div>
@@ -2443,7 +2447,8 @@ function openFabricEdit(fabric){
   modal.className='fabric-edit-modal';
   modal.innerHTML='<div class="fabric-edit-box"><h2>Edit Fabric</h2><div class="fabric-edit-grid">'+
     '<div><label>Fabric name</label><input id="editFabricName"></div>'+
-    '<div><label>Price per metre (₹)</label><input id="editFabricPrice" type="number" min="0"></div>'+
+    '<div><label>Retail price per metre (₹)</label><input id="editFabricPrice" type="number" min="0"></div>'+ 
+    '<div><label>Wholesale price per metre (₹, 10m+)</label><input id="editFabricWholesalePrice" type="number" min="0"></div>'+
     '<div><label>Available meters</label><input id="editFabricMeters" type="number" min="0" step="1"></div>'+
     '<div><label>Fabric code</label><input id="editFabricCode"></div>'+
     '<div><label>Pattern</label><select id="editFabricPattern"><option value="">Select pattern</option><option>Plain</option><option>Floral</option><option>Printed</option><option>Striped</option><option>Checked</option><option>Polka Dot</option><option>Geometric</option><option>Abstract</option><option>Embroidered</option><option>Textured</option><option>Tie-Dye</option><option>Animal Print</option><option>Other</option></select></div>'+
@@ -2459,7 +2464,7 @@ function openFabricEdit(fabric){
     '<div class="fabric-edit-actions"><button type="button" class="fabric-edit-cancel">Cancel</button><button type="button" class="fabric-edit-save">Save changes</button></div><div id="fabricEditStatus" class="status"></div></div>';
   document.body.appendChild(modal);
   const q=id=>modal.querySelector('#'+id);
-  q('editFabricName').value=fabric.name||'';q('editFabricPrice').value=fabric.price??'';q('editFabricMeters').value=fabric.available_meters??0;q('editFabricCode').value=fabric.fabric_code||'';q('editFabricPattern').value=fabric.pattern||'';q('editFabricMaterial').value=fabric.material||'';q('editFabricWidth').value=fabric.width||'';q('editFabricDescription').value=fabric.description||'';q('editFabricAvailable').value=fabric.is_available===false?'false':'true';q('editFabricInstagramLink').value=fabric.instagram_link||'';q('editFabricYoutubeLink').value=fabric.youtube_link||'';
+  q('editFabricName').value=fabric.name||'';q('editFabricPrice').value=fabric.price??'';q('editFabricWholesalePrice').value=fabric.wholesale_price??'';q('editFabricMeters').value=fabric.available_meters??0;q('editFabricCode').value=fabric.fabric_code||'';q('editFabricPattern').value=fabric.pattern||'';q('editFabricMaterial').value=fabric.material||'';q('editFabricWidth').value=fabric.width||'';q('editFabricDescription').value=fabric.description||'';q('editFabricAvailable').value=fabric.is_available===false?'false':'true';q('editFabricInstagramLink').value=fabric.instagram_link||'';q('editFabricYoutubeLink').value=fabric.youtube_link||'';
   q('editFabricImages').value='';q('editFabricInstagramPhoto').value='';q('editFabricYoutubePhoto').value='';
   q('editFabricAvailable').focus();
   modal.querySelector('.fabric-edit-cancel').onclick=()=>modal.remove();
@@ -2472,7 +2477,7 @@ function openFabricEdit(fabric){
       let instagramPhotoUrl=fabric.instagram_photo_url||null,youtubePhotoUrl=fabric.youtube_photo_url||null;
       if(q('editFabricInstagramPhoto').files[0]) [instagramPhotoUrl]=await uploadFabricFiles([q('editFabricInstagramPhoto').files[0]]);
       if(q('editFabricYoutubePhoto').files[0]) [youtubePhotoUrl]=await uploadFabricFiles([q('editFabricYoutubePhoto').files[0]]);
-      const payload={name:q('editFabricName').value.trim(),price:q('editFabricPrice').value?Number(q('editFabricPrice').value):null,available_meters:Math.max(0,Math.floor(Number(q('editFabricMeters').value)||0)),fabric_code:q('editFabricCode').value.trim()||null,pattern:q('editFabricPattern').value||null,material:q('editFabricMaterial').value.trim()||null,width:q('editFabricWidth').value.trim()||null,description:q('editFabricDescription').value.trim()||null,is_available:q('editFabricAvailable').value==='true',instagram_photo_url:instagramPhotoUrl,instagram_link:q('editFabricInstagramLink').value.trim()||null,youtube_photo_url:youtubePhotoUrl,youtube_link:q('editFabricYoutubeLink').value.trim()||null};
+      const payload={name:q('editFabricName').value.trim(),price:q('editFabricPrice').value?Number(q('editFabricPrice').value):null,wholesale_price:q('editFabricWholesalePrice').value?Number(q('editFabricWholesalePrice').value):null,available_meters:Math.max(0,Math.floor(Number(q('editFabricMeters').value)||0)),fabric_code:q('editFabricCode').value.trim()||null,pattern:q('editFabricPattern').value||null,material:q('editFabricMaterial').value.trim()||null,width:q('editFabricWidth').value.trim()||null,description:q('editFabricDescription').value.trim()||null,is_available:q('editFabricAvailable').value==='true',instagram_photo_url:instagramPhotoUrl,instagram_link:q('editFabricInstagramLink').value.trim()||null,youtube_photo_url:youtubePhotoUrl,youtube_link:q('editFabricYoutubeLink').value.trim()||null};
       if(imageUrls.length){payload.image_url=imageUrls[0];payload.image_urls=imageUrls;}
       const {error}=await supabase.from('fabrics').update(payload).eq('id',fabric.id);if(error)throw error;
       save.textContent='Saved successfully!';save.className='status ok';setTimeout(()=>{modal.remove();loadFabricsAdmin();},350);
@@ -2505,6 +2510,7 @@ $('uploadFabric')?.addEventListener('click',async()=>{
     const {error}=await supabase.from('fabrics').insert({
       name,
       price,
+      wholesale_price:$('fabricWholesalePrice').value?Number($('fabricWholesalePrice').value):null,
       available_meters:Math.max(0, Math.floor(Number($('fabricAvailableMeters').value)||0)),
       fabric_code:$('fabricCode').value.trim()||null,
       pattern:$('fabricPattern').value||null,
@@ -2521,7 +2527,7 @@ $('uploadFabric')?.addEventListener('click',async()=>{
     });
     if(error) throw error;
     setStatus('fabricUploadStatus','Fabric uploaded successfully! 🎉','ok');
-    ['fabricName','fabricPrice','fabricAvailableMeters','fabricCode','fabricPattern','fabricMaterial','fabricWidth','fabricDescription'].forEach(id=>$(id).value='');
+    ['fabricName','fabricPrice','fabricWholesalePrice','fabricAvailableMeters','fabricCode','fabricPattern','fabricMaterial','fabricWidth','fabricDescription'].forEach(id=>$(id).value='');
     selectedFabricFiles=[];$('fabricImagePreviews').innerHTML='';$('fabricImages').value='';
     if($('fabricInstagramPhoto')) $('fabricInstagramPhoto').value='';
     if($('fabricYoutubePhoto')) $('fabricYoutubePhoto').value='';
