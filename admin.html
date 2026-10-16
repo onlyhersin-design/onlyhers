@@ -751,6 +751,15 @@ body { color: #fff; }
             <option value="Coord Sets">Coord Sets</option>
           </select>
         </div>
+        <div>
+          <label>Collection section</label>
+          <select id="collectionSection" required>
+            <option value="onlyhers_designs">OnlyHers Designs</option>
+            <option value="customisations">Customisations</option>
+            <option value="recreations">Recreations</option>
+          </select>
+          <p class="help-text">Choose where this design appears on the Collection page.</p>
+        </div>
 
       </div>
 
@@ -981,6 +990,15 @@ body { color: #fff; }
           <option value="Coord Sets">Coord Sets</option>
         </select>
 
+      </div>
+      <div>
+        <label>Collection section</label>
+        <select id="editCollectionSection" required>
+          <option value="onlyhers_designs">OnlyHers Designs</option>
+          <option value="customisations">Customisations</option>
+          <option value="recreations">Recreations</option>
+        </select>
+        <p class="help-text">Choose where this design appears on the Collection page.</p>
       </div>
 
     </div>
@@ -1532,6 +1550,8 @@ $('upload').onclick =
                 .trim()
               || null,
 
+            collection_section: $('collectionSection').value || 'onlyhers_designs',
+
             sizes,
 
             size_chart_url: sizeChartUrl,
@@ -1858,6 +1878,8 @@ function openEditModal(product) {
 
   $('editCategory').value =
     product.category || '';
+
+  $('editCollectionSection').value = product.collection_section || 'onlyhers_designs';
 
   $('editIsAvailable').checked =
     product.is_available !== false;
@@ -2277,6 +2299,8 @@ $('saveEdit').onclick =
                 .value
                 .trim()
               || null,
+
+            collection_section: $('editCollectionSection').value || 'onlyhers_designs',
 
             sizes,
 
