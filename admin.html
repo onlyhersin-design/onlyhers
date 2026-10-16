@@ -1032,6 +1032,31 @@ body { color: #fff; }
     ></div>
 
 
+    <h3 style="margin-top:24px;font-family:'Playfair Display',serif;font-weight:500">Social panels</h3>
+    <p class="help-text">Update the Instagram/YouTube links and replace their panel photos here. Leave a photo field empty to keep the current photo.</p>
+    <div class="row social-fields">
+      <div>
+        <label>Current Instagram photo</label>
+        <div id="editInstagramPhotoPreview" class="help-text"></div>
+        <label>Replace Instagram photo (optional)</label>
+        <input id="editInstagramPhoto" type="file" accept="image/*">
+      </div>
+      <div>
+        <label>Instagram link</label>
+        <input id="editInstagramLink" type="url" placeholder="https://instagram.com/...">
+      </div>
+      <div>
+        <label>Current YouTube photo</label>
+        <div id="editYoutubePhotoPreview" class="help-text"></div>
+        <label>Replace YouTube photo (optional)</label>
+        <input id="editYoutubePhoto" type="file" accept="image/*">
+      </div>
+      <div>
+        <label>YouTube link</label>
+        <input id="editYoutubeLink" type="url" placeholder="https://youtube.com/...">
+      </div>
+    </div>
+
     <div class="modal-actions">
 
       <button
@@ -1841,6 +1866,17 @@ function openEditModal(product) {
   $('editWashCare').value = product.wash_care || '';
   $('editMoreDetails').value = product.more_details || '';
 
+  $('editInstagramLink').value = product.instagram_link || '';
+  $('editYoutubeLink').value = product.youtube_link || '';
+  $('editInstagramPhoto').value = '';
+  $('editYoutubePhoto').value = '';
+  $('editInstagramPhotoPreview').innerHTML = product.instagram_photo_url
+    ? '<a href="' + escapeHTML(product.instagram_photo_url) + '" target="_blank" rel="noopener">View current Instagram photo</a>'
+    : 'No Instagram photo uploaded.';
+  $('editYoutubePhotoPreview').innerHTML = product.youtube_photo_url
+    ? '<a href="' + escapeHTML(product.youtube_photo_url) + '" target="_blank" rel="noopener">View current YouTube photo</a>'
+    : 'No YouTube photo uploaded.';
+
   $('editSizeChart').value = '';
   $('editSizeChartPreview').innerHTML =
     product.size_chart_url
@@ -2202,6 +2238,16 @@ $('saveEdit').onclick =
           : null;
 
       let sizeChartUrl = editingProduct.size_chart_url || null;
+      let instagramPhotoUrl = editingProduct.instagram_photo_url || null;
+      let youtubePhotoUrl = editingProduct.youtube_photo_url || null;
+      if ($('editInstagramPhoto').files[0]) {
+        setStatus('editStatus', 'Uploading Instagram photo...');
+        [instagramPhotoUrl] = await uploadFiles([$('editInstagramPhoto').files[0]]);
+      }
+      if ($('editYoutubePhoto').files[0]) {
+        setStatus('editStatus', 'Uploading YouTube photo...');
+        [youtubePhotoUrl] = await uploadFiles([$('editYoutubePhoto').files[0]]);
+      }
       const editChartFile = $('editSizeChart').files[0];
       if (editChartFile) {
         setStatus('editStatus', 'Uploading size chart...');
@@ -2244,6 +2290,11 @@ $('saveEdit').onclick =
 
             more_details:
               $('editMoreDetails').value.trim() || null,
+
+            instagram_photo_url: instagramPhotoUrl,
+            instagram_link: $('editInstagramLink').value.trim() || null,
+            youtube_photo_url: youtubePhotoUrl,
+            youtube_link: $('editYoutubeLink').value.trim() || null,
 
             is_available:
               $('editIsAvailable').checked,
