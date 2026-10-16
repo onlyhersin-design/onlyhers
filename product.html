@@ -1168,12 +1168,12 @@ body { color: #fff; }
 
       }
 
-      if (product.instagram_photo_url && product.instagram_link) {
-        productSocialLinks[productImages.length] = { platform: "Instagram", link: product.instagram_link };
+      if (product.instagram_photo_url) {
+        productSocialLinks[productImages.length] = { platform: "Instagram", link: product.instagram_link || "" };
         productImages.push(product.instagram_photo_url);
       }
-      if (product.youtube_photo_url && product.youtube_link) {
-        productSocialLinks[productImages.length] = { platform: "YouTube", link: product.youtube_link };
+      if (product.youtube_photo_url) {
+        productSocialLinks[productImages.length] = { platform: "YouTube", link: product.youtube_link || "" };
         productImages.push(product.youtube_photo_url);
       }
 
