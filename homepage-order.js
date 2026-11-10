@@ -120,11 +120,20 @@
       const db = await getClient(), field = sortField;
       let currentValue, otherValue;
       if (field === 'homepage_order') {
-        currentValue = current.homepage_order; otherValue = other.homepage_order;
-        if (currentValue == null || otherValue == null) {
+        // Initialise the complete sequence before swapping. This prevents
+        // null homepage_order rows from jumping around unpredictably.
+        if (products.some(product => product.homepage_order == null)) {
           const base = Date.now() * 1000;
-          currentValue = base - index * 2; otherValue = base - otherIndex * 2;
+          for (let i = 0; i < products.length; i++) {
+            const { error } = await db.from('products')
+              .update({ homepage_order: base - i * 2 })
+              .eq('id', products[i].id);
+            if (error) throw error;
+            products[i].homepage_order = base - i * 2;
+          }
         }
+        currentValue = current.homepage_order;
+        otherValue = other.homepage_order;
       } else { currentValue = current.created_at; otherValue = other.created_at; }
       const first = await db.from('products').update({ [field]: otherValue }).eq('id', current.id);
       if (first.error) throw first.error;
