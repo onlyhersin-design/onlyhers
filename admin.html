@@ -1655,19 +1655,14 @@ async function loadProducts() {
     'Loading products...';
 
 
-  const {
-    data,
-    error
-  } =
-    await supabase
-      .from('products')
-      .select('*')
-      .order(
-        'created_at',
-        {
-          ascending: false
-        }
-      );
+  let { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .order('homepage_order', { ascending: false, nullsFirst: false })
+    .order('created_at', { ascending: false });
+
+  // Older products may not have a homepage_order yet. Keep those after
+  // manually ordered products, in newest-first order (same as the homepage).
 
 
   if (error) {
