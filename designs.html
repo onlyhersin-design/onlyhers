@@ -38,10 +38,6 @@
 
 
   <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <!-- Your Supabase App -->
-  <script src="app.js"></script>
 
 
   <style>
@@ -1367,158 +1363,31 @@ body { color: #fff; }
 
 
     /* ----------------------------
-       CHECK LOGIN STATUS
+       NAVIGATION + LOAD PRODUCTS
     ----------------------------- */
 
-    async function checkUser() {
-
-      try {
-
-        const {
-          data: {
-            session
-          }
-        } =
-        await supabaseClient
-          .auth
-          .getSession();
-
-
-        const loginLink =
-          document.getElementById(
-            "loginLink"
-          );
-
-
-        if (session) {
-
-          loginLink.textContent =
-            "My Account";
-
-          loginLink.href =
-            "account.html";
-
-        }
-
+    function checkUser() {
+      const loginLink = document.getElementById("loginLink");
+      if (loginLink) {
+        loginLink.textContent = "Login";
+        loginLink.href = "login.html";
       }
-
-      catch (error) {
-
-        console.log(
-          "Auth check:",
-          error
-        );
-
-      }
-
     }
-
-
-
-    /* ----------------------------
-       LOAD PRODUCTS
-    ----------------------------- */
 
     async function loadProducts() {
-
-      const grid =
-        document.getElementById(
-          "productsGrid"
-        );
-
-
-      const count =
-        document.getElementById(
-          "productCount"
-        );
-
-
+      const grid = document.getElementById("productsGrid");
+      const count = document.getElementById("productCount");
       try {
-
-        if (
-          typeof supabaseClient ===
-          "undefined"
-        ) {
-
-          throw new Error(
-            "Supabase is not connected. Check app.js."
-          );
-
-        }
-
-
-        const {
-          data: products,
-          error
-        } =
-        await supabaseClient
-          .from("products")
-          .select("*")
-          .order(
-            "created_at",
-            {
-              ascending: false
-            }
-          );
-
-
-        if (error) {
-
-          throw error;
-
-        }
-
-
-        allProducts =
-          products || [];
-
-
-        renderProducts(
-          allProducts
-        );
-
-
+        const response = await fetch("/api/products", { headers: { accept: "application/json" } });
+        if (!response.ok) throw new Error("Products API returned " + response.status);
+        allProducts = await response.json() || [];
+        renderProducts(allProducts);
+      } catch (error) {
+        console.error("Product loading error:", error);
+        grid.innerHTML = '<div class="error-message"><h3>Couldn\'t load the collection</h3><p style="margin-top:12px;opacity:.7">Please refresh and try again.</p></div>';
+        count.textContent = "Unable to load";
       }
-
-      catch (error) {
-
-        console.error(
-          "Product loading error:",
-          error
-        );
-
-
-        grid.innerHTML = `
-
-          <div class="error-message">
-
-            <h3>
-              Couldn't load the collection
-            </h3>
-
-            <p style="
-              margin-top:12px;
-              opacity:.7;
-            ">
-              ${escapeHTML(
-                error.message ||
-                "Please check your Supabase connection."
-              )}
-            </p>
-
-          </div>
-
-        `;
-
-
-        count.textContent =
-          "Unable to load";
-
-      }
-
     }
-
-
 
     /* ----------------------------
        RENDER PRODUCTS
