@@ -1,9 +1,5 @@
 /* OnlyHers homepage product ordering + temporary festive banner */
 (function () {
-  const SUPABASE_URL = 'https://zeodtbgxadxfvexvywpm.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr';
-  let clientPromise = null;
-  let sortField = 'homepage_order';
   let busy = false;
 
   function removeFestiveCloseButton() {
@@ -71,25 +67,10 @@
     document.body.prepend(banner);
   }
 
-  async function getClient() {
-    if (clientPromise) return clientPromise;
-    clientPromise = import('https://esm.sh/@supabase/supabase-js@2')
-      .then(({ createClient }) => createClient(SUPABASE_URL, SUPABASE_KEY));
-    return clientPromise;
-  }
-
   async function getProducts() {
-    const db = await getClient();
-    let result = await db.from('products')
-      .select('id,name,created_at,homepage_order')
-      .order('homepage_order', { ascending: false, nullsFirst: false })
-      .order('created_at', { ascending: false });
-    if (result.error) {
-      sortField = 'created_at';
-      result = await db.from('products').select('id,name,created_at').order('created_at', { ascending: false });
-    } else sortField = 'homepage_order';
-    if (result.error) throw result.error;
-    return result.data || [];
+    const response = await fetch('/api/products', { headers: { accept: 'application/json' } });
+    if (!response.ok) throw new Error('Products API returned ' + response.status);
+    return response.json();
   }
 
   function injectStyles() {
@@ -346,12 +327,6 @@
   function start() {
     addFestiveBanner();
     removeFestiveCloseButton();
-    const list = document.getElementById('productList');
-    if (list) {
-      const observer = new MutationObserver(() => { removeFestiveCloseButton(); addAdminControls(); });
-      observer.observe(list, { childList: true, subtree: true });
-      setTimeout(addAdminControls, 250);
-    }
     const feed = document.getElementById('homeProductsFeed');
     if (feed) {
       const observer = new MutationObserver(() => {
