@@ -25,10 +25,6 @@
 
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <!-- Your existing Supabase connection -->
-  <script src="app.js"></script>
 
   <style>
 
@@ -1012,26 +1008,12 @@ body { color: #fff; }
       }
 
 
-      const { data: product, error } =
-        await supabaseClient
-          .from("products")
-          .select("*")
-          .eq("id", productId)
-          .single();
-
-
-      if (error || !product) {
-
-        console.error(error);
-
-        showError(
-          "Something went wrong",
-          "This product is currently unavailable."
-        );
-
+      const response = await fetch("/api/products/" + encodeURIComponent(productId), { headers: { accept: "application/json" } });
+      if (!response.ok) {
+        showError("Something went wrong", "This product is currently unavailable.");
         return;
-
       }
+      const product = await response.json();
 
 
       const productName =
@@ -1417,46 +1399,10 @@ body { color: #fff; }
        STOCK CONTROLS
     ========================= */
 
-    async function setupStockControls(product) {
+    async function setupStockControls() {
+      // Stock changes are managed from the protected admin dashboard.
       const controls = document.getElementById("stockControls");
-      if (!controls || !supabaseClient) return;
-
-      try {
-        const { data: { user } } = await supabaseClient.auth.getUser();
-        if (!user || user.email !== "onlyhers.in@gmail.com") return;
-
-        controls.classList.add("visible");
-
-        controls.querySelectorAll(".stock-option").forEach(button => {
-          button.addEventListener("click", async () => {
-            const nextAvailability = button.dataset.stock === "true";
-            controls.querySelectorAll(".stock-option").forEach(btn => btn.disabled = true);
-
-            const { error } = await supabaseClient
-              .from("products")
-              .update({ is_available: nextAvailability })
-              .eq("id", product.id);
-
-            if (error) {
-              console.error("Stock update error:", error);
-              alert("Could not update stock status. " + error.message);
-              controls.querySelectorAll(".stock-option").forEach(btn => btn.disabled = false);
-              return;
-            }
-
-            const status = document.getElementById("stockStatus");
-            status.textContent = nextAvailability ? "In Stock" : "Out of Stock";
-            status.className = "stock-status " + (nextAvailability ? "in-stock" : "out-of-stock");
-
-            controls.querySelectorAll(".stock-option").forEach(btn => {
-              btn.classList.toggle("active", (btn.dataset.stock === "true") === nextAvailability);
-              btn.disabled = false;
-            });
-          });
-        });
-      } catch (error) {
-        console.error("Stock control auth check:", error);
-      }
+      if (controls) controls.classList.remove("visible");
     }
 
 
