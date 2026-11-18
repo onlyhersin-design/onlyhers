@@ -7,7 +7,6 @@
 <link rel="canonical" href="https://onlyhers.in/fabrics.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100%;font-family:"DM Sans",sans-serif;color:#fff;background:radial-gradient(ellipse at 50% 50%,#a90a18 0%,#78040e 38%,#420108 68%,#170002 100%);background-attachment:fixed}
@@ -90,9 +89,7 @@ body { color: #fff; }
 <div id="fabricGrid" class="fabric-grid"><div class="fabric-loading">Loading fabrics...</div></div></main>
 <footer style="background:#6f0912;text-align:center;padding:60px 20px">OnlyHers · Fabrics for your ideas.</footer>
 <script>
-const SUPABASE_URL="https://zeodtbgxadxfvexvywpm.supabase.co";
-const SUPABASE_KEY="sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr";
-const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
 let allFabrics=[];
 
 function escapeHTML(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");}
@@ -100,9 +97,9 @@ function escapeHTML(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"
 async function loadFabrics(){
  const grid=document.getElementById("fabricGrid");
  try{
-   const {data,error}=await supabaseClient.from("fabrics").select("*").order("created_at",{ascending:false});
-   if(error) throw error;
-   allFabrics=data||[];
+   const response=await fetch("/api/fabrics",{headers:{accept:"application/json"}});
+   if(!response.ok) throw new Error("Fabrics API returned "+response.status);
+   allFabrics=await response.json()||[];
    buildPatternOptions();
    renderFabrics();
  }catch(error){
