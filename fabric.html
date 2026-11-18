@@ -4,7 +4,6 @@
 <title>Fabric | OnlyHers</title><meta name="description" id="metaDescription" content="OnlyHers fabric.">
 <meta name="robots" content="index, follow, max-image-preview:large"><link rel="canonical" id="canonicalUrl" href="https://onlyhers.in/fabric.html">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}html,body{min-height:100%;font-family:"DM Sans",sans-serif;color:#fff;background:radial-gradient(ellipse at 50% 50%,#a90a18 0%,#78040e 38%,#420108 68%,#170002 100%);background-attachment:fixed}body{padding-top:75px}.navbar{height:75px;position:fixed;top:0;left:0;width:100%;display:flex;align-items:center;justify-content:space-between;padding:0 8%;z-index:10;background:rgba(25,0,4,.30);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.16)}.brand{font-family:"Playfair Display",serif;font-size:30px;font-weight:600;color:#fff;text-decoration:none}.nav-links a{color:#fff;text-decoration:none;font-size:13px}.fabric-page{padding:55px 8% 100px}.back{display:inline-block;color:#fff;text-decoration:none;font-size:11px;letter-spacing:2px;margin-bottom:35px;opacity:.8}.fabric-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:70px;align-items:start}.fabric-main-image{width:100%;aspect-ratio:3/4;background:rgba(255,255,255,.07);overflow:hidden}.fabric-main-image img{width:100%;height:100%;object-fit:cover}.fabric-thumbnails .fabric-thumb:only-child{display:none!important}.fabric-thumbnails:has(.fabric-thumb:only-child){display:none!important}.fabric-social-panels{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.fabric-social-panel{display:block;position:relative;aspect-ratio:3/4;overflow:hidden;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06)}.fabric-social-panel img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}.fabric-social-panel:hover img{transform:scale(1.03)}.fabric-social-label{position:absolute;left:10px;right:10px;bottom:10px;padding:8px 10px;background:rgba(0,0,0,.62);backdrop-filter:blur(8px);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;text-align:center}
@@ -98,10 +97,7 @@ body { color: #fff; }
 <header class="navbar"><a href="index.html" class="brand">Onlyhers</a><nav class="nav-links"><a href="fabrics.html">Fabrics</a></nav></header>
 <main class="fabric-page"><a href="fabrics.html" class="back">← FABRICS</a><div id="fabricContent"><div class="error">Loading fabric...</div></div></main>
 <script>
-const SUPABASE_URL="https://zeodtbgxadxfvexvywpm.supabase.co";
-const SUPABASE_KEY="sb_publishable_ywvo11SASIHo-oeNZasF0Q__LmK-oxr";
 let currentFabricImages=[]; let currentFabricImage=0; let currentFabricSocialLinks={};
-const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 
 function handleFabricImageError(img){if(!img)return;img.style.display="none";const thumb=img.closest(".fabric-thumb");if(thumb)thumb.style.display="none";}
@@ -111,8 +107,9 @@ function changeFabricImage(direction){if(!currentFabricImages.length)return;setF
 function handleFabricImageClick(){const social=currentFabricSocialLinks[currentFabricImage];if(social&&social.link)window.open(social.link,"_blank","noopener,noreferrer");}
 async function loadFabric(){
  const id=new URLSearchParams(location.search).get("id"); if(!id){showError("Fabric not found");return;}
- const {data:f,error}=await supabaseClient.from("fabrics").select("*").eq("id",id).single();
- if(error||!f){console.error(error);showError("This fabric is currently unavailable.");return;}
+ const response=await fetch("/api/fabrics/"+encodeURIComponent(id),{headers:{accept:"application/json"}});
+ if(!response.ok){showError("This fabric is currently unavailable.");return;}
+ const f=await response.json();
  const name=f.name||"OnlyHers Fabric", desc=f.description||"A fabric selected by OnlyHers for comfortable, beautiful creations.";
  document.title=name+" | OnlyHers Fabrics";
  document.getElementById("metaDescription").content=desc;
