@@ -53,7 +53,7 @@
   async function loadFabrics() {
     const target=$("fabric-grid"); if(!target)return;let all=[];
     try {all=await get("/fabrics");const draw=(list)=>{if($("result-count"))$("result-count").textContent=list.length+" fabrics";target.innerHTML=list.length?list.map(fabricCard).join(""):empty("No fabrics found. Please check back soon.");};draw(all);
-      const search=$("catalogue-search");if(search)search.addEventListener("input",()=>{const t=search.value.toLowerCase().trim();draw(all.filter(f=>(f.name+" "+(f.material||"")+" "+(f.fabric_code||"")+" "+(f.pattern||"")).toLowerCase().includes(t));});
+      const search=$("catalogue-search");if(search)search.addEventListener("input",()=>{const t=search.value.toLowerCase().trim();draw(all.filter(f=>(f.name+" "+(f.material||"")+" "+(f.fabric_code||"")+" "+(f.pattern||"")).toLowerCase().includes(t)));});
     }catch(e){console.error(e);target.innerHTML=empty("We couldn't load fabrics just now.");}
   }
   async function loadFabric() {
