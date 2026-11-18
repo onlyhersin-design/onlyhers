@@ -1,0 +1,13 @@
+{
+  "$schema": "https://developers.cloudflare.com/workers/wrangler/config-schema.json",
+  "name": "onlyhers",
+  "pages_build_output_dir": "./",
+  "compatibility_date": "2026-11-19",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "onlyhers-production",
+      "database_id": "f58147c9-1c4c-40ff-b1ba-b840634e903f"
+    }
+  ]
+}
