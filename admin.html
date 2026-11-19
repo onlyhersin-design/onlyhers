@@ -19,7 +19,9 @@
 <div class="field"><label for="product-section">Collection</label><select id="product-section"><option value="onlyhers_designs">OnlyHers Designs</option><option value="customisations">Customisations</option><option value="recreations">Recreations</option></select></div>
 <div class="field"><label for="product-sizes">Sizes (comma separated)</label><input id="product-sizes" placeholder="XS, S, M, L, XL"></div>
 <div class="field"><label for="product-image">Cover image URL</label><input id="product-image" type="url" placeholder="https://…"></div>
+<div class="field full"><label for="product-upload">Upload photos from your phone</label><input id="product-upload" type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple><small class="upload-help">Choose JPG, PNG, WebP or AVIF photos (max 8 MB each). The first selected photo becomes the cover; the rest are added to the gallery.</small><p id="product-upload-status" class="upload-status" role="status"></p></div>
 <div class="field full"><label for="product-gallery">Additional image URLs (one per line)</label><textarea id="product-gallery" placeholder="https://image-1…&#10;https://image-2…"></textarea></div>
+<div class="field full"><label for="product-instagram-link">Instagram post URL (optional)</label><input id="product-instagram-link" type="url" placeholder="https://www.instagram.com/p/…/"><small class="upload-help">A public post or Reel can be shown below the product details when embedding is available.</small></div>
 <div class="field full"><label for="product-description">Description</label><textarea id="product-description"></textarea></div>
 <div class="field"><label for="product-care">Wash care</label><input id="product-care"></div>
 <div class="field"><label for="product-extra">More details</label><input id="product-extra"></div>
@@ -38,11 +40,13 @@
 <div class="field"><label for="fabric-pattern">Pattern</label><input id="fabric-pattern" placeholder="Plain, Printed, Embroidered…"></div>
 <div class="field"><label for="fabric-meters">Available metres</label><input id="fabric-meters" type="number" min="0" step="1"></div>
 <div class="field"><label for="fabric-image">Cover image URL</label><input id="fabric-image" type="url" placeholder="https://…"></div>
+<div class="field full"><label for="fabric-upload">Upload photos from your phone</label><input id="fabric-upload" type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple><small class="upload-help">Choose JPG, PNG, WebP or AVIF photos (max 8 MB each). The first selected photo becomes the cover; the rest are added to the gallery.</small><p id="fabric-upload-status" class="upload-status" role="status"></p></div>
+<div class="field full"><label for="fabric-instagram-link">Instagram post URL (optional)</label><input id="fabric-instagram-link" type="url" placeholder="https://www.instagram.com/p/…/"><small class="upload-help">A public post or Reel can be shown below the fabric details when embedding is available.</small></div>
 <div class="field"><label for="fabric-available">Availability</label><select id="fabric-available"><option value="true">Available</option><option value="false">Out of stock</option></select></div>
 <div class="field full"><label for="fabric-gallery">Additional image URLs (one per line)</label><textarea id="fabric-gallery"></textarea></div>
 <div class="field full"><label for="fabric-description">Description</label><textarea id="fabric-description"></textarea></div>
 </div><div class="admin-actions"><button class="button primary" type="submit" id="fabric-save">Add fabric</button><button class="small-button" type="button" id="fabric-reset">Clear form</button></div></form></div>
 </div>
 <div class="admin-card"><div class="section-head" style="margin-bottom:16px"><div><div class="eyebrow">CURRENT CATALOGUE</div><h2 id="list-heading" style="font-size:30px">Products</h2></div><span class="count-label" id="list-count"></span></div><div id="catalogue-list" class="admin-list"><div class="empty-state">Loading your catalogue…</div></div></div>
-<div class="admin-card"><div class="eyebrow">IMAGE STORAGE NOTE</div><p style="font-size:12px;line-height:1.8;color:var(--muted);margin:10px 0 0">For now, add a public image URL in the image field. Direct photo uploads will be enabled after the OnlyHers Cloudflare image bucket is connected. Your admin login is protected; never share the admin password in the website files.</p></div>
+<div class="admin-card"><div class="eyebrow">IMAGE STORAGE NOTE</div><p style="font-size:12px;line-height:1.8;color:var(--muted);margin:10px 0 0">Photo upload requires the OnlyHers Cloudflare image bucket to be connected. Once configured, choose photos directly from your phone; the first selected image becomes the cover and the remaining images become gallery photos. Never share the admin password.</p></div>
 </section></main><script src="/assets/admin.js"></script></body></html>
