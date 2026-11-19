@@ -10,5 +10,11 @@
       "database_id": "f58147c9-1c4c-40ff-b1ba-b840634e903f",
       "migrations_dir": "cloudflare/migrations"
     }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "IMAGES",
+      "bucket_name": "onlyhers-assets"
+    }
   ]
 }
