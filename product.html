@@ -289,6 +289,11 @@
       opacity: 1;
       border: 2px solid white;
     }
+    .instagram-post-section { margin-top: 30px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.16); }
+    .instagram-post-heading { margin-bottom: 14px; color: rgba(255,255,255,.72); font-size: 10px; letter-spacing: 2px; font-weight: 700; }
+    .instagram-embed-host { width: min(540px, 100%); max-width: 100%; overflow: hidden; }
+    .instagram-embed-host blockquote.instagram-media { width: 100% !important; min-width: 0 !important; max-width: 540px !important; margin: 0 !important; }
+    .instagram-post-link { display: inline-block; margin-top: 13px; color: #fff; font-size: 11px; text-decoration: underline; text-underline-offset: 4px; }
     .social-thumb-label { position:absolute;left:4px;right:4px;bottom:4px;padding:4px 3px;background:rgba(0,0,0,.65);color:#fff;font-size:8px;letter-spacing:1px;text-transform:uppercase;text-align:center; }
     .thumbnail { position:relative; }
 
@@ -989,6 +994,35 @@ body { color: #fff; }
     let productSocialLinks = {};
     let currentImageIndex = 0;
 
+    function getInstagramPostUrl(value) {
+      try {
+        const url = new URL(String(value || "").trim());
+        if (url.protocol !== "https:" || !["instagram.com", "www.instagram.com"].includes(url.hostname)) return "";
+        const match = url.pathname.match(/^\/(p|reel|tv)\/([A-Za-z0-9_-]+)\/?$/);
+        return match ? "https://www.instagram.com/" + match[1] + "/" + match[2] + "/" : "";
+      } catch { return ""; }
+    }
+
+    function processInstagramEmbed() {
+      const host = document.getElementById("instagramEmbedBlock");
+      if (!host) return;
+      if (window.instgrm && window.instgrm.Embeds) {
+        window.instgrm.Embeds.process();
+        return;
+      }
+      let script = document.getElementById("instagram-embed-script");
+      if (!script) {
+        script = document.createElement("script");
+        script.id = "instagram-embed-script";
+        script.async = true;
+        script.src = "https://www.instagram.com/embed.js";
+        script.onload = () => window.instgrm?.Embeds?.process();
+        document.body.appendChild(script);
+      } else {
+        script.addEventListener("load", () => window.instgrm?.Embeds?.process(), { once: true });
+      }
+    }
+
 
     async function loadProduct() {
 
@@ -1068,6 +1102,7 @@ body { color: #fff; }
       const productWashCare = product.wash_care || "";
       const productMoreDetails = product.more_details || "";
       const sizeChartUrl = product.size_chart_url || "";
+      const instagramPostUrl = getInstagramPostUrl(product.instagram_link);
       productSocialLinks = {};
 
       const productStructuredData = {
@@ -1326,6 +1361,16 @@ body { color: #fff; }
               ${escapeHTML(productDescription)}
             </p>
 
+            ${instagramPostUrl ? `
+              <section class="instagram-post-section">
+                <div class="instagram-post-heading">AS SEEN ON INSTAGRAM</div>
+                <div class="instagram-embed-host" id="instagramEmbedBlock">
+                  <blockquote class="instagram-media" data-instgrm-permalink="${escapeHTML(instagramPostUrl)}?utm_source=ig_embed&utm_campaign=loading" data-instgrm-version="14"></blockquote>
+                </div>
+                <a class="instagram-post-link" href="${escapeHTML(instagramPostUrl)}" target="_blank" rel="noopener noreferrer">View original Instagram post ↗</a>
+              </section>
+            ` : ""}
+
 
             <div class="size-title">
               Select your size
@@ -1391,6 +1436,7 @@ body { color: #fff; }
 
       setupSizeSelection(productName, productPrice);
       setupStockControls(product);
+      if (instagramPostUrl) processInstagramEmbed();
 
     }
 
