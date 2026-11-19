@@ -3,6 +3,9 @@
   "name": "onlyhers",
   "pages_build_output_dir": "./",
   "compatibility_date": "2025-01-01",
+  "vars": {
+    "IMAGE_BASE_URL": "https://images.onlyhers.in"
+  },
   "d1_databases": [
     {
       "binding": "DB",
