@@ -127,5 +127,33 @@
     try{await api("/admin/"+activeTab+"/"+encodeURIComponent(id),{method:"DELETE"});await reload();message("Item deleted.");}
     catch(e){message(e.message,true);}
   }
+  const clearImagesButton = $("clear-old-images");
+  const clearImagesStatus = $("clear-image-status");
+  clearImagesButton?.addEventListener("click", async () => {
+    const confirmed = confirm(
+      "Clear every existing product and fabric photo link from the live catalogue? " +
+      "Product and fabric records, descriptions, prices, sizes, stock and social links will remain. " +
+      "This cannot be undone."
+    );
+    if (!confirmed) return;
+
+    clearImagesButton.disabled = true;
+    clearImagesStatus.textContent = "Clearing old image links...";
+    try {
+      const result = await api("/admin/clear-images", {
+        method: "POST",
+        body: JSON.stringify({ confirm: "CLEAR_IMAGES" })
+      });
+      clearImagesStatus.textContent =
+        "Done. Cleared image links for " + result.productsCleared +
+        " products and " + result.fabricsCleared + " fabrics. Catalogue details were preserved.";
+      await reload();
+    } catch (error) {
+      clearImagesStatus.textContent = error.message || "Could not clear old image links.";
+    } finally {
+      clearImagesButton.disabled = false;
+    }
+  });
+
   checkSession();
 })();
