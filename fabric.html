@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Fabric | OnlyHers</title><meta name="description" id="metaDescription" content="OnlyHers fabric.">
+<title>Fabric | onlyhers</title><meta name="description" id="metaDescription" content="onlyhers fabric.">
 <meta name="robots" content="index, follow, max-image-preview:large"><link rel="canonical" id="canonicalUrl" href="https://onlyhers.in/fabric.html">
 
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
@@ -69,13 +69,13 @@
 
 <meta name="theme-color" content="#78040e">
 
-<!-- OnlyHers site icon -->
+<!-- onlyhers site icon -->
 <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
 <link rel="apple-touch-icon" sizes="512x512" href="/favicon.png">
 <meta name="theme-color" content="#78040e">
 
 <style>
-/* ONLYHERS REFERENCE RED-BLACK GRADIENT */
+/* onlyhers REFERENCE RED-BLACK GRADIENT */
 html, body {
   min-height: 100%;
   background: radial-gradient(ellipse at 50% 50%, #a90a18 0%, #78040e 38%, #420108 68%, #170002 100%) !important;
@@ -115,10 +115,10 @@ async function loadFabric(){
  const response=await fetch("/api/fabrics/"+encodeURIComponent(id),{headers:{accept:"application/json"}});
  if(!response.ok){showError("This fabric is currently unavailable.");return;}
  const f=await response.json();
- const name=f.name||"OnlyHers Fabric", desc=f.description||"A fabric selected by OnlyHers for comfortable, beautiful creations.";
+ const name=f.name||"onlyhers Fabric", desc=f.description||"A fabric selected by onlyhers for comfortable, beautiful creations.";
  const instagramPostUrl=getInstagramPostUrl(f.instagram_link);
  const instagramBlock=instagramPostUrl ? '<section class="instagram-post-section"><div class="instagram-post-heading">AS SEEN ON INSTAGRAM</div><div class="instagram-embed-host" id="fabricInstagramEmbed"><blockquote class="instagram-media" data-instgrm-permalink="'+escapeHTML(instagramPostUrl+"?utm_source=ig_embed&utm_campaign=loading")+'" data-instgrm-version="14"></blockquote></div><a class="instagram-post-link" href="'+escapeHTML(instagramPostUrl)+'" target="_blank" rel="noopener noreferrer">View original Instagram post ↗</a></section>' : "";
- document.title=name+" | OnlyHers Fabrics";
+ document.title=name+" | onlyhers Fabrics";
  document.getElementById("metaDescription").content=desc;
  document.getElementById("canonicalUrl").href=location.origin+"/fabric.html?id="+encodeURIComponent(f.id);
  const img=f.image_url||"";
@@ -126,14 +126,14 @@ async function loadFabric(){
  const wholesalePrice=f.wholesale_price!=null?"₹"+Number(f.wholesale_price).toLocaleString("en-IN")+" / metre":"";
  const available=Math.max(0,Math.floor(Number(f.available_meters)||0));
  const meterOptions=Array.from({length:available},(_,i)=>'<option value="'+(i+1)+'">'+(i+1)+' metre'+(i===0?'':'s')+'</option>').join("");
- const msg=encodeURIComponent("Hi OnlyHers! 👋\n\nI'm interested in this fabric:\n"+name+"\nQuantity: "+(document.getElementById("meterQuantity")?.value||1)+" metre(s)\nRetail price: "+price+(wholesalePrice?"\nWholesale price (10 metres or more): "+wholesalePrice:"")+"\n\nCould you please share more details?");
+ const msg=encodeURIComponent("Hi onlyhers! 👋\n\nI'm interested in this fabric:\n"+name+"\nQuantity: "+(document.getElementById("meterQuantity")?.value||1)+" metre(s)\nRetail price: "+price+(wholesalePrice?"\nWholesale price (10 metres or more): "+wholesalePrice:"")+"\n\nCould you please share more details?");
  currentFabricImages=[img];
  if(Array.isArray(f.image_urls)) f.image_urls.forEach(function(url){if(typeof url==="string" && url.trim() && !currentFabricImages.includes(url.trim())) currentFabricImages.push(url.trim());});
  currentFabricSocialLinks={};
  if(f.instagram_photo_url && f.instagram_link){currentFabricSocialLinks[currentFabricImages.length]={platform:"Instagram",link:f.instagram_link};currentFabricImages.push(f.instagram_photo_url);}
  if(f.youtube_photo_url && f.youtube_link){currentFabricSocialLinks[currentFabricImages.length]={platform:"YouTube",link:f.youtube_link};currentFabricImages.push(f.youtube_photo_url);}
  var galleryHtml='<div class="fabric-gallery"><div class="fabric-main-image"><img id="fabricMainImage" src="'+escapeHTML(currentFabricImages[0]||"")+'" alt="'+escapeHTML(name)+'" onerror="handleFabricMainImageError(this)" onclick="handleFabricImageClick()">'+(currentFabricImages.length>1?'<button class="fabric-gallery-arrow prev" onclick="changeFabricImage(-1)">‹</button><button class="fabric-gallery-arrow next" onclick="changeFabricImage(1)">›</button>':'')+'<div class="fabric-gallery-counter" id="fabricGalleryCounter">1 / '+(currentFabricImages.length||1)+'</div></div><div class="fabric-thumbnails">'+currentFabricImages.map(function(url,i){return '<button type="button" class="fabric-thumb '+(i===0?"active":"")+'" onclick="setFabricImage('+i+')"><img src="'+escapeHTML(url)+'" alt="'+escapeHTML(name)+' view '+(i+1)+'">'+(currentFabricSocialLinks[i]?'<span class="fabric-social-label">'+escapeHTML(currentFabricSocialLinks[i].platform)+'</span>':'')+'</button>';}).join("")+'</div></div>';
- document.getElementById("fabricContent").innerHTML=galleryHtml+'<div class="fabric-layout" style="display:block"><div class="fabric-details"><div class="code">'+escapeHTML(f.fabric_code||"ONLYHERS FABRIC")+'</div><h1 class="name">'+escapeHTML(name)+'</h1><div class="price">Retail: '+price+'</div>'+(wholesalePrice?'<div class="price" style="font-size:16px;margin-top:8px">Wholesale (10m+): '+wholesalePrice+'</div>':'')+'<div class="wholesale-note">Wholesale pricing applies to orders of 10 metres or more.</div><div class="stock '+(f.is_available!==false?"in":"out")+'">'+(f.is_available!==false?"In Stock":"Out of Stock")+'</div>'+(f.is_available!==false && available>0?'<div class="meter-selection"><label for="meterQuantity">Select quantity</label><select id="meterQuantity">'+meterOptions+'</select><div class="available-meters">'+available+' metre'+(available===1?"":"s")+' available</div></div>':'<div class="available-meters" style="margin-top:14px">'+available+' metre'+(available===1?"":"s")+' available</div>')+'<p class="description">'+escapeHTML(desc)+'</p>'+instagramBlock+'<div class="facts">'+(f.material?'<div class="fact"><span>Material</span><span>'+escapeHTML(f.material)+'</span></div>':"")+(f.width?'<div class="fact"><span>Width</span><span>'+escapeHTML(f.width)+'</span></div>':"")+'</div><a class="order" id="fabricOrder" target="_blank" href="https://wa.me/919059828206?text='+msg+'">ENQUIRE ABOUT THIS FABRIC</a></div></div>';
+ document.getElementById("fabricContent").innerHTML=galleryHtml+'<div class="fabric-layout" style="display:block"><div class="fabric-details"><div class="code">'+escapeHTML(f.fabric_code||"onlyhers FABRIC")+'</div><h1 class="name">'+escapeHTML(name)+'</h1><div class="price">Retail: '+price+'</div>'+(wholesalePrice?'<div class="price" style="font-size:16px;margin-top:8px">Wholesale (10m+): '+wholesalePrice+'</div>':'')+'<div class="wholesale-note">Wholesale pricing applies to orders of 10 metres or more.</div><div class="stock '+(f.is_available!==false?"in":"out")+'">'+(f.is_available!==false?"In Stock":"Out of Stock")+'</div>'+(f.is_available!==false && available>0?'<div class="meter-selection"><label for="meterQuantity">Select quantity</label><select id="meterQuantity">'+meterOptions+'</select><div class="available-meters">'+available+' metre'+(available===1?"":"s")+' available</div></div>':'<div class="available-meters" style="margin-top:14px">'+available+' metre'+(available===1?"":"s")+' available</div>')+'<p class="description">'+escapeHTML(desc)+'</p>'+instagramBlock+'<div class="facts">'+(f.material?'<div class="fact"><span>Material</span><span>'+escapeHTML(f.material)+'</span></div>':"")+(f.width?'<div class="fact"><span>Width</span><span>'+escapeHTML(f.width)+'</span></div>':"")+'</div><a class="order" id="fabricOrder" target="_blank" href="https://wa.me/919059828206?text='+msg+'">ENQUIRE ABOUT THIS FABRIC</a></div></div>';
  if(instagramPostUrl)processFabricInstagramEmbed();
 }
 function showError(t){document.getElementById("fabricContent").innerHTML='<div class="error"><h2>'+escapeHTML(t)+'</h2><p style="margin-top:12px;opacity:.7">Please return to the fabric collection.</p></div>'}
@@ -155,5 +155,5 @@ function processFabricInstagramEmbed(){
  else{script.addEventListener("load",()=>window.instgrm?.Embeds?.process(),{once:true});}
 }
 loadFabric();
-document.addEventListener("change",function(e){if(e.target.id==="meterQuantity"){const q=e.target.value;const el=document.getElementById("fabricOrder");if(el){el.href="https://wa.me/919059828206?text="+encodeURIComponent("Hi OnlyHers! 👋\n\nI'm interested in this fabric:\n"+document.querySelector(".name").textContent+"\nQuantity: "+q+" metre(s)\n"+document.querySelector(".price").textContent+"\n\nCould you please share more details?");}}});
+document.addEventListener("change",function(e){if(e.target.id==="meterQuantity"){const q=e.target.value;const el=document.getElementById("fabricOrder");if(el){el.href="https://wa.me/919059828206?text="+encodeURIComponent("Hi onlyhers! 👋\n\nI'm interested in this fabric:\n"+document.querySelector(".name").textContent+"\nQuantity: "+q+" metre(s)\n"+document.querySelector(".price").textContent+"\n\nCould you please share more details?");}}});
 </script></body></html>
