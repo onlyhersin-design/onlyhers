@@ -1073,7 +1073,11 @@ body { color: #fff; }
         window.location.origin + "/product.html?id=" + encodeURIComponent(product.id);
 
       const primaryImage =
-        productImages.length ? productImages[0] : "";
+        product.image_url ||
+        (Array.isArray(product.image_urls) ? product.image_urls[0] : "") ||
+        product.instagram_photo_url ||
+        product.youtube_photo_url ||
+        "";
 
       document.title = productName + " | onlyhers";
 
@@ -1105,33 +1109,45 @@ body { color: #fff; }
       const instagramPostUrl = getInstagramPostUrl(product.instagram_link);
       productSocialLinks = {};
 
+      const productSchemaImages = [...new Set([
+        product.image_url,
+        ...(Array.isArray(product.image_urls) ? product.image_urls : []),
+        product.instagram_photo_url,
+        product.youtube_photo_url
+      ].filter(url => typeof url === "string" && url.trim()))];
+
       const productStructuredData = {
         "@context": "https://schema.org",
         "@type": "Product",
+        "@id": productUrl + "#product",
+        "url": productUrl,
         "name": productName,
         "description": productDescription,
-        "image": productImages.length ? productImages : [product.image_url].filter(Boolean),
+        ...(productSchemaImages.length ? { "image": productSchemaImages } : {}),
         "sku": productCode || String(product.id),
         "brand": {
           "@type": "Brand",
           "name": "onlyhers"
         },
         "category": productCategory,
-        "offers": {
-          "@type": "Offer",
-          "url": productUrl,
-          "priceCurrency": "INR",
-          "price": Number(productPrice).toFixed(2),
-          "availability": product.is_available !== false
-            ? "https://schema.org/InStock"
-            : "https://schema.org/OutOfStock",
-          "itemCondition": "https://schema.org/NewCondition",
-          "seller": {
-            "@type": "Organization",
-            "name": "onlyhers",
-            "url": "https://onlyhers.in/"
+        ...(productMaterial ? { "material": productMaterial } : {}),
+        ...(Number(productPrice) > 0 ? {
+          "offers": {
+            "@type": "Offer",
+            "url": productUrl,
+            "priceCurrency": "INR",
+            "price": Number(productPrice).toFixed(2),
+            "availability": product.is_available !== false
+              ? "https://schema.org/InStock"
+              : "https://schema.org/OutOfStock",
+            "itemCondition": "https://schema.org/NewCondition",
+            "seller": {
+              "@type": "Organization",
+              "name": "onlyhers",
+              "url": "https://onlyhers.in/"
+            }
           }
-        }
+        } : {})
       };
 
       const structuredDataElement = document.getElementById("productStructuredData");
