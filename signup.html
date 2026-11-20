@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
   <meta name="robots" content="noindex, nofollow"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Create Account | OnlyHers</title>
+<title>Create Account | onlyhers</title>
 
 <link rel="stylesheet" href="style.css">
 <style>
@@ -132,13 +132,13 @@ button{width:100%;margin-top:28px;padding:16px;border:none;background:white;colo
 
 <meta name="theme-color" content="#78040e">
 
-<!-- OnlyHers site icon -->
+<!-- onlyhers site icon -->
 <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
 <link rel="apple-touch-icon" sizes="512x512" href="/favicon.png">
 <meta name="theme-color" content="#78040e">
 
 <style>
-/* ONLYHERS REFERENCE RED-BLACK GRADIENT */
+/* onlyhers REFERENCE RED-BLACK GRADIENT */
 html, body {
   min-height: 100%;
   background: radial-gradient(ellipse at 50% 50%, #a90a18 0%, #78040e 38%, #420108 68%, #170002 100%) !important;
@@ -165,7 +165,7 @@ body { color: #fff; }
 <body>
 <header class="auth-header"><a href="index.html" class="auth-logo">Onlyhers</a><a href="index.html" class="auth-home-btn">HOME</a></header>
 <div class="auth-box">
-<a href="index.html" class="logo">OnlyHers</a><h1>Create account.</h1>
+<a href="index.html" class="logo">onlyhers</a><h1>Create account.</h1>
 <p class="subtitle">Create your account with your email and we'll send you a secure verification link.</p>
 <div id="detailsStep">
 <label>Full Name</label><input type="text" id="fullName" placeholder="Enter your full name">
@@ -201,6 +201,6 @@ async function sendOtp(){
  const {error}=await supabaseClient.auth.signInWithOtp({email,options:{shouldCreateUser:true,emailRedirectTo:window.location.origin+'/account.html',data:{full_name:fullName,phone:phone}}});
  if(error){message(error.message,"error");return;}message("Sign-up link sent! Check your email and tap the link to create your account.","success");
 }
-async function verifyOtp(){const token=$("otp").value.trim();if(!/^[0-9]{6}$/.test(token)){message("Please enter the 6-digit OTP.","error");return;}message("Verifying...");const {error}=await supabaseClient.auth.verifyOtp({email:signupEmail,token,type:"email"});if(error){message(error.message,"error");return;}message("Welcome to OnlyHers!","success");window.location.href="account.html";}
+async function verifyOtp(){const token=$("otp").value.trim();if(!/^[0-9]{6}$/.test(token)){message("Please enter the 6-digit OTP.","error");return;}message("Verifying...");const {error}=await supabaseClient.auth.verifyOtp({email:signupEmail,token,type:"email"});if(error){message(error.message,"error");return;}message("Welcome to onlyhers!","success");window.location.href="account.html";}
 $("sendOtpBtn").onclick=sendOtp;$("resendOtpBtn").onclick=sendOtp;const otpStep=$("otpStep");if(otpStep)otpStep.remove();
 </script></body></html>
