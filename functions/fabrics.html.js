@@ -39,8 +39,7 @@ export async function onRequest(context) {
   try {
     const result = await context.env.DB.prepare("SELECT * FROM fabrics ORDER BY created_at DESC").all();
     const fabrics = result.results || [];
-    const schema = {
-      "@context": "https://schema.org",
+    const collectionSchema = {
       "@type": "CollectionPage",
       "name": "Dress Fabrics by the Metre | onlyhers",
       "url": SITE + "/fabrics.html",
@@ -54,6 +53,14 @@ export async function onRequest(context) {
         }))
       }
     };
+    const breadcrumbSchema = {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/" },
+        { "@type": "ListItem", "position": 2, "name": "Fabrics", "item": SITE + "/fabrics.html" }
+      ]
+    };
+    const schema = { "@context": "https://schema.org", "@graph": [collectionSchema, breadcrumbSchema] };
     const html = await response.text();
     const cards = fabrics.length
       ? fabrics.map(renderFabric).join("")
