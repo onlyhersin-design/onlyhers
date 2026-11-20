@@ -2487,3 +2487,27 @@ a {
     width: min(100%, 640px);
   }
 }
+
+
+/* Homepage supporting copy appears after the product feed, preserving the design-first layout. */
+.home-seo-copy {
+  width: min(100% - 40px, 820px);
+  margin: 34px auto 70px;
+  padding: 34px 24px;
+  border-top: 1px solid rgba(255,255,255,.14);
+  color: rgba(255,246,242,.78);
+  text-align: center;
+}
+.home-seo-copy h1 {
+  margin: 0 0 14px;
+  color: #fffaf7;
+  font: 500 clamp(25px, 3.5vw, 38px)/1.15 "Playfair Display", Georgia, serif;
+}
+.home-seo-copy p {
+  margin: 10px auto 0;
+  font: 400 13px/1.85 "DM Sans", sans-serif;
+}
+.home-seo-copy a {
+  color: #f4d8ce;
+  text-underline-offset: 4px;
+}
