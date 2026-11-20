@@ -2511,3 +2511,24 @@ a {
   color: #f4d8ce;
   text-underline-offset: 4px;
 }
+
+/* MOBILE HOMEPAGE PRODUCT PHOTOS — FULL-WIDTH, NATURAL IMAGE RATIO */
+@media (max-width: 700px) {
+  .home-design-image {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    aspect-ratio: auto;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .home-design-image img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    object-position: center;
+  }
+}
