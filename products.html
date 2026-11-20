@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Shop | OnlyHers</title>
-  <meta name="description" content="Explore OnlyHers women's fashion. Select your size and order directly on WhatsApp.">
+  <title>Shop | onlyhers</title>
+  <meta name="description" content="Explore onlyhers women's fashion. Select your size and order directly on WhatsApp.">
   <link rel="canonical" href="https://onlyhers.in/products.html">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap');
@@ -143,13 +143,13 @@
 
 <meta name="theme-color" content="#78040e">
 
-<!-- OnlyHers site icon -->
+<!-- onlyhers site icon -->
 <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
 <link rel="apple-touch-icon" sizes="512x512" href="/favicon.png">
 <meta name="theme-color" content="#78040e">
 
 <style>
-/* ONLYHERS REFERENCE RED-BLACK GRADIENT */
+/* onlyhers REFERENCE RED-BLACK GRADIENT */
 html, body {
   min-height: 100%;
   background: radial-gradient(ellipse at 50% 50%, #a90a18 0%, #78040e 38%, #420108 68%, #170002 100%) !important;
@@ -175,13 +175,13 @@ body { color: #fff; }
 </head>
 <body>
 <nav>
-  <a class="brand" href="index.html">ONLYHERS</a>
+  <a class="brand" href="index.html">onlyhers</a>
   <div class="links"><a href="index.html">Home</a><a href="products.html">Shop</a><a href="index.html#connect">Connect</a></div>
 </nav>
 
 <section class="hero">
   <h1>Made for her.</h1>
-  <p>Explore thoughtfully designed pieces from OnlyHers. Choose your size and place your order directly with us on WhatsApp.</p>
+  <p>Explore thoughtfully designed pieces from onlyhers. Choose your size and place your order directly with us on WhatsApp.</p>
 </section>
 
 <main>
@@ -189,7 +189,7 @@ body { color: #fff; }
   <div class="grid" id="products"></div>
 </main>
 
-<footer>HERS · ONLYHERS.IN · © 2026 ONLYHERS</footer>
+<footer>HERS · onlyhers.IN · © 2026 onlyhers</footer>
 
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
@@ -233,7 +233,7 @@ async function loadProducts(){
   grid.innerHTML = data.map(p => {
     const sizes = Array.isArray(p.sizes) ? p.sizes : [];
     return `<article class="card" data-id="${p.id}">
-      <div class="image"><img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.name)} by OnlyHers"></div>
+      <div class="image"><img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.name)} by onlyhers"></div>
       <div class="details">
         <h2 class="name">${escapeHtml(p.name)}</h2>
         <div class="desc">${escapeHtml(p.description || '')}</div>
@@ -262,7 +262,7 @@ async function loadProducts(){
         alert('Please select your size first.');
         return;
       }
-      const message = `Hi OnlyHers ❤️\n\nI would like to order:\n\nDress: ${p.name}\n${selectedSize ? `Size: ${selectedSize}\n` : ''}${p.price ? `Price: ₹${p.price}\n` : ''}\nProduct ID: ${p.id}\n\nPlease let me know the next steps.`;
+      const message = `Hi onlyhers ❤️\n\nI would like to order:\n\nDress: ${p.name}\n${selectedSize ? `Size: ${selectedSize}\n` : ''}${p.price ? `Price: ₹${p.price}\n` : ''}\nProduct ID: ${p.id}\n\nPlease let me know the next steps.`;
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
     });
   });
