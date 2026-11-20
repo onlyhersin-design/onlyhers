@@ -12,16 +12,12 @@
 <button class="menu-toggle" aria-label="Open menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
 <nav class="nav-links"><a href="/collection.html">Collections</a><a href="/fabrics.html">Fabrics</a><a href="/about.html">Our Story</a><a href="https://www.instagram.com/onlyhers.in/" target="_blank" rel="noopener">Instagram ↗</a></nav>
 </header>
-<main>
-<section class="hero"><div class="hero-inner"><div class="eyebrow">A WOMEN'S CLOTHING LABEL</div><h1>A little fashion,<br>a little her.</h1><p>Thoughtfully designed pieces, personal touches and fabrics for the ideas you can't wait to bring to life. Welcome to OnlyHers.</p><div class="hero-actions"><a class="button primary" href="/collection.html">Explore collections</a><a class="button" href="/fabrics.html">Shop fabrics</a></div></div></section>
-<section class="section"><div class="section-head"><div><div class="eyebrow">THE LATEST FROM ONLYHERS</div><h2>Made to be yours.</h2></div><a class="text-link" href="/collection.html">View all collections ↗</a></div><div id="home-products" class="product-grid"><div class="empty-state">Loading the latest designs…</div></div></section>
-<section class="section"><div class="section-head"><div><div class="eyebrow">FIND YOUR KIND OF HER</div><h2>Explore the collections.</h2></div></div><div class="collection-tiles">
-<a class="collection-tile" href="/collection-items.html?section=onlyhers_designs"><span>01 · Designed by OnlyHers</span><h3>OnlyHers Designs</h3><p>Original pieces thoughtfully created by OnlyHers.</p></a>
-<a class="collection-tile" href="/collection-items.html?section=customisations"><span>02 · Made more you</span><h3>Customisations</h3><p>Personalise a design to suit your style and preferences.</p></a>
-<a class="collection-tile" href="/collection-items.html?section=recreations"><span>03 · Inspired by your ideas</span><h3>Recreations</h3><p>Bring your favourite inspiration to life with a personal touch.</p></a>
-<a class="collection-tile" href="/fabrics.html"><span>04 · Choose your material</span><h3>Fabrics</h3><p>Explore materials for your own creations, available by the metre.</p></a>
-</div></section>
-<section class="story-band"><div class="eyebrow">THE ONLYHERS POINT OF VIEW</div><h2>Clothes are personal. They should feel that way.</h2><p>OnlyHers is about thoughtful designs, wearable details and giving every piece a little room for your personality. A little fashion, a little lifestyle, a little her.</p></section>
+<main class="home-designs" id="home-designs">
+<section class="home-design-section" aria-label="OnlyHers designs">
+<div id="home-products" class="home-design-feed">
+<div class="home-design-loading" aria-hidden="true"></div>
+</div>
+</section>
 </main>
 <footer class="site-footer"><div class="footer-brand">OnlyHers</div><p>Thoughtfully made for her.</p><div class="footer-links"><a href="/collection.html">Collections</a><a href="/fabrics.html">Fabrics</a><a href="/about.html">Our story</a><a href="https://www.instagram.com/onlyhers.in/" target="_blank" rel="noopener">Instagram</a><a href="https://wa.me/919059828206" target="_blank" rel="noopener">WhatsApp</a></div><p class="footer-copy">© 2026 OnlyHers. All rights reserved.</p></footer>
 <script src="/assets/store.js"></script><script>OnlyHers.loadHome();</script>
