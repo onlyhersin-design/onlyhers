@@ -114,8 +114,7 @@ export async function onRequest(context) {
       "name": item.name || (selected.kind === "fabric" ? "Fabric" : "Design"),
       "url": SITE + (selected.kind === "fabric" ? "/fabric.html?id=" : "/product.html?id=") + encodeURIComponent(item.id)
     }));
-    const schema = {
-      "@context": "https://schema.org",
+    const collectionSchema = {
       "@type": "CollectionPage",
       "name": selected.title,
       "description": selected.description,
@@ -123,6 +122,17 @@ export async function onRequest(context) {
       "isPartOf": { "@type": "WebSite", "name": "onlyhers", "url": SITE + "/" },
       "mainEntity": { "@type": "ItemList", "itemListElement": itemList }
     };
+    const parentTitle = key === "fabrics" ? "Fabrics" : "Collections";
+    const parentUrl = key === "fabrics" ? SITE + "/fabrics.html" : SITE + "/collection.html";
+    const breadcrumbSchema = {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/" },
+        { "@type": "ListItem", "position": 2, "name": parentTitle, "item": parentUrl },
+        { "@type": "ListItem", "position": 3, "name": selected.title, "item": pageUrl }
+      ]
+    };
+    const schema = { "@context": "https://schema.org", "@graph": [collectionSchema, breadcrumbSchema] };
 
     let html = await response.text();
     html = html.replace(/<title>[\s\S]*?<\/title>/i, "<title>" + escapeHtml(selected.title) + " | onlyhers</title>");
