@@ -1,4 +1,4 @@
-/* OnlyHers homepage product ordering + temporary festive banner */
+/* onlyhers homepage product ordering + temporary festive banner */
 (function () {
   let busy = false;
 
@@ -122,7 +122,7 @@
       if (second.error) throw second.error;
       window.location.reload();
     } catch (error) {
-      console.error('OnlyHers homepage ordering error:', error);
+      console.error('onlyhers homepage ordering error:', error);
       alert(`Could not change the homepage order. ${error.message || 'Please try again.'}`);
     } finally { busy = false; }
   }
@@ -172,7 +172,7 @@
       products.forEach(product => { const section = byId.get(String(product.id)); if (section) feed.appendChild(section); });
       setupPremiumDesktopMotion();
       setupGyroscopeMotion();
-    } catch (error) { console.warn('OnlyHers homepage custom order unavailable:', error); }
+    } catch (error) { console.warn('onlyhers homepage custom order unavailable:', error); }
   }
 
   function setupGyroscopeMotion() {
@@ -213,7 +213,7 @@
           const permission = await DeviceOrientationEvent.requestPermission();
           if (permission === 'granted') enable();
         } else enable();
-      } catch (error) { console.warn('OnlyHers motion permission was not granted:', error); }
+      } catch (error) { console.warn('onlyhers motion permission was not granted:', error); }
     }
     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
       const button = document.createElement('button');
