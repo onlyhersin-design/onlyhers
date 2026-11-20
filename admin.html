@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>OnlyHers Admin</title><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#78040e"><link rel="stylesheet" href="/style.css"></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>onlyhers Admin</title><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#78040e"><link rel="stylesheet" href="/style.css"></head>
 <body class="admin-body">
-<header class="site-header"><a class="brand" href="/">OnlyHers<small>ADMIN STUDIO</small></a><nav class="nav-links" style="display:flex"><a href="/" target="_blank">View website ↗</a></nav></header>
+<header class="site-header"><a class="brand" href="/">onlyhers<small>ADMIN STUDIO</small></a><nav class="nav-links" style="display:flex"><a href="/" target="_blank">View website ↗</a></nav></header>
 <main class="admin-shell">
-<section id="login-view" class="login-card" hidden><div class="eyebrow">PRIVATE AREA</div><h1>Welcome back.</h1><p>Sign in to manage the OnlyHers catalogue.</p><form id="login-form"><div class="field"><label for="login-email">Email</label><input id="login-email" type="email" autocomplete="username" value="onlyhers.in@gmail.com" required></div><div class="field" style="margin-top:14px"><label for="login-password">Password</label><input id="login-password" type="password" autocomplete="current-password" required></div><div class="admin-actions"><button class="button primary" type="submit">Sign in</button></div><p id="login-message" class="admin-message" role="status"></p></form></section>
+<section id="login-view" class="login-card" hidden><div class="eyebrow">PRIVATE AREA</div><h1>Welcome back.</h1><p>Sign in to manage the onlyhers catalogue.</p><form id="login-form"><div class="field"><label for="login-email">Email</label><input id="login-email" type="email" autocomplete="username" value="onlyhers.in@gmail.com" required></div><div class="field" style="margin-top:14px"><label for="login-password">Password</label><input id="login-password" type="password" autocomplete="current-password" required></div><div class="admin-actions"><button class="button primary" type="submit">Sign in</button></div><p id="login-message" class="admin-message" role="status"></p></form></section>
 <section id="dashboard-view" hidden>
-<div class="admin-title"><div><div class="eyebrow">ONLYHERS STORE MANAGEMENT</div><h1>Admin Studio.</h1><p>Manage your designs and fabrics without editing website code.</p></div><button id="logout-button" class="small-button">Sign out</button></div>
+<div class="admin-title"><div><div class="eyebrow">onlyhers STORE MANAGEMENT</div><h1>Admin Studio.</h1><p>Manage your designs and fabrics without editing website code.</p></div><button id="logout-button" class="small-button">Sign out</button></div>
 <div class="admin-card"><div id="dashboard-message" class="admin-message" role="status">Your catalogue is ready to manage.</div><div class="admin-tabs"><button class="admin-tab active" data-tab="products">Products</button><button class="admin-tab" data-tab="fabrics">Fabrics</button></div>
 <div id="product-panel">
 <form id="product-form">
@@ -16,7 +16,7 @@
 <div class="field"><label for="product-price">Price (₹)</label><input id="product-price" type="number" min="0" step="1"></div>
 <div class="field"><label for="product-category">Category</label><input id="product-category" placeholder="Dresses, Coord Sets…"></div>
 <div class="field"><label for="product-material">Material</label><input id="product-material"></div>
-<div class="field"><label for="product-section">Collection</label><select id="product-section"><option value="onlyhers_designs">OnlyHers Designs</option><option value="customisations">Customisations</option><option value="recreations">Recreations</option></select></div>
+<div class="field"><label for="product-section">Collection</label><select id="product-section"><option value="onlyhers_designs">onlyhers Designs</option><option value="customisations">Customisations</option><option value="recreations">Recreations</option></select></div>
 <div class="field"><label for="product-sizes">Sizes (comma separated)</label><input id="product-sizes" placeholder="XS, S, M, L, XL"></div>
 <div class="field"><label for="product-image">Cover image URL</label><input id="product-image" type="url" placeholder="https://…"></div>
 <div class="field full"><label for="product-upload">Upload photos from your phone</label><input id="product-upload" type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple><small class="upload-help">Choose JPG, PNG, WebP or AVIF photos (max 8 MB each). The first selected photo becomes the cover; the rest are added to the gallery.</small><p id="product-upload-status" class="upload-status" role="status"></p></div>
