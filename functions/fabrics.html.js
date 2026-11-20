@@ -60,7 +60,7 @@ export async function onRequest(context) {
       : '<div class="fabric-loading">No fabrics are available at the moment.</div>';
     let output = html.replace('<div class="fabric-loading">Loading fabrics...</div>', cards);
     output = output.replace(
-      /(<script type="application\\/ld\\+json" id="fabricListStructuredData">)[\\s\\S]*?(<\\/script>)/i,
+      /(<script type="application\/ld\+json" id="fabricListStructuredData">)[\s\S]*?(<\/script>)/i,
       "$1" + schemaText(schema) + "$2"
     );
     const headers = new Headers(response.headers);
