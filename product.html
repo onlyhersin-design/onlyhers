@@ -930,7 +930,7 @@ body { color: #fff; }
 
   <main class="product-page">
 
-    <a href="designs.html" class="back-link">
+    <a href="collection-items.html?section=onlyhers_designs" class="back-link">
       ← Back to collection
     </a>
 
@@ -989,6 +989,10 @@ body { color: #fff; }
     const params = new URLSearchParams(window.location.search);
 
     const productId = params.get("id");
+    if (!productId) {
+      const robotsMeta = document.querySelector('meta[name="robots"]');
+      if (robotsMeta) robotsMeta.content = "noindex, follow";
+    }
 
     let productImages = [];
     let productSocialLinks = {};
@@ -1091,7 +1095,7 @@ body { color: #fff; }
       const twitterDescription = document.getElementById("twitterDescription");
       const twitterImage = document.getElementById("twitterImage");
 
-      if (metaDescription) metaDescription.setAttribute("content", productDescription);
+      if (metaDescription) metaDescription.setAttribute("content", productDescription.replace(/\\s+/g, " ").slice(0, 160));
       if (canonicalUrl) canonicalUrl.setAttribute("href", productUrl);
       if (ogTitle) ogTitle.setAttribute("content", productName);
       if (ogDescription) ogDescription.setAttribute("content", productDescription);
