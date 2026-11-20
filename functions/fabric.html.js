@@ -59,8 +59,7 @@ export async function onRequest(context) {
     const name = fabric.name || "onlyhers fabric";
     const description = String(fabric.description || "Selected dress fabric from onlyhers, available for your own clothing and creative projects.").replace(/\s+/g, " ").slice(0, 160);
     const priceValue = Number(fabric.price);
-    const schema = {
-      "@context": "https://schema.org",
+    const fabricSchema = {
       "@type": "Product",
       "@id": canonical + "#product",
       "url": canonical,
@@ -83,6 +82,15 @@ export async function onRequest(context) {
         }
       } : {})
     };
+    const breadcrumbSchema = {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://onlyhers.in/" },
+        { "@type": "ListItem", "position": 2, "name": "Fabrics", "item": "https://onlyhers.in/fabrics.html" },
+        { "@type": "ListItem", "position": 3, "name": name, "item": canonical }
+      ]
+    };
+    const schema = { "@context": "https://schema.org", "@graph": [fabricSchema, breadcrumbSchema] };
 
     const priceText = Number.isFinite(priceValue) && priceValue > 0
       ? "₹" + priceValue.toLocaleString("en-IN") + " / metre"
