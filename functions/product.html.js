@@ -83,7 +83,10 @@ export async function onRequest(context) {
         '<meta name="robots" content="index, follow, max-image-preview:large">',
         '<meta name="robots" content="noindex, follow">'
       );
-      return new Response(html, { status: response.status, headers: response.headers });
+      const headers = new Headers(response.headers);
+      headers.set("cache-control", "no-store");
+      headers.delete("content-length");
+      return new Response(html, { status: 404, headers });
     }
 
     const images = [...new Set([
