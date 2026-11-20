@@ -33,9 +33,10 @@ export async function onRequestGet({ env }) {
       }
 
       for (const row of fabrics.results || []) {
-        const id = Number(row.id);
-        if (Number.isSafeInteger(id) && id > 0) {
-          entries.push(urlEntry("/fabric.html?id=" + id, "0.7", "weekly"));
+        // Fabric IDs are UUID strings in D1, unlike the numeric product IDs.
+        const id = String(row.id ?? "").trim();
+        if (id) {
+          entries.push(urlEntry("/fabric.html?id=" + encodeURIComponent(id), "0.7", "weekly"));
         }
       }
     }
