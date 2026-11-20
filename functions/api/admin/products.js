@@ -20,7 +20,7 @@ const columns=["created_at","name","description","price","image_url","sizes","ca
 export async function onRequestGet({request,env}) {
   const auth=await requireAdmin(request,env);if(auth.response)return auth.response;
   if(!env.DB)return adminJson({error:"Database is not connected."},503);
-  try{const result=await env.DB.prepare("SELECT * FROM products ORDER BY created_at DESC").all();return adminJson((result.results||[]).map(productRow));}
+  try{const result=await env.DB.prepare("SELECT * FROM products ORDER BY CASE WHEN UPPER(product_code)='DTG01' THEN 0 ELSE 1 END ASC, homepage_order DESC, created_at DESC").all();return adminJson((result.results||[]).map(productRow));}
   catch(error){console.error(error);return adminJson({error:"Could not load products."},500);}
 }
 export async function onRequestPost({request,env}) {
