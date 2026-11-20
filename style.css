@@ -2453,3 +2453,29 @@ a {
     padding: 13px 18px 25px;
   }
 }
+
+
+/* DESKTOP ONLY — scale product photos down and centre the feed.
+   All mobile breakpoints and styles remain unchanged. */
+@media (min-width: 769px) {
+  .home-design-image,
+  .home-design-loading {
+    width: min(100%, 640px);
+    height: min(78svh, 760px);
+    max-height: min(78svh, 760px);
+    aspect-ratio: auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .home-design-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .home-design-meta {
+    width: min(100%, 640px);
+  }
+}
