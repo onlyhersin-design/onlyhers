@@ -1,4 +1,4 @@
-ONLYHERS SHOP + DASHBOARD SETUP
+onlyhers SHOP + DASHBOARD SETUP
 
 FILES
 - products.html  -> public shop page
