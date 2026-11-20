@@ -40,7 +40,7 @@ export async function onRequestGet({ env }) {
         "<g:title>" + xml(product.name).slice(0, 150) + "</g:title>",
         "<g:description>" + xml(description) + "</g:description>",
         "<g:link>" + xml(productUrl) + "</g:link>",
-        "<g:image_link>" + xml(product.image_url) + "</g:image_link>",
+        " <g:image_link>" + xml(image) + "</g:image_link>",
         "<g:availability>" + (available ? "in_stock" : "out_of_stock") + "</g:availability>",
         "<g:price>" + Number(product.price).toFixed(2) + " INR</g:price>",
         "<g:brand>onlyhers</g:brand>",
