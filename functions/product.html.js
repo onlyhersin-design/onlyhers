@@ -98,8 +98,7 @@ export async function onRequest(context) {
     const canonical = "https://onlyhers.in/product.html?id=" + id;
     const name = product.name || "onlyhers design";
     const description = String(product.description || "Thoughtfully designed to feel comfortable, personal and uniquely hers.").replace(/\s+/g, " ").slice(0, 160);
-    const schema = {
-      "@context": "https://schema.org",
+    const productSchema = {
       "@type": "Product",
       "@id": canonical + "#product",
       "url": canonical,
@@ -122,6 +121,15 @@ export async function onRequest(context) {
         }
       } : {})
     };
+    const breadcrumbSchema = {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://onlyhers.in/" },
+        { "@type": "ListItem", "position": 2, "name": "Collections", "item": "https://onlyhers.in/collection.html" },
+        { "@type": "ListItem", "position": 3, "name": name, "item": canonical }
+      ]
+    };
+    const schema = { "@context": "https://schema.org", "@graph": [productSchema, breadcrumbSchema] };
 
     html = html.replace(/<title>[\s\S]*?<\/title>/i, "<title>" + escapeHtml(name) + " | onlyhers</title>");
     html = setAttributeById(html, "meta", "metaDescription", "content", description);
