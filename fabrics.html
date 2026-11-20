@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Fabrics | OnlyHers</title>
-<meta name="description" content="Shop OnlyHers fabrics — selected fabrics used in our clothing and available for your own creations.">
+<title>Fabrics | onlyhers</title>
+<meta name="description" content="Shop onlyhers fabrics — selected fabrics used in our clothing and available for your own creations.">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://onlyhers.in/fabrics.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,13 +47,13 @@ body{padding-top:75px}
 
 <meta name="theme-color" content="#78040e">
 
-<!-- OnlyHers site icon -->
+<!-- onlyhers site icon -->
 <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
 <link rel="apple-touch-icon" sizes="512x512" href="/favicon.png">
 <meta name="theme-color" content="#78040e">
 
 <style>
-/* ONLYHERS REFERENCE RED-BLACK GRADIENT */
+/* onlyhers REFERENCE RED-BLACK GRADIENT */
 html, body {
   min-height: 100%;
   background: radial-gradient(ellipse at 50% 50%, #a90a18 0%, #78040e 38%, #420108 68%, #170002 100%) !important;
@@ -79,7 +79,7 @@ body { color: #fff; }
 </head>
 <body class="fabrics-page">
 <header class="navbar"><a href="index.html" class="brand">Onlyhers</a><nav class="nav-links"><a href="collection.html">Collection</a></nav></header>
-<section class="hero"><div class="eyebrow">ONLYHERS FABRICS</div><h1>Fabrics.</h1><p>Explore the fabrics behind our designs — available to shop for your own creations.</p></section>
+<section class="hero"><div class="eyebrow">onlyhers FABRICS</div><h1>Fabrics.</h1><p>Explore the fabrics behind our designs — available to shop for your own creations.</p></section>
 <main class="fabric-area"><a href="collection.html" class="fabric-back">← COLLECTION</a>
 <div class="fabric-controls">
 <input id="fabricSearch" class="fabric-search" type="search" placeholder="Search by fabric name, material or code..." autocomplete="off">
@@ -87,7 +87,7 @@ body { color: #fff; }
 <label for="fabricSort">Sort</label><select id="fabricSort"><option value="newest">Newest</option><option value="price-low">Price: Low to High</option><option value="price-high">Price: High to Low</option><option value="name">Name: A to Z</option></select>
 </div>
 <div id="fabricGrid" class="fabric-grid"><div class="fabric-loading">Loading fabrics...</div></div></main>
-<footer style="background:#6f0912;text-align:center;padding:60px 20px">OnlyHers · Fabrics for your ideas.</footer>
+<footer style="background:#6f0912;text-align:center;padding:60px 20px">onlyhers · Fabrics for your ideas.</footer>
 <script>
 
 let allFabrics=[];
@@ -128,7 +128,7 @@ function renderFabrics(){
    const img=f.image_url||"";
    const price=f.price!=null?"₹"+Number(f.price).toLocaleString("en-IN")+" / metre":"Price on request";
    const wholesale=f.wholesale_price!=null?"₹"+Number(f.wholesale_price).toLocaleString("en-IN")+" / metre (10m+)":"";
-   return '<article class="fabric-card" data-fabric-index="'+index+'"><div class="fabric-image">'+(img?'<img src="'+escapeHTML(img)+'" alt="'+escapeHTML(f.name||"OnlyHers Fabric")+'" loading="lazy">':'')+'</div><div class="fabric-info"><div class="fabric-code">'+escapeHTML(f.fabric_code||"ONLYHERS FABRIC")+'</div><h2 class="fabric-name">'+escapeHTML(f.name||"Untitled Fabric")+'</h2>'+(f.pattern?'<div class="fabric-code">'+escapeHTML(f.pattern)+'</div>':'')+'<div class="fabric-price">Retail: '+price+'</div>'+(wholesale?'<div class="fabric-price" style="margin-top:6px;font-size:12px;opacity:.85">Wholesale (10m+): '+wholesale+'</div>':'')+'<div class="fabric-meters">'+(Number.isFinite(Number(f.available_meters))?'Available: '+Number(f.available_meters)+' metre'+(Number(f.available_meters)===1?'':'s'):'')+'</div><div class="fabric-stock '+(f.is_available!==false?"in-stock":"out-stock")+'">'+(f.is_available!==false?"In Stock":"Out of Stock")+'</div></div></article>';
+   return '<article class="fabric-card" data-fabric-index="'+index+'"><div class="fabric-image">'+(img?'<img src="'+escapeHTML(img)+'" alt="'+escapeHTML(f.name||"onlyhers Fabric")+'" loading="lazy">':'')+'</div><div class="fabric-info"><div class="fabric-code">'+escapeHTML(f.fabric_code||"onlyhers FABRIC")+'</div><h2 class="fabric-name">'+escapeHTML(f.name||"Untitled Fabric")+'</h2>'+(f.pattern?'<div class="fabric-code">'+escapeHTML(f.pattern)+'</div>':'')+'<div class="fabric-price">Retail: '+price+'</div>'+(wholesale?'<div class="fabric-price" style="margin-top:6px;font-size:12px;opacity:.85">Wholesale (10m+): '+wholesale+'</div>':'')+'<div class="fabric-meters">'+(Number.isFinite(Number(f.available_meters))?'Available: '+Number(f.available_meters)+' metre'+(Number(f.available_meters)===1?'':'s'):'')+'</div><div class="fabric-stock '+(f.is_available!==false?"in-stock":"out-stock")+'">'+(f.is_available!==false?"In Stock":"Out of Stock")+'</div></div></article>';
  }).join("");
  grid.querySelectorAll("[data-fabric-index]").forEach(card=>{
    card.addEventListener("click",()=>{const item=items[Number(card.dataset.fabricIndex)];window.location.href="fabric.html?id="+encodeURIComponent(item.id);});
