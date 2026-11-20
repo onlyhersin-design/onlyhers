@@ -1,4 +1,10 @@
 const SITE = "https://onlyhers.in";
+function images(value) {
+  if (Array.isArray(value)) return value.filter(item => typeof item === "string" && item.trim());
+  if (typeof value !== "string" || !value.trim()) return [];
+  try { const parsed = JSON.parse(value); return Array.isArray(parsed) ? parsed.filter(item => typeof item === "string" && item.trim()) : []; }
+  catch { return []; }
+}
 const xml = (value) => String(value ?? "").replace(/[<>&'"]/g, character => ({
   "<": "&lt;", ">": "&gt;", "&": "&amp;", "'": "&apos;", '"': "&quot;"
 }[character]));
@@ -13,16 +19,18 @@ export async function onRequestGet({ env }) {
 
   try {
     const result = await env.DB.prepare(
-      "SELECT id, name, description, price, image_url, product_code, category, is_available FROM products ORDER BY homepage_order DESC, created_at DESC"
+      "SELECT id, name, description, price, image_url, image_urls, product_code, category, is_available FROM products ORDER BY homepage_order DESC, created_at DESC"
     ).all();
 
-    const items = (result.results || []).filter(product =>
-      Number.isSafeInteger(Number(product.id)) &&
+    const items = (result.results || []).filter(product => {
+      const image = product.image_url || images(product.image_urls)[0] || "";
+      return Number.isSafeInteger(Number(product.id)) &&
       String(product.name || "").trim() &&
-      /^https?:\/\//i.test(String(product.image_url || "")) &&
+      /^https?:\/\//i.test(String(image)) &&
       Number.isFinite(Number(product.price)) &&
-      Number(product.price) > 0
-    ).map(product => {
+      Number(product.price) > 0;
+    }).map(product => {
+      const image = product.image_url || images(product.image_urls)[0] || "";
       const available = Number(product.is_available) !== 0;
       const productUrl = SITE + "/product.html?id=" + Number(product.id);
       const description = String(product.description || product.name).slice(0, 5000);
