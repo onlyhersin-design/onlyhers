@@ -120,7 +120,7 @@ function setFabricImage(index){if(!currentFabricImages[index])return;currentFabr
 function changeFabricImage(direction){if(!currentFabricImages.length)return;setFabricImage((currentFabricImage+direction+currentFabricImages.length)%currentFabricImages.length);}
 function handleFabricImageClick(){const social=currentFabricSocialLinks[currentFabricImage];if(social&&social.link)window.open(social.link,"_blank","noopener,noreferrer");}
 async function loadFabric(){
- const id=new URLSearchParams(location.search).get("id"); if(!id){showError("Fabric not found");return;}
+ const id=new URLSearchParams(location.search).get("id"); if(!id){const robotsMeta=document.querySelector('meta[name="robots"]');if(robotsMeta)robotsMeta.content="noindex, follow";showError("Fabric not found");return;}
  const response=await fetch("/api/fabrics/"+encodeURIComponent(id),{headers:{accept:"application/json"}});
  if(!response.ok){showError("This fabric is currently unavailable.");return;}
  const f=await response.json();
