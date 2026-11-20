@@ -17,9 +17,22 @@
     return '<a class="fabric-card" href="/fabric.html?id='+encodeURIComponent(f.id)+'"><div class="fabric-image">'+image(f.image_url, f.name)+'</div><div class="fabric-meta"><div class="product-code">'+esc(f.fabric_code || "ONLYHERS FABRIC")+'</div><h3 class="fabric-name">'+esc(f.name)+'</h3><div class="fabric-price">'+money(f.price)+' <span style="font-weight:400">/ metre</span></div><div class="product-tag">'+esc(f.material || "")+(f.width ? " · "+esc(f.width)+'" width' : "")+'</div></div></a>';
   }
   function empty(message) { return '<div class="empty-state">'+esc(message)+'</div>'; }
+  function homeProductCard(p, index) {
+    const urls = Array.isArray(p.image_urls) ? p.image_urls : [];
+    const cover = p.image_url || urls[0] || "";
+    const photo = cover
+      ? '<img src="' + esc(cover) + '" alt="' + esc(p.name) + '" loading="' + (index === 0 ? 'eager' : 'lazy') + '" decoding="async" ' + (index === 0 ? 'fetchpriority="high"' : '') + '>'
+      : '<div class="home-design-no-image" aria-hidden="true"></div>';
+    return '<article class="home-design-item"><a class="home-design-link" href="/product.html?id=' + encodeURIComponent(p.id) + '"><div class="home-design-image">' + photo + '</div></a><div class="home-design-meta"><h2>' + esc(p.name) + '</h2><span>' + money(p.price) + '</span></div></article>';
+  }
   async function loadHome() {
     const target=$("home-products"); if(!target)return;
-    try { const items=await get("/products"); target.innerHTML=items.length?items.slice(0,6).map(productCard).join(""):empty("Our first collection is taking shape. New designs are coming soon."); }
+    try {
+      const items=await get("/products");
+      const isFeatured=(p)=>String(p.product_code||"").toUpperCase()==="DTG01" || /dual\\s*tone\\s*green\\s*dress/i.test(p.name||"");
+      items.sort((a,b)=>Number(isFeatured(b))-Number(isFeatured(a)));
+      target.innerHTML=items.length?items.map(homeProductCard).join(""):empty("Our designs will appear here soon.");
+    }
     catch(e){console.error(e);target.innerHTML=empty("We couldn't load the designs just now. Please refresh.");}
   }
   async function loadCollection() {
