@@ -74,7 +74,7 @@ body {
 
   padding: 0 8%;
 
-  /* Glassy OnlyHers header */
+  /* Glassy onlyhers header */
   background: rgba(35, 10, 13, 0.32);
 
   -webkit-backdrop-filter: blur(18px) saturate(125%);
@@ -798,7 +798,7 @@ footer p {
 
 }
 /* =========================================
-   ONLYHERS FULL SCREEN PRODUCT HOME
+   onlyhers FULL SCREEN PRODUCT HOME
    SINGLE SMOOTH PAGE SCROLL
 ========================================= */
 
@@ -1064,7 +1064,7 @@ html:has(body.home-page) {
 
 }
 /* =========================================
-   ONLYHERS AUTH HEADER
+   onlyhers AUTH HEADER
    LOGIN + SIGNUP PAGES
 ========================================= */
 
@@ -1187,7 +1187,7 @@ html:has(body.home-page) {
   }
 }
 
-/* ONLYHERS REFERENCE RED-BLACK GRADIENT */
+/* onlyhers REFERENCE RED-BLACK GRADIENT */
 html, body {
   min-height: 100%;
   background: radial-gradient(ellipse at 50% 50%, #a90a18 0%, #78040e 38%, #420108 68%, #170002 100%) !important;
@@ -1209,7 +1209,7 @@ body { color: #fff; }
 }
 .main-image-container { background: rgba(255,255,255,.06) !important; }
 
-/* ONLYHERS HOMEPAGE — PREMIUM SCATTERED PRODUCT MOTION ON DESKTOP + MOBILE */
+/* onlyhers HOMEPAGE — PREMIUM SCATTERED PRODUCT MOTION ON DESKTOP + MOBILE */
 .home-page .home-product-slide {
   position: relative !important;
   overflow: hidden !important;
@@ -1362,7 +1362,7 @@ body { color: #fff; }
 
 
 /* =========================================================
-   ONLYHERS CLOUD SITE REFRESH
+   onlyhers CLOUD SITE REFRESH
    Styles for the current homepage and Cloudflare admin studio.
    Kept separate from the legacy page styles above.
 ========================================================= */
@@ -2367,7 +2367,7 @@ a {
 }
 
 
-/* ONLYHERS HOMEPAGE — DESIGNS FIRST, ONE AFTER ANOTHER */
+/* onlyhers HOMEPAGE — DESIGNS FIRST, ONE AFTER ANOTHER */
 .home-designs {
   width: 100%;
   min-height: 60vh;
