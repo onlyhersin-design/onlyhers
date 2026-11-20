@@ -85,8 +85,9 @@ export async function onRequest(context) {
 
   try {
     const url = new URL(context.request.url);
-    const key = url.searchParams.get("section") || "all";
-    const selected = sections[key] || sections.all;
+    const requested = url.searchParams.get("section") || "all";
+    const key = sections[requested] ? requested : "all";
+    const selected = sections[key];
     let items = [];
 
     if (selected.kind === "fabric") {
