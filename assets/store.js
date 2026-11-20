@@ -29,7 +29,7 @@
     const target=$("home-products"); if(!target)return;
     try {
       const items=await get("/products");
-      const isFeatured=(p)=>String(p.product_code||"").toUpperCase()==="DTG01" || /dual\\s*tone\\s*green\\s*dress/i.test(p.name||"");
+      const isFeatured=(p)=>String(p.product_code||"").toUpperCase()==="DTG01";
       items.sort((a,b)=>Number(isFeatured(b))-Number(isFeatured(a)));
       target.innerHTML=items.length?items.map(homeProductCard).join(""):empty("Our designs will appear here soon.");
     }
