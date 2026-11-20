@@ -71,7 +71,7 @@ function renderItem(item, kind) {
     escapeHtml(cost) + "</div></div></a>";
 }
 function setText(html, id, value) {
-  const pattern = new RegExp('(<[^>]+\\bid="' + id + '"[^>]*>)[\\s\\S]*?(<\\/[^>]+>)', "i");
+  const pattern = new RegExp('(<[^>]+\\bid="' + id + '"[^>]*>)[\s\S]*?(<\\/[^>]+>)', "i");
   return html.replace(pattern, (_match, before, after) => before + escapeHtml(value) + after);
 }
 function setAttribute(html, id, attribute, value) {
@@ -125,7 +125,7 @@ export async function onRequest(context) {
     };
 
     let html = await response.text();
-    html = html.replace(/<title>[\\s\\S]*?<\\/title>/i, "<title>" + escapeHtml(selected.title) + " | onlyhers</title>");
+    html = html.replace(/<title>[\s\S]*?<\/title>/i, "<title>" + escapeHtml(selected.title) + " | onlyhers</title>");
     html = setAttribute(html, "metaDescription", "content", selected.description);
     html = setAttribute(html, "canonicalUrl", "href", canonical);
     html = setAttribute(html, "ogTitle", "content", selected.title + " | onlyhers");
@@ -137,7 +137,7 @@ export async function onRequest(context) {
     html = setText(html, "eyebrow", selected.eyebrow);
     html = setText(html, "pageDescription", selected.description);
     html = html.replace(
-      /(<script type="application\\/ld\\+json" id="collectionStructuredData">)[\\s\\S]*?(<\\/script>)/i,
+      /(<script type="application\/ld\+json" id="collectionStructuredData">)[\s\S]*?(<\/script>)/i,
       "$1" + schemaText(schema) + "$2"
     );
     const placeholder = '<div class="empty">Loading collection…</div>';
