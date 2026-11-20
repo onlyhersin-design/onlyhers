@@ -1061,7 +1061,7 @@ body { color: #fff; }
 
 
       const productPrice =
-        product.price ?? 0;
+        product.price == null ? null : Number(product.price);
 
 
       const productDescription =
@@ -1361,7 +1361,7 @@ body { color: #fff; }
 
 
             <div class="product-price">
-              ₹${Number(productPrice).toLocaleString("en-IN")}
+              ${productPrice == null || !Number.isFinite(productPrice) ? "Price on request" : "₹" + productPrice.toLocaleString("en-IN")}
             </div>
 
             <div class="stock-status ${product.is_available !== false ? "in-stock" : "out-of-stock"}" id="stockStatus">
@@ -1674,7 +1674,7 @@ I'm interested in:
 
 ${productName}
 
-Price: ₹${productPrice}
+Price: ${productPrice == null ? 'To be confirmed' : '₹' + productPrice.toLocaleString('en-IN')}
 
 Size: ${sizeText}
 
