@@ -5,6 +5,16 @@
 <meta name="description" content="Shop onlyhers fabrics — selected fabrics used in our clothing and available for your own creations.">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://onlyhers.in/fabrics.html">
+<meta property="og:type" content="website"><meta property="og:site_name" content="onlyhers">
+<meta property="og:title" content="Dress Fabrics by the Metre | onlyhers">
+<meta property="og:description" content="Shop selected dress fabrics by the metre, including printed, cotton and embroidered materials from onlyhers.">
+<meta property="og:url" content="https://onlyhers.in/fabrics.html"><meta property="og:image" content="https://onlyhers.in/onlyhers-logo.png">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Dress Fabrics by the Metre | onlyhers">
+<meta name="twitter:description" content="Shop selected dress fabrics by the metre for your own creations.">
+<meta name="twitter:image" content="https://onlyhers.in/onlyhers-logo.png">
+<script type="application/ld+json" id="fabricListStructuredData">
+{"@context":"https://schema.org","@type":"CollectionPage","name":"Dress Fabrics by the Metre | onlyhers","url":"https://onlyhers.in/fabrics.html","isPartOf":{"@type":"WebSite","name":"onlyhers","url":"https://onlyhers.in/"}}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -100,6 +110,7 @@ async function loadFabrics(){
    const response=await fetch("/api/fabrics",{headers:{accept:"application/json"}});
    if(!response.ok) throw new Error("Fabrics API returned "+response.status);
    allFabrics=await response.json()||[];
+   updateFabricListSchema(allFabrics);
    buildPatternOptions();
    renderFabrics();
  }catch(error){
@@ -107,6 +118,12 @@ async function loadFabrics(){
    grid.innerHTML='<div class="fabric-loading">Couldn\'t load fabrics right now.</div>';
  }
 }
+function updateFabricListSchema(items){
+ const schema={"@context":"https://schema.org","@type":"CollectionPage","name":"Dress Fabrics by the Metre | onlyhers","url":"https://onlyhers.in/fabrics.html","mainEntity":{"@type":"ItemList","itemListElement":items.map((item,index)=>({"@type":"ListItem","position":index+1,"name":item.name||"Fabric","url":"https://onlyhers.in/fabric.html?id="+encodeURIComponent(item.id)}))}};
+ const target=document.getElementById("fabricListStructuredData");
+ if(target)target.textContent=JSON.stringify(schema);
+}
+
 function buildPatternOptions(){
  const select=document.getElementById("patternFilter");
  const patterns=[...new Set(allFabrics.map(f=>(f.pattern||"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
