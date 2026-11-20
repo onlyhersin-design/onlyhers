@@ -31,14 +31,47 @@
     try{[products,fabrics]=await Promise.all([api("/admin/products"),api("/admin/fabrics")]);renderList();message("Catalogue loaded. Add, edit or remove items below.");}
     catch(e){message(e.message,true);if(e.message.toLowerCase().includes("sign in"))showLogin();}
   }
+  function productOrder(a,b){
+    const aFeatured=String(a.product_code||"").toUpperCase()==="DTG01";
+    const bFeatured=String(b.product_code||"").toUpperCase()==="DTG01";
+    if(aFeatured!==bFeatured)return aFeatured?-1:1;
+    return Number(b.homepage_order||0)-Number(a.homepage_order||0) || String(b.created_at||"").localeCompare(String(a.created_at||""));
+  }
+  async function moveProduct(id,direction){
+    const ordered=[...products].sort(productOrder);
+    const index=ordered.findIndex(item=>String(item.id)===String(id));
+    const next=index+(direction==="up"?-1:1);
+    if(index<1||next<1||next>=ordered.length)return;
+    const moving=ordered.splice(index,1)[0];
+    ordered.splice(next,0,moving);
+    const controls=$("catalogue-list").querySelectorAll("[data-move]");
+    controls.forEach(button=>button.disabled=true);
+    try{
+      await api("/admin/reorder-products",{method:"POST",body:JSON.stringify({ids:ordered.map(item=>Number(item.id))})});
+      products=ordered;
+      await reload();
+      message("Homepage design order saved.");
+    }catch(error){
+      message(error.message||"Could not save the homepage order.",true);
+      controls.forEach(button=>button.disabled=false);
+    }
+  }
   function renderList(){
-    const items=activeTab==="products"?products:fabrics;$("list-count").textContent=items.length+" items";
-    $("catalogue-list").innerHTML=items.length?items.map(item=>{
-      const id=activeTab==="products"?item.id:item.id;
-      return '<div class="admin-row"><div><strong>'+esc(item.name)+'</strong><small>'+esc(activeTab==="products"?(item.product_code||item.category||"Product"):(item.fabric_code||item.material||"Fabric"))+' · '+money(item.price)+(activeTab==="fabrics"?' / metre':'')+' · '+(item.is_available?"Available":"Out of stock")+'</small></div><div class="row-actions"><button class="small-button" data-edit="'+esc(id)+'">Edit</button><button class="small-button danger" data-delete="'+esc(id)+'">Delete</button></div></div>';
+    const items=activeTab==="products"?[...products].sort(productOrder):fabrics;
+    $("list-count").textContent=items.length+" items";
+    $("catalogue-list").innerHTML=items.length?items.map((item,index)=>{
+      const id=item.id;
+      const isProduct=activeTab==="products";
+      const featured=isProduct&&String(item.product_code||"").toUpperCase()==="DTG01";
+      const position=featured?" · Featured first":(isProduct?" · Homepage #"+(index+1):"");
+      const orderControls=isProduct
+        ? '<button type="button" class="small-button" data-move="up" data-id="'+esc(id)+'" aria-label="Move '+esc(item.name)+' up" title="Move up" '+(featured||index===1?'disabled':'')+'>↑</button><button type="button" class="small-button" data-move="down" data-id="'+esc(id)+'" aria-label="Move '+esc(item.name)+' down" title="Move down" '+(index===items.length-1?'disabled':'')+'>↓</button>'
+        : "";
+      return '<div class="admin-row"><div><strong>'+esc(item.name)+'</strong><small>'+esc(isProduct?(item.product_code||item.category||"Product"):(item.fabric_code||item.material||"Fabric"))+' · '+money(item.price)+(activeTab==="fabrics"?' / metre':'')+' · '+(item.is_available?"Available":"Out of stock")+position+'</small></div><div class="row-actions">'+orderControls+'<button class="small-button" data-edit="'+esc(id)+'">Edit</button><button class="small-button danger" data-delete="'+esc(id)+'">Delete</button></div></div>';
     }).join(""):'<div class="empty-state">No '+activeTab+' added yet. Use the form above to add your first one.</div>';
     $("catalogue-list").querySelectorAll("[data-edit]").forEach(b=>b.addEventListener("click",()=>activeTab==="products"?editProduct(b.dataset.edit):editFabric(b.dataset.edit)));
     $("catalogue-list").querySelectorAll("[data-delete]").forEach(b=>b.addEventListener("click",()=>deleteItem(b.dataset.delete)));
+    $("catalogue-list").querySelectorAll("[data-move]").forEach(b=>b.addEventListener("click",()=>moveProduct(b.dataset.id,b.dataset.move)));
   }
   function resetProduct(){ $("product-form").reset();$("product-id").value="";$("product-section").value="onlyhers_designs";$("product-save").textContent="Add product"; }
   function resetFabric(){ $("fabric-form").reset();$("fabric-id").value="";$("fabric-save").textContent="Add fabric"; }
@@ -83,7 +116,8 @@
   $("fabric-upload").addEventListener("change",()=>uploadSelectedFiles("fabric-upload","fabrics","fabric-image","fabric-gallery","fabric-upload-status"));
   function productPayload(){
     const image=$("product-image").value.trim();const urls=[image,...lines($("product-gallery").value)].filter(Boolean);
-    return {name:$("product-name").value,product_code:$("product-code").value,price:$("product-price").value,category:$("product-category").value,material:$("product-material").value,
+    const current=products.find(item=>String(item.id)===String($("product-id").value));
+    return {homepage_order:current?.homepage_order,name:$("product-name").value,product_code:$("product-code").value,price:$("product-price").value,category:$("product-category").value,material:$("product-material").value,
       collection_section:$("product-section").value,sizes:$("product-sizes").value.split(",").map(s=>s.trim()).filter(Boolean),image_url:image,image_urls:urls,
       description:$("product-description").value,wash_care:$("product-care").value,more_details:$("product-extra").value,size_chart_url:$("product-chart").value,instagram_link:$("product-instagram-link").value.trim(),
       is_available:$("product-available").value==="true"};
