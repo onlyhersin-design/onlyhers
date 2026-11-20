@@ -12,16 +12,15 @@ function imageList(value) {
     return Array.isArray(parsed) ? parsed.filter(item => typeof item === "string" && item.trim()) : [];
   } catch { return []; }
 }
-function renderFabric(fabric) {
+function renderFabric(fabric, index) {
   const name = fabric.name || "onlyhers fabric";
   const images = imageList(fabric.image_urls);
   const cover = fabric.image_url || images[0] || "";
   const retail = fabric.price == null ? "Price on request" : "₹" + Number(fabric.price).toLocaleString("en-IN") + " / metre";
   const wholesale = fabric.wholesale_price == null ? "" : "₹" + Number(fabric.wholesale_price).toLocaleString("en-IN") + " / metre (10m+)";
-  const photo = cover
-    ? '<img src="' + escapeHtml(cover) + '" alt="' + escapeHtml(name) + '" loading="lazy">'
-    : "";
-  return '<a class="fabric-card" data-fabric-index="" href="/fabric.html?id=' + encodeURIComponent(fabric.id) +
+  const available = fabric.is_available !== false && Number(fabric.is_available) !== 0;
+  const photo = cover ? '<img src="' + escapeHtml(cover) + '" alt="' + escapeHtml(name) + '" loading="lazy">' : "";
+  return '<a class="fabric-card" data-fabric-index="' + index + '" href="/fabric.html?id=' + encodeURIComponent(fabric.id) +
     '" style="display:block;color:inherit;text-decoration:none"><div class="fabric-image">' + photo +
     '</div><div class="fabric-info"><div class="fabric-code">' + escapeHtml(fabric.fabric_code || "onlyhers FABRIC") +
     '</div><h2 class="fabric-name">' + escapeHtml(name) + '</h2>' +
@@ -29,9 +28,8 @@ function renderFabric(fabric) {
     '<div class="fabric-price">Retail: ' + escapeHtml(retail) + '</div>' +
     (wholesale ? '<div class="fabric-price" style="margin-top:6px;font-size:12px;opacity:.85">Wholesale: ' + escapeHtml(wholesale) + '</div>' : "") +
     '<div class="fabric-meters">' + (Number.isFinite(Number(fabric.available_meters)) ? "Available: " + Number(fabric.available_meters) + " metres" : "") + '</div>' +
-    '<div class="fabric-stock ' + (fabric.is_available === false || Number(fabric.is_available) === 0 ? "out-stock" : "in-stock") + '">' +
-    (fabric.is_available === false || Number(fabric.is_available) === 0 ? "Out of Stock" : "In Stock") +
-    "</div></div></a>";
+    '<div class="fabric-stock ' + (available ? "in-stock" : "out-stock") + '">' +
+    (available ? "In Stock" : "Out of Stock") + "</div></div></a>";
 }
 function schemaText(value) { return JSON.stringify(value).replace(/</g, "\\u003c"); }
 
@@ -56,25 +54,22 @@ export async function onRequest(context) {
         }))
       }
     };
-
-    let html = await response.text();
-    const placeholder = '<div class="fabric-loading">Loading fabrics...</div>';
+    const html = await response.text();
     const cards = fabrics.length
       ? fabrics.map(renderFabric).join("")
       : '<div class="fabric-loading">No fabrics are available at the moment.</div>';
-    html = html.replace(placeholder, cards);
-    html = html.replace(
+    let output = html.replace('<div class="fabric-loading">Loading fabrics...</div>', cards);
+    output = output.replace(
       /(<script type="application\\/ld\\+json" id="fabricListStructuredData">)[\\s\\S]*?(<\\/script>)/i,
       "$1" + schemaText(schema) + "$2"
     );
-
     const headers = new Headers(response.headers);
     headers.set("content-type", "text/html; charset=utf-8");
     headers.set("cache-control", "public, max-age=0, s-maxage=300");
     headers.delete("content-length");
-    return new Response(html, { status: response.status, headers });
+    return new Response(output, { status: response.status, headers });
   } catch (error) {
-    console.error("Fabrics server rendering failed", error);
+    console.error("Fabrics catalogue server rendering failed", error);
     return response;
   }
 }
