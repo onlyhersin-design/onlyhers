@@ -37,7 +37,7 @@ function render(items,kind){
  }).join("");
 }
 function updateCollectionSeo(items,key,selected,kind){
- const canonical=location.origin+"/collection-items.html"+(key==="all"?"":"?section="+encodeURIComponent(key));
+ const canonical="https://onlyhers.in/collection-items.html"+(key==="all"?"":"?section="+encodeURIComponent(key));
  const description=selected.description;
  document.title=selected.title+" | onlyhers";
  document.getElementById("metaDescription").content=description;
