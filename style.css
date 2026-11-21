@@ -2512,23 +2512,28 @@ a {
   text-underline-offset: 4px;
 }
 
-/* MOBILE HOMEPAGE PRODUCT PHOTOS — FULL-WIDTH, NATURAL IMAGE RATIO */
+/* MOBILE HOMEPAGE PRODUCT PHOTOS — EDGE-TO-EDGE, FULL IMAGE, NO CROP */
 @media (max-width: 700px) {
-  .home-design-image {
-    width: 100%;
-    height: auto;
-    max-height: none;
-    aspect-ratio: auto;
-    margin-left: 0;
-    margin-right: 0;
+  .home-designs .home-design-item .home-design-image {
+    box-sizing: border-box;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
+    margin-left: calc(50% - 50vw) !important;
+    margin-right: 0 !important;
+    overflow: visible !important;
   }
 
-  .home-design-image img {
+  .home-designs .home-design-item .home-design-image img {
     display: block;
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    object-fit: contain;
-    object-position: center;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    object-fit: initial !important;
+    object-position: center !important;
   }
 }
