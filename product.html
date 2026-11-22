@@ -1073,6 +1073,23 @@ body { color: #fff; }
         product.category ||
         "onlyhers Collection";
 
+      const productMaterial = product.material || "";
+      const productSeoTitle = [productName, productCategory]
+        .filter(Boolean)
+        .join(" | ") + " | onlyhers";
+      const productSeoDescription = [
+        productName,
+        productCategory,
+        productMaterial ? "made with " + productMaterial : "",
+        productDescription
+      ].filter(Boolean).join(". ").replace(/\\s+/g, " ").slice(0, 160);
+
+      const productImageAlt = [
+        productName,
+        productCategory,
+        productMaterial
+      ].filter(Boolean).join(" - ");
+
       const productUrl =
         "https://onlyhers.in/product.html?id=" + encodeURIComponent(product.id);
 
@@ -1083,7 +1100,7 @@ body { color: #fff; }
         product.youtube_photo_url ||
         "";
 
-      document.title = productName + " | onlyhers";
+      document.title = productSeoTitle;
 
       const metaDescription = document.getElementById("metaDescription");
       const canonicalUrl = document.getElementById("canonicalUrl");
@@ -1095,18 +1112,17 @@ body { color: #fff; }
       const twitterDescription = document.getElementById("twitterDescription");
       const twitterImage = document.getElementById("twitterImage");
 
-      if (metaDescription) metaDescription.setAttribute("content", productDescription.replace(/\\s+/g, " ").slice(0, 160));
+      if (metaDescription) metaDescription.setAttribute("content", productSeoDescription);
       if (canonicalUrl) canonicalUrl.setAttribute("href", productUrl);
-      if (ogTitle) ogTitle.setAttribute("content", productName);
-      if (ogDescription) ogDescription.setAttribute("content", productDescription);
+      if (ogTitle) ogTitle.setAttribute("content", productSeoTitle);
+      if (ogDescription) ogDescription.setAttribute("content", productSeoDescription);
       if (ogUrl) ogUrl.setAttribute("content", productUrl);
       if (ogImage && primaryImage) ogImage.setAttribute("content", primaryImage);
-      if (twitterTitle) twitterTitle.setAttribute("content", productName);
-      if (twitterDescription) twitterDescription.setAttribute("content", productDescription);
+      if (twitterTitle) twitterTitle.setAttribute("content", productSeoTitle);
+      if (twitterDescription) twitterDescription.setAttribute("content", productSeoDescription);
       if (twitterImage && primaryImage) twitterImage.setAttribute("content", primaryImage);
 
       const productCode = product.product_code || "";
-      const productMaterial = product.material || "";
       const productWashCare = product.wash_care || "";
       const productMoreDetails = product.more_details || "";
       const sizeChartUrl = product.size_chart_url || "";
@@ -1332,7 +1348,7 @@ body { color: #fff; }
 
                   <img
                     src="${escapeHTML(image)}"
-                    alt="${escapeHTML(productName)} view ${index + 1}"
+                    alt="${escapeHTML(productImageAlt)} - view ${index + 1}"
                   >${productSocialLinks[index] ? `<span class="social-thumb-label">${escapeHTML(productSocialLinks[index].platform)}</span>` : ""}
 
                 </button>
