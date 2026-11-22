@@ -1082,7 +1082,7 @@ body { color: #fff; }
         productCategory,
         productMaterial ? "made with " + productMaterial : "",
         productDescription
-      ].filter(Boolean).join(". ").replace(/\\s+/g, " ").slice(0, 160);
+      ].filter(Boolean).join(". ").replace(/\s+/g, " ").slice(0, 160);
 
       const productImageAlt = [
         productName,
