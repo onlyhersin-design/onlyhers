@@ -33,7 +33,8 @@ export async function onRequestPost({ request, env }) {
   const header = new Uint8Array(await file.slice(0, 16).arrayBuffer());
   if (!type.signature(header)) return adminJson({ error: "This file does not appear to be a valid " + type.ext.toUpperCase() + " image." }, 415);
 
-  const folder = form.get("folder") === "fabrics" ? "fabrics" : "products";
+  const requestedFolder = form.get("folder");
+  const folder = ["products", "fabrics", "size-charts"].includes(requestedFolder) ? requestedFolder : "products";
   const key = folder + "/" + Date.now() + "-" + crypto.randomUUID() + "." + type.ext;
 
   try {
