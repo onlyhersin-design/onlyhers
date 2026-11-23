@@ -6,7 +6,7 @@
 <section id="login-view" class="login-card" hidden><div class="eyebrow">PRIVATE AREA</div><h1>Welcome back.</h1><p>Sign in to manage the onlyhers catalogue.</p><form id="login-form"><div class="field"><label for="login-email">Email</label><input id="login-email" type="email" autocomplete="username" value="onlyhers.in@gmail.com" required></div><div class="field" style="margin-top:14px"><label for="login-password">Password</label><input id="login-password" type="password" autocomplete="current-password" required></div><div class="admin-actions"><button class="button primary" type="submit">Sign in</button></div><p id="login-message" class="admin-message" role="status"></p></form></section>
 <section id="dashboard-view" hidden>
 <div class="admin-title"><div><div class="eyebrow">onlyhers STORE MANAGEMENT</div><h1>Admin Studio.</h1><p>Manage your designs and fabrics without editing website code.</p></div><button id="logout-button" class="small-button">Sign out</button></div>
-<div class="admin-card"><div id="dashboard-message" class="admin-message" role="status">Your catalogue is ready to manage.</div><div class="admin-tabs"><button class="admin-tab active" data-tab="products">Products</button><button class="admin-tab" data-tab="fabrics">Fabrics</button></div>
+<div class="admin-card"><div id="dashboard-message" class="admin-message" role="status">Your catalogue is ready to manage.</div><div class="admin-tabs"><button class="admin-tab active" data-tab="products">Products</button><button class="admin-tab" data-tab="fabrics">Fabrics</button><button class="admin-tab" data-tab="size-charts">Size Charts</button></div>
 <div id="product-panel">
 <form id="product-form">
 <input type="hidden" id="product-id">
@@ -46,6 +46,18 @@
 <div class="field full"><label for="fabric-gallery">Additional image URLs (one per line)</label><textarea id="fabric-gallery"></textarea></div>
 <div class="field full"><label for="fabric-description">Description</label><textarea id="fabric-description"></textarea></div>
 </div><div class="admin-actions"><button class="button primary" type="submit" id="fabric-save">Add fabric</button><button class="small-button" type="button" id="fabric-reset">Clear form</button></div></form></div>
+</div>
+<div id="size-charts-panel" hidden>
+  <div class="admin-form-grid">
+    <div class="field"><label for="chart-garment-type">Garment type</label><select id="chart-garment-type"><option>Tops</option><option>Short Tops</option><option>Dresses</option><option>Maxi Dress</option><option>Trousers</option><option>Coord Sets</option></select></div>
+    <div class="field full"><label for="chart-upload">Upload size chart image</label><input id="chart-upload" type="file" accept="image/jpeg,image/png,image/webp,image/avif"><small class="upload-help">Upload one chart per garment type. JPG, PNG, WebP or AVIF; maximum 8 MB. Uploading a replacement updates the shared chart for every matching product.</small><p id="chart-upload-status" class="upload-status" role="status"></p></div>
+    <div class="field full"><label for="chart-image-url">Uploaded image URL</label><input id="chart-image-url" type="url" readonly placeholder="Upload an image to generate its URL"></div>
+    <div class="field full"><img id="chart-image-preview" alt="Size chart preview" hidden style="max-width:100%;max-height:360px;object-fit:contain;border-radius:10px;background:#fff;padding:8px"></div>
+  </div>
+  <div class="admin-actions"><button class="button primary" type="button" id="chart-save">Save size chart</button></div>
+  <p class="admin-message" id="chart-save-status" role="status"></p>
+  <div class="section-head" style="margin:24px 0 12px"><div><div class="eyebrow">SHARED GARMENT CHARTS</div><h2 style="font-size:24px">Current size charts</h2></div></div>
+  <div id="size-chart-list" class="admin-list"><div class="empty-state">Loading size charts…</div></div>
 </div>
 <div class="admin-card"><div class="section-head" style="margin-bottom:16px"><div><div class="eyebrow">CURRENT CATALOGUE</div><h2 id="list-heading" style="font-size:30px">Products</h2></div><span class="count-label" id="list-count"></span></div><p class="upload-help" style="margin:0 0 14px">In Products, use ↑ and ↓ to arrange the homepage designs. The Dual Tone Green Dress stays featured first.</p><div id="catalogue-list" class="admin-list"><div class="empty-state">Loading your catalogue…</div></div></div>
 <div class="admin-card"><div class="eyebrow">IMAGE STORAGE · FRESH START</div><p style="font-size:12px;line-height:1.8;color:var(--muted);margin:10px 0 14px">Clear the old Supabase image links from the live catalogue before adding fresh photos to Cloudflare R2. Product and fabric details, prices, sizes, stock and social links will be preserved.</p><div class="admin-actions"><button class="small-button" type="button" id="clear-old-images">Clear old image links</button></div><p id="clear-image-status" class="admin-message" role="status"></p></div>
