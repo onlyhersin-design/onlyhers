@@ -28,8 +28,31 @@
     $("list-heading").textContent=activeTab==="products"?"Products":activeTab==="fabrics"?"Fabrics":"Size Charts";if(activeTab==="size-charts")renderSizeCharts();else renderList();
   }));
   async function reload(){
-    try{[products,fabrics,sizeCharts]=await Promise.all([api("/admin/products"),api("/admin/fabrics"),api("/admin/size-charts")]);sizeCharts=sizeCharts.sizeCharts||[];renderList();renderSizeCharts();message("Catalogue loaded. Add, edit or remove items below.");}
-    catch(e){message(e.message,true);if(e.message.toLowerCase().includes("sign in"))showLogin();}
+    try {
+      const [productResult, fabricResult] = await Promise.all([
+        api("/admin/products"),
+        api("/admin/fabrics")
+      ]);
+      products = Array.isArray(productResult) ? productResult : [];
+      fabrics = Array.isArray(fabricResult) ? fabricResult : [];
+      renderList();
+      message("Products and fabrics loaded. Add, edit or remove catalogue items below.");
+
+      // Size charts are an optional admin feature. If their migration has not
+      // been applied yet, it must not prevent the existing catalogue loading.
+      try {
+        const chartResult = await api("/admin/size-charts");
+        sizeCharts = chartResult.sizeCharts || [];
+        renderSizeCharts();
+      } catch (chartError) {
+        sizeCharts = [];
+        renderSizeCharts();
+        console.warn("Size charts could not be loaded:", chartError);
+      }
+    } catch(e) {
+      message(e.message, true);
+      if (e.message.toLowerCase().includes("sign in")) showLogin();
+    }
   }
   function productOrder(a,b){
     const aFeatured=String(a.product_code||"").toUpperCase()==="DTG01";
