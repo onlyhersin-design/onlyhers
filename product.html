@@ -1125,7 +1125,15 @@ body { color: #fff; }
       const productCode = product.product_code || "";
       const productWashCare = product.wash_care || "";
       const productMoreDetails = product.more_details || "";
-      const sizeChartUrl = product.size_chart_url || "";
+      let sizeChartUrl = product.size_chart_url || "";
+      try {
+        const chartResponse = await fetch("/api/admin/size-charts", { headers: { accept: "application/json" } });
+        if (chartResponse.ok) {
+          const chartData = await chartResponse.json();
+          const sharedChart = (chartData.sizeCharts || []).find(chart => String(chart.garment_type || "").toLowerCase() === String(productCategory || "").trim().toLowerCase());
+          if (sharedChart?.image_url) sizeChartUrl = sharedChart.image_url;
+        }
+      } catch (error) { console.warn("Shared size chart unavailable; using product chart if set.", error); }
       const instagramPostUrl = getInstagramPostUrl(product.instagram_link);
       productSocialLinks = {};
 
