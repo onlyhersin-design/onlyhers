@@ -1,6 +1,6 @@
 (() => {
   const $=id=>document.getElementById(id);
-  let activeTab="products",products=[],fabrics=[];
+  let activeTab="products",products=[],fabrics=[],sizeCharts=[];
   const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const money=v=>v==null?"—":"₹"+Number(v).toLocaleString("en-IN");
   async function api(path,options={}) {
@@ -24,11 +24,11 @@
   $("logout-button").addEventListener("click",async()=>{try{await api("/admin/logout",{method:"POST",body:"{}"});}catch{}showLogin();});
   document.querySelectorAll("[data-tab]").forEach(button=>button.addEventListener("click",()=>{
     activeTab=button.dataset.tab;document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b===button));
-    $("product-panel").hidden=activeTab!=="products";$("fabric-panel").hidden=activeTab!=="fabrics";
-    $("list-heading").textContent=activeTab==="products"?"Products":"Fabrics";renderList();
+    $("product-panel").hidden=activeTab!=="products";$("fabric-panel").hidden=activeTab!=="fabrics";$("size-charts-panel").hidden=activeTab!=="size-charts";
+    $("list-heading").textContent=activeTab==="products"?"Products":activeTab==="fabrics"?"Fabrics":"Size Charts";if(activeTab==="size-charts")renderSizeCharts();else renderList();
   }));
   async function reload(){
-    try{[products,fabrics]=await Promise.all([api("/admin/products"),api("/admin/fabrics")]);renderList();message("Catalogue loaded. Add, edit or remove items below.");}
+    try{[products,fabrics,sizeCharts]=await Promise.all([api("/admin/products"),api("/admin/fabrics"),api("/admin/size-charts")]);sizeCharts=sizeCharts.sizeCharts||[];renderList();renderSizeCharts();message("Catalogue loaded. Add, edit or remove items below.");}
     catch(e){message(e.message,true);if(e.message.toLowerCase().includes("sign in"))showLogin();}
   }
   function productOrder(a,b){
@@ -73,6 +73,41 @@
     $("catalogue-list").querySelectorAll("[data-delete]").forEach(b=>b.addEventListener("click",()=>deleteItem(b.dataset.delete)));
     $("catalogue-list").querySelectorAll("[data-move]").forEach(b=>b.addEventListener("click",()=>moveProduct(b.dataset.id,b.dataset.move)));
   }
+  const chartTypes=["Tops","Short Tops","Dresses","Maxi Dress","Trousers","Coord Sets"];
+  function renderSizeCharts(){
+    const host=$("size-chart-list");if(!host)return;
+    host.innerHTML=chartTypes.map(type=>{
+      const chart=sizeCharts.find(item=>item.garment_type===type);
+      return '<div class="admin-row"><div><strong>'+esc(type)+'</strong><small>'+(chart?'Chart uploaded · Updated '+new Date(chart.updated_at).toLocaleDateString():'No chart uploaded yet')+'</small></div><div class="row-actions">'+(chart?'<a class="small-button" href="'+esc(chart.image_url)+'" target="_blank" rel="noopener">View</a>':'<span class="count-label">Pending</span>')+'</div></div>';
+    }).join("");
+  }
+  $("chart-upload").addEventListener("change",async()=>{
+    const file=$("chart-upload").files?.[0];if(!file)return;
+    const status=$("chart-upload-status");status.textContent="Uploading size chart…";
+    const form=new FormData();form.append("file",file,file.name);form.append("folder","size-charts");
+    const input=$("chart-upload");input.disabled=true;
+    try{
+      const response=await fetch("/api/admin/upload",{method:"POST",body:form,credentials:"same-origin"});
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok)throw new Error(data.error||"Could not upload size chart.");
+      $("chart-image-url").value=data.url;
+      $("chart-image-preview").src=data.url;$("chart-image-preview").hidden=false;
+      status.textContent="Image uploaded. Choose the garment type and save the chart.";
+    }catch(error){status.textContent=error.message;}
+    finally{input.disabled=false;input.value="";}
+  });
+  $("chart-save").addEventListener("click",async()=>{
+    const status=$("chart-save-status"),button=$("chart-save");
+    const imageUrl=$("chart-image-url").value.trim();
+    if(!imageUrl){status.textContent="Please upload a size chart image first.";return;}
+    button.disabled=true;status.textContent="Saving shared size chart…";
+    try{
+      await api("/admin/size-charts",{method:"POST",body:JSON.stringify({garment_type:$("chart-garment-type").value,image_url:imageUrl})});
+      const result=await api("/admin/size-charts");sizeCharts=result.sizeCharts||[];renderSizeCharts();
+      status.textContent=$("chart-garment-type").value+" size chart saved. It is now stored centrally for this garment type.";
+    }catch(error){status.textContent=error.message;}
+    finally{button.disabled=false;}
+  });
   function resetProduct(){ $("product-form").reset();$("product-id").value="";$("product-section").value="onlyhers_designs";$("product-save").textContent="Add product"; }
   function resetFabric(){ $("fabric-form").reset();$("fabric-id").value="";$("fabric-save").textContent="Add fabric"; }
   $("product-reset").addEventListener("click",resetProduct);$("fabric-reset").addEventListener("click",resetFabric);
