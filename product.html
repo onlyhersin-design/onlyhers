@@ -422,18 +422,31 @@
       color: #8f0d1b;
     }
 
+    .size-chart-wrap {
+      display: flex;
+      width: 100%;
+      justify-content: flex-start;
+      margin: -20px 0 30px;
+      position: relative;
+      z-index: 2;
+    }
+
     .size-chart-btn {
-      display: inline-flex;
+      display: inline-flex !important;
       align-items: center;
+      justify-content: center;
       gap: 8px;
-      margin: -18px 0 34px;
+      min-height: 42px;
+      margin: 0;
       padding: 10px 14px;
-      background: transparent;
-      border: 1px solid rgba(255,255,255,.45);
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.65);
       color: white;
       cursor: pointer;
-      font-size: 12px;
+      font: 600 12px "DM Sans", sans-serif;
       letter-spacing: .5px;
+      visibility: visible;
+      opacity: 1;
     }
 
     .size-chart-btn:hover {
@@ -722,9 +735,15 @@
         font-size: 14px;
       }
 
+      .size-chart-wrap {
+        justify-content: flex-start;
+        margin-top: -20px;
+        margin-bottom: 28px;
+      }
+
       .size-chart-btn {
-        margin-left: auto;
-        margin-right: auto;
+        margin: 0;
+        max-width: 100%;
       }
 
       .details-accordion {
@@ -1426,9 +1445,11 @@ body { color: #fff; }
             </div>
 
             ${sizeChartUrl ? `
-              <button class="size-chart-btn" onclick="openSizeChart('${escapeHTML(sizeChartUrl)}')">
-                ↗ View Size Chart
-              </button>
+              <div class="size-chart-wrap">
+                <button class="size-chart-btn" type="button" onclick="openSizeChart('${escapeHTML(sizeChartUrl)}')">
+                  ↗ View Size Chart
+                </button>
+              </div>
             ` : ""}
 
             ${(productMaterial || productWashCare || productMoreDetails) ? `
