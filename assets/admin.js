@@ -188,7 +188,7 @@
   function editProduct(id){
     const p=products.find(x=>String(x.id)===String(id));if(!p)return;
     $("product-id").value=p.id;$("product-name").value=p.name||"";$("product-code").value=p.product_code||"";$("product-price").value=p.price??"";
-    $("product-category").value=p.category||"";$("product-material").value=p.material||"";$("product-section").value=p.collection_section||"onlyhers_designs";
+    const categorySelect=$("product-category");const existingCategory=String(p.category||"");if(existingCategory&&!Array.from(categorySelect.options).some(option=>option.value===existingCategory)){const option=document.createElement("option");option.value=existingCategory;option.textContent=existingCategory;categorySelect.insertBefore(option,categorySelect.lastElementChild);}categorySelect.value=existingCategory;$("product-material").value=p.material||"";$("product-section").value=p.collection_section||"onlyhers_designs";
     $("product-sizes").value=(p.sizes||[]).join(", ");$("product-image").value=p.image_url||"";
     $("product-gallery").value=(p.image_urls||[]).filter(x=>x!==p.image_url).join("\n");$("product-description").value=p.description||"";
     $("product-care").value=p.wash_care||"";$("product-extra").value=p.more_details||"";$("product-chart").value=p.size_chart_url||"";$("product-instagram-link").value=p.instagram_link||"";
