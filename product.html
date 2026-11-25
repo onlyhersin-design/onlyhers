@@ -7,6 +7,19 @@
   <meta name="description" id="metaDescription" content="Shop onlyhers women's fashion.">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" id="canonicalUrl" href="https://onlyhers.in/product.html">
+  <script>
+    // Set the product-specific canonical before external crawlers process the page.
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+      if (!id || !/^\\d+$/.test(id)) return;
+      const productUrl = "https://onlyhers.in/product.html?id=" + encodeURIComponent(id);
+      const canonical = document.getElementById("canonicalUrl");
+      if (canonical) canonical.setAttribute("href", productUrl);
+      const ogUrl = document.getElementById("ogUrl");
+      if (ogUrl) ogUrl.setAttribute("content", productUrl);
+    })();
+  </script>
   <meta property="og:type" content="product">
   <meta property="og:site_name" content="onlyhers">
   <meta property="og:title" id="ogTitle" content="onlyhers Product">
