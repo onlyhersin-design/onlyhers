@@ -9,6 +9,7 @@ export async function onRequestGet({ env }) {
   const entries = [
     urlEntry("/", "1.0", "daily"),
     urlEntry("/collection.html", "0.9", "weekly"),
+    urlEntry("/designs.html", "0.8", "weekly"),
     urlEntry("/collection-items.html", "0.9", "daily"),
     urlEntry("/collection-items.html?section=onlyhers_designs", "0.9", "daily"),
     urlEntry("/collection-items.html?section=customisations", "0.8", "weekly"),
