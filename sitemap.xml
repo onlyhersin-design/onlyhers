@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://onlyhers.in/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
-  <url><loc>https://onlyhers.in/collection.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://onlyhers.in/designs.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://onlyhers.in/collection-items.html</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
-  <url><loc>https://onlyhers.in/collection-items.html?section=onlyhers_designs</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
-  <url><loc>https://onlyhers.in/collection-items.html?section=customisations</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://onlyhers.in/collection-items.html?section=recreations</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://onlyhers.in/fabrics.html</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
-  <url><loc>https://onlyhers.in/about.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://onlyhers.in/return-policy.html</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://onlyhers.in/collection</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://onlyhers.in/designs</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://onlyhers.in/collection-items</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://onlyhers.in/collection-items?section=onlyhers_designs</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://onlyhers.in/collection-items?section=customisations</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://onlyhers.in/collection-items?section=recreations</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://onlyhers.in/fabrics</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://onlyhers.in/about</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://onlyhers.in/return-policy</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
 </urlset>
