@@ -2,11 +2,11 @@
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Fabric | onlyhers</title><meta name="description" id="metaDescription" content="onlyhers fabric.">
-<meta name="robots" content="index, follow, max-image-preview:large"><link rel="canonical" id="canonicalUrl" href="https://onlyhers.in/fabric.html">
+<meta name="robots" content="index, follow, max-image-preview:large"><link rel="canonical" id="canonicalUrl" href="https://onlyhers.in/fabric">
 <meta property="og:type" content="product"><meta property="og:site_name" content="onlyhers">
 <meta property="og:title" id="ogTitle" content="Fabric | onlyhers">
 <meta property="og:description" id="ogDescription" content="Shop selected dress fabrics from onlyhers.">
-<meta property="og:url" id="ogUrl" content="https://onlyhers.in/fabric.html">
+<meta property="og:url" id="ogUrl" content="https://onlyhers.in/fabric">
 <meta property="og:image" id="ogImage" content="https://onlyhers.in/onlyhers-logo.png">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" id="twitterTitle" content="Fabric | onlyhers">
 <meta name="twitter:description" id="twitterDescription" content="Shop selected dress fabrics from onlyhers.">
@@ -108,8 +108,8 @@ body { color: #fff; }
 
 </style>
 </head><body>
-<header class="navbar"><a href="index.html" class="brand">Onlyhers</a><nav class="nav-links"><a href="fabrics.html">Fabrics</a></nav></header>
-<main class="fabric-page"><a href="fabrics.html" class="back">← FABRICS</a><div id="fabricContent"><div class="error">Loading fabric...</div></div></main>
+<header class="navbar"><a href="index.html" class="brand">Onlyhers</a><nav class="nav-links"><a href="fabrics">Fabrics</a></nav></header>
+<main class="fabric-page"><a href="fabrics" class="back">← FABRICS</a><div id="fabricContent"><div class="error">Loading fabric...</div></div></main>
 <script>
 let currentFabricImages=[]; let currentFabricImage=0; let currentFabricSocialLinks={};
 
@@ -136,14 +136,14 @@ async function loadFabric(){
  const instagramBlock=instagramPostUrl ? '<section class="instagram-post-section"><div class="instagram-post-heading">AS SEEN ON INSTAGRAM</div><div class="instagram-embed-host" id="fabricInstagramEmbed"><blockquote class="instagram-media" data-instgrm-permalink="'+escapeHTML(instagramPostUrl+"?utm_source=ig_embed&utm_campaign=loading")+'" data-instgrm-version="14"></blockquote></div><a class="instagram-post-link" href="'+escapeHTML(instagramPostUrl)+'" target="_blank" rel="noopener noreferrer">View original Instagram post ↗</a></section>' : "";
  document.title=name+" | onlyhers Fabrics";
  document.getElementById("metaDescription").content=desc.replace(/\s+/g," ").slice(0,160);
- const canonical="https://onlyhers.in/fabric.html?id="+encodeURIComponent(f.id);
+ const canonical="https://onlyhers.in/fabric?id="+encodeURIComponent(f.id);
  document.getElementById("canonicalUrl").href=canonical;
  document.getElementById("ogTitle").content=name+" | onlyhers Fabrics";
  document.getElementById("ogDescription").content=desc;
  document.getElementById("ogUrl").content=canonical;
  const breadcrumbData={"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
   {"@type":"ListItem","position":1,"name":"Home","item":"https://onlyhers.in/"},
-  {"@type":"ListItem","position":2,"name":"Fabrics","item":"https://onlyhers.in/fabrics.html"},
+  {"@type":"ListItem","position":2,"name":"Fabrics","item":"https://onlyhers.in/fabrics"},
   {"@type":"ListItem","position":3,"name":name,"item":canonical}
  ]};
  let breadcrumb=document.getElementById("fabricBreadcrumbStructuredData");
