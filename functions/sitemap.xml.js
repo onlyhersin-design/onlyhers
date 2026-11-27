@@ -8,15 +8,15 @@ function urlEntry(path, priority = "0.7", frequency = "weekly") {
 export async function onRequestGet({ env }) {
   const entries = [
     urlEntry("/", "1.0", "daily"),
-    urlEntry("/collection.html", "0.9", "weekly"),
-    urlEntry("/designs.html", "0.8", "weekly"),
-    urlEntry("/collection-items.html", "0.9", "daily"),
-    urlEntry("/collection-items.html?section=onlyhers_designs", "0.9", "daily"),
-    urlEntry("/collection-items.html?section=customisations", "0.8", "weekly"),
-    urlEntry("/collection-items.html?section=recreations", "0.8", "weekly"),
-    urlEntry("/fabrics.html", "0.8", "daily"),
-    urlEntry("/about.html", "0.6", "monthly"),
-    urlEntry("/return-policy.html", "0.3", "monthly")
+    urlEntry("/collection", "0.9", "weekly"),
+    urlEntry("/designs", "0.8", "weekly"),
+    urlEntry("/collection-items", "0.9", "daily"),
+    urlEntry("/collection-items?section=onlyhers_designs", "0.9", "daily"),
+    urlEntry("/collection-items?section=customisations", "0.8", "weekly"),
+    urlEntry("/collection-items?section=recreations", "0.8", "weekly"),
+    urlEntry("/fabrics", "0.8", "daily"),
+    urlEntry("/about", "0.6", "monthly"),
+    urlEntry("/return-policy", "0.3", "monthly")
   ];
 
   try {
@@ -29,7 +29,7 @@ export async function onRequestGet({ env }) {
       for (const row of products.results || []) {
         const id = Number(row.id);
         if (Number.isSafeInteger(id) && id > 0) {
-          entries.push(urlEntry("/product.html?id=" + id, "0.8", "weekly"));
+          entries.push(urlEntry("/product?id=" + id, "0.8", "weekly"));
         }
       }
 
@@ -37,7 +37,7 @@ export async function onRequestGet({ env }) {
         // Fabric IDs are UUID strings in D1, unlike the numeric product IDs.
         const id = String(row.id ?? "").trim();
         if (id) {
-          entries.push(urlEntry("/fabric.html?id=" + encodeURIComponent(id), "0.7", "weekly"));
+          entries.push(urlEntry("/fabric?id=" + encodeURIComponent(id), "0.7", "weekly"));
         }
       }
     }
