@@ -4,16 +4,16 @@
 <title>Fabrics | onlyhers</title>
 <meta name="description" content="Shop onlyhers fabrics — selected fabrics used in our clothing and available for your own creations.">
 <meta name="robots" content="index, follow, max-image-preview:large">
-<link rel="canonical" href="https://onlyhers.in/fabrics.html">
+<link rel="canonical" href="https://onlyhers.in/fabrics">
 <meta property="og:type" content="website"><meta property="og:site_name" content="onlyhers">
 <meta property="og:title" content="Dress Fabrics by the Metre | onlyhers">
 <meta property="og:description" content="Shop selected dress fabrics by the metre, including printed, cotton and embroidered materials from onlyhers.">
-<meta property="og:url" content="https://onlyhers.in/fabrics.html"><meta property="og:image" content="https://onlyhers.in/onlyhers-logo.png">
+<meta property="og:url" content="https://onlyhers.in/fabrics"><meta property="og:image" content="https://onlyhers.in/onlyhers-logo.png">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Dress Fabrics by the Metre | onlyhers">
 <meta name="twitter:description" content="Shop selected dress fabrics by the metre for your own creations.">
 <meta name="twitter:image" content="https://onlyhers.in/onlyhers-logo.png">
 <script type="application/ld+json" id="fabricListStructuredData">
-{"@context":"https://schema.org","@type":"CollectionPage","name":"Dress Fabrics by the Metre | onlyhers","url":"https://onlyhers.in/fabrics.html","isPartOf":{"@type":"WebSite","name":"onlyhers","url":"https://onlyhers.in/"}}
+{"@context":"https://schema.org","@type":"CollectionPage","name":"Dress Fabrics by the Metre | onlyhers","url":"https://onlyhers.in/fabrics","isPartOf":{"@type":"WebSite","name":"onlyhers","url":"https://onlyhers.in/"}}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
@@ -88,9 +88,9 @@ body { color: #fff; }
 </style>
 </head>
 <body class="fabrics-page">
-<header class="navbar"><a href="index.html" class="brand">Onlyhers</a><nav class="nav-links"><a href="collection.html">Collection</a></nav></header>
+<header class="navbar"><a href="index.html" class="brand">Onlyhers</a><nav class="nav-links"><a href="collection">Collection</a></nav></header>
 <section class="hero"><div class="eyebrow">onlyhers FABRICS</div><h1>Fabrics.</h1><p>Explore the fabrics behind our designs — available to shop for your own creations.</p></section>
-<main class="fabric-area"><a href="collection.html" class="fabric-back">← COLLECTION</a>
+<main class="fabric-area"><a href="collection" class="fabric-back">← COLLECTION</a>
 <div class="fabric-controls">
 <input id="fabricSearch" class="fabric-search" type="search" placeholder="Search by fabric name, material or code..." autocomplete="off">
 <label for="patternFilter">Pattern</label><select id="patternFilter"><option value="">All patterns</option></select>
@@ -119,7 +119,7 @@ async function loadFabrics(){
  }
 }
 function updateFabricListSchema(items){
- const schema={"@context":"https://schema.org","@type":"CollectionPage","name":"Dress Fabrics by the Metre | onlyhers","url":"https://onlyhers.in/fabrics.html","mainEntity":{"@type":"ItemList","itemListElement":items.map((item,index)=>({"@type":"ListItem","position":index+1,"name":item.name||"Fabric","url":"https://onlyhers.in/fabric.html?id="+encodeURIComponent(item.id)}))}};
+ const schema={"@context":"https://schema.org","@type":"CollectionPage","name":"Dress Fabrics by the Metre | onlyhers","url":"https://onlyhers.in/fabrics","mainEntity":{"@type":"ItemList","itemListElement":items.map((item,index)=>({"@type":"ListItem","position":index+1,"name":item.name||"Fabric","url":"https://onlyhers.in/fabric?id="+encodeURIComponent(item.id)}))}};
  const target=document.getElementById("fabricListStructuredData");
  if(target)target.textContent=JSON.stringify(schema);
 }
@@ -148,7 +148,7 @@ function renderFabrics(){
    return '<article class="fabric-card" data-fabric-index="'+index+'"><div class="fabric-image">'+(img?'<img src="'+escapeHTML(img)+'" alt="'+escapeHTML(f.name||"onlyhers Fabric")+'" loading="lazy">':'')+'</div><div class="fabric-info"><div class="fabric-code">'+escapeHTML(f.fabric_code||"onlyhers FABRIC")+'</div><h2 class="fabric-name">'+escapeHTML(f.name||"Untitled Fabric")+'</h2>'+(f.pattern?'<div class="fabric-code">'+escapeHTML(f.pattern)+'</div>':'')+'<div class="fabric-price">Retail: '+price+'</div>'+(wholesale?'<div class="fabric-price" style="margin-top:6px;font-size:12px;opacity:.85">Wholesale (10m+): '+wholesale+'</div>':'')+'<div class="fabric-meters">'+(Number.isFinite(Number(f.available_meters))?'Available: '+Number(f.available_meters)+' metre'+(Number(f.available_meters)===1?'':'s'):'')+'</div><div class="fabric-stock '+(f.is_available!==false?"in-stock":"out-stock")+'">'+(f.is_available!==false?"In Stock":"Out of Stock")+'</div></div></article>';
  }).join("");
  grid.querySelectorAll("[data-fabric-index]").forEach(card=>{
-   card.addEventListener("click",()=>{const item=items[Number(card.dataset.fabricIndex)];window.location.href="fabric.html?id="+encodeURIComponent(item.id);});
+   card.addEventListener("click",()=>{const item=items[Number(card.dataset.fabricIndex)];window.location.href="fabric?id="+encodeURIComponent(item.id);});
  });
 }
 document.getElementById("fabricSearch").addEventListener("input",renderFabrics);
