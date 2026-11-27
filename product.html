@@ -6,14 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="description" id="metaDescription" content="Shop onlyhers women's fashion.">
   <meta name="robots" content="index, follow, max-image-preview:large">
-  <link rel="canonical" id="canonicalUrl" href="https://onlyhers.in/product.html">
+  <link rel="canonical" id="canonicalUrl" href="https://onlyhers.in/product">
   <script>
     // Set the product-specific canonical before external crawlers process the page.
     (function () {
       const params = new URLSearchParams(window.location.search);
       const id = params.get("id");
       if (!id || !/^[0-9]+$/.test(id)) return;
-      const productUrl = "https://onlyhers.in/product.html?id=" + encodeURIComponent(id);
+      const productUrl = "https://onlyhers.in/product?id=" + encodeURIComponent(id);
       const canonical = document.getElementById("canonicalUrl");
       if (canonical) canonical.setAttribute("href", productUrl);
       const ogUrl = document.getElementById("ogUrl");
@@ -24,7 +24,7 @@
   <meta property="og:site_name" content="onlyhers">
   <meta property="og:title" id="ogTitle" content="onlyhers Product">
   <meta property="og:description" id="ogDescription" content="Shop onlyhers women's fashion.">
-  <meta property="og:url" id="ogUrl" content="https://onlyhers.in/product.html">
+  <meta property="og:url" id="ogUrl" content="https://onlyhers.in/product">
   <meta property="og:image" id="ogImage" content="https://onlyhers.in/onlyhers-logo.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" id="twitterTitle" content="onlyhers Product">
@@ -952,7 +952,7 @@ body { color: #fff; }
 
     <nav>
       <a href="index.html">Home</a>
-      <a href="designs.html" class="collection-btn">
+      <a href="designs" class="collection-btn">
         Collection
       </a>
     </nav>
@@ -962,7 +962,7 @@ body { color: #fff; }
 
   <main class="product-page">
 
-    <a href="collection-items.html?section=onlyhers_designs" class="back-link">
+    <a href="collection-items?section=onlyhers_designs" class="back-link">
       ← Back to collection
     </a>
 
@@ -1127,7 +1127,7 @@ body { color: #fff; }
       ].filter(Boolean).join(" - ");
 
       const productUrl =
-        "https://onlyhers.in/product.html?id=" + encodeURIComponent(product.id);
+        "https://onlyhers.in/product?id=" + encodeURIComponent(product.id);
 
       const primaryImage =
         product.image_url ||
@@ -1246,7 +1246,7 @@ body { color: #fff; }
         "@type": "BreadcrumbList",
         "itemListElement": [
           { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://onlyhers.in/" },
-          { "@type": "ListItem", "position": 2, "name": "Collections", "item": "https://onlyhers.in/collection.html" },
+          { "@type": "ListItem", "position": 2, "name": "Collections", "item": "https://onlyhers.in/collection" },
           { "@type": "ListItem", "position": 3, "name": productName, "item": productUrl }
         ]
       };
@@ -1548,7 +1548,7 @@ body { color: #fff; }
               <p><strong>Made to order:</strong> We begin preparing your piece only after your order is received. Please allow at least 7 days for dispatch.</p>
               <p style="margin-top:8px;"><strong>Shipping charges:</strong> Shipping is charged separately and calculated based on your delivery pincode and package weight. Most orders are expected to have shipping charges below ₹150; the final amount will be confirmed before dispatch.</p>
               <p style="margin-top:8px;"><strong>Returns:</strong> As each piece is stitched to your requirements and customisations, we do not accept returns.</p>
-              <a href="/return-policy.html" style="display:inline-block;margin-top:10px;color:#fff;text-decoration:underline;">Read our full shipping &amp; return policy</a>
+              <a href="/return-policy" style="display:inline-block;margin-top:10px;color:#fff;text-decoration:underline;">Read our full shipping &amp; return policy</a>
             </div>
 
             <p class="product-note">
@@ -1826,7 +1826,7 @@ Could you please share more details?`;
           <p>${escapeHTML(message)}</p>
 
           <a
-            href="designs.html"
+            href="designs"
             class="collection-btn"
             style="
               color:white;
